@@ -35,7 +35,8 @@ void Game::InitGame()
 
 	//Creates a new scene.
 	//Replace this with your own scene.
-	m_scenes.push_back(new Scene("Default Scene"));
+	
+	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene"));
 
 	//Sets active scene reference to our scene
 	m_activeScene = m_scenes[0];
