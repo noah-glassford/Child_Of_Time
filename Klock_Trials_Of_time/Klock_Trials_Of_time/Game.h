@@ -2,7 +2,7 @@
 #define __GAME_H__
 
 #include "BackEnd.h"
-
+#include "PhysicsTestScene.h"
 //Our main class for running our game
 class Game
 {
