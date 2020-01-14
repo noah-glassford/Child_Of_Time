@@ -56,7 +56,48 @@ void PhysicsTestScene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
 	}
+	
+	//Setup box #1, entity 2
+	{
+		//Create new Entity
+		auto entity = ECS::CreateEntity();
+		//EntityIdentifier::MainPlayer(entity);
 
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		ECS::AttachComponent<PhysicsBody>(entity);
+		//Sets up components
+		std::string fileName = "Box.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 25, 25);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 97.f));
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers the entire sprite
+		float shrinkX = tempSpr.GetWidth() / 2.f;
+		float shrinkY = tempSpr.GetHeight() / 2.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_dynamicBody;
+		tempDef.position.Set(float32(26.f), float32(50.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
+			vec2(0.f, 0.f), true);
+
+
+
+		//Sets up the identifier
+
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Box1");
+
+	}
 
 	{
 		//Creates camera entity
