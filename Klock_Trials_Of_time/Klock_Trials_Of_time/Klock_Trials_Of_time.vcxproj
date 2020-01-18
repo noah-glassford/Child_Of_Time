@@ -145,6 +145,7 @@
     <ClInclude Include="BloomEffect.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraSystem.h" />
+    <ClInclude Include="ContactListener.h" />
     <ClInclude Include="ECS.h" />
     <ClInclude Include="EffectManager.h" />
     <ClInclude Include="EntityIdentifier.h" />
@@ -196,6 +197,7 @@
     <ClCompile Include="BloomEffect.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraSystem.cpp" />
+    <ClCompile Include="ContactListener.cpp" />
     <ClCompile Include="ECS.cpp" />
     <ClCompile Include="EffectManager.cpp" />
     <ClCompile Include="EntityIdentifier.cpp" />

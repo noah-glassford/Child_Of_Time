@@ -204,11 +204,10 @@ void Game::GamepadTrigger(XInputController * con)
 
 void Game::KeyboardHold()
 {
-	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(EntityIdentifier::MainPlayer());
+	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(1);
 
 	b2Body* body = tempPhysBod.GetBody();
 	b2BodyDef tempDef;
-
 	
 	if (Input::GetKey(Key::S))
 	{
@@ -224,6 +223,14 @@ void Game::KeyboardHold()
 	{
 		m_register->get<PhysicsBody>(1).ApplyForce(vec3(9999.f, 0.f, 0.f));
 	}
+	if (Input::GetKey(Key::W))
+	{
+	
+		if(true)
+			m_register->get<PhysicsBody>(1).ApplyForce(vec3(0.f, 9999.f, 0.f));
+	
+	}
+	
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->KeyboardHold();
@@ -233,12 +240,13 @@ void Game::KeyboardDown()
 {
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
+
 	m_activeScene->KeyboardDown();
 }
 
 void Game::KeyboardUp()
 {
-	bool isJumping = false;
+
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->KeyboardUp();
@@ -255,13 +263,7 @@ void Game::KeyboardUp()
 	{
 		PhysicsBody::SetDraw(!PhysicsBody::GetDraw());
 	}
-	if (Input::GetKey(Key::W))
-	{
-		if (isJumping == false)
-		{
-			m_register->get<PhysicsBody>(1).ApplyForce(vec3(0.f, 9999.f, 0.f));
-		}
-	}
+	
 }
 
 void Game::MouseMotion(SDL_MouseMotionEvent evnt)

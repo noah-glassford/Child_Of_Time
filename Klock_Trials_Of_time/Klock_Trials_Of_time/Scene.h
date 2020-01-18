@@ -68,6 +68,7 @@ public:
 	void SetWindowSize(float windowWidth, float windowHeight);
 protected:
 	b2World* m_physicsWorld = nullptr;
+
 	b2Vec2 m_gravity = b2Vec2(float32(0.f), float32(0.f));
 
 	vec4 m_clearColor = vec4(0.15f, 0.33f, 0.58f, 1.f);
