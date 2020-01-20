@@ -36,11 +36,13 @@ void Game::InitGame()
 	//Creates a new scene.
 	//Replace this with your own scene.
 	
-	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene"));
+	//m_scenes.push_back(new PhysicsTestScene("Physics Test Scene"));
+	m_scenes.push_back(new Level1Scene("Level 1 Scene"));
 
 	//Sets active scene reference to our scene
 	m_activeScene = m_scenes[0];
 
+	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 
 	//Sets m_register to point to the register in the active scene
@@ -204,31 +206,28 @@ void Game::GamepadTrigger(XInputController * con)
 
 void Game::KeyboardHold()
 {
-	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(1);
-
+	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(0);
+	
 	b2Body* body = tempPhysBod.GetBody();
 	b2BodyDef tempDef;
 	
 	if (Input::GetKey(Key::S))
 	{
-		m_register->get<PhysicsBody>(1).ApplyForce(vec3(0.f, -9999.f, 0.f));
+		m_register->get<PhysicsBody>(0).ApplyForce(vec3(0.f, -99599.f, 0.f));
 	}
 
 	if (Input::GetKey(Key::A))
 	{
-		m_register->get<PhysicsBody>(1).ApplyForce(vec3(-9999.f, 0.f, 0.f));
+		m_register->get<PhysicsBody>(0).ApplyForce(vec3(-99599.f, 0.f, 0.f));
 	}
 
 	if (Input::GetKey(Key::D))
 	{
-		m_register->get<PhysicsBody>(1).ApplyForce(vec3(9999.f, 0.f, 0.f));
+		m_register->get<PhysicsBody>(0).ApplyForce(vec3(99959.f, 0.f, 0.f));
 	}
 	if (Input::GetKey(Key::W))
 	{
-	
-		if(true)
-			m_register->get<PhysicsBody>(1).ApplyForce(vec3(0.f, 9999.f, 0.f));
-	
+		m_register->get<PhysicsBody>(0).ApplyForce(vec3(0.f, 9999.f, 0.f));
 	}
 	
 	//Active scene now captures this input and can use it

@@ -3,6 +3,7 @@
 
 #include "BackEnd.h"
 #include "PhysicsTestScene.h"
+#include "Level1Scene.h"
 //Our main class for running our game
 class Game
 {

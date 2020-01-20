@@ -59,30 +59,23 @@ void PhysicsTestScene::InitScene(float windowWidth, float windowHeight)
 
 
 
-	//fixture definition
-	b2PolygonShape polygonShape;
-	b2FixtureDef myFixtureDef;
-	myFixtureDef.shape = &polygonShape;
-	myFixtureDef.density = 1;
+		//fixture definition
+		b2PolygonShape polygonShape;
+		b2FixtureDef myFixtureDef;
+		myFixtureDef.shape = &polygonShape;
+		myFixtureDef.density = 1;
 
-	//add foot sensor fixture
-	polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight() / 2.f, b2Vec2(0, 0), 0);
-	myFixtureDef.isSensor = true;
-	b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
-	//footSensorFixture->SetUserData((void*)3);
+		//Adds a fixture the size of the body
+		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight() / 2.f, b2Vec2(0, 0), 0);
+		myFixtureDef.isSensor = true;
+		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
+		//footSensorFixture->SetUserData((void*)3);
 	
-
-
-
 		//Sets up the Identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
 	}
 	
-	//Player Box2D Object
-	{
-	
-	}
 
 	//Setup box #1, entity 1
 	{
@@ -118,8 +111,6 @@ void PhysicsTestScene::InitScene(float windowWidth, float windowHeight)
 			vec2(0.f, 0.f), true);
 	
 		
-		
-		
 		//fixture definition
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
@@ -127,7 +118,7 @@ void PhysicsTestScene::InitScene(float windowWidth, float windowHeight)
 		myFixtureDef.density = 1;
 
 		//add foot sensor fixture
-		polygonShape.SetAsBox(0.3, 0.3, b2Vec2(0, -25), 0);
+		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight(), b2Vec2(0, -25), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		footSensorFixture->SetUserData( (void*)3);
