@@ -5,7 +5,7 @@ PhysicsTestScene::PhysicsTestScene(std::string name)
 {
 	
 	MyContactListener listener;
-	m_gravity = b2Vec2(float32(0.f), float32(-9.f));
+	m_gravity = b2Vec2(float32(0.f), float32(-50.f));
 	m_physicsWorld->SetGravity(m_gravity);
 	//Physics world contact stuff breaks if this is uncommented
 	//m_physicsWorld->SetContactListener(&listener);
@@ -62,12 +62,14 @@ void PhysicsTestScene::InitScene(float windowWidth, float windowHeight)
 		//fixture definition
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
+		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight() / 2.f, b2Vec2(0, 0), 0);
+		myFixtureDef.isSensor = false;
 		myFixtureDef.shape = &polygonShape;
 		myFixtureDef.density = 1;
+		
 
 		//Adds a fixture the size of the body
-		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight() / 2.f, b2Vec2(0, 0), 0);
-		myFixtureDef.isSensor = true;
+		
 		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		//footSensorFixture->SetUserData((void*)3);
 	
@@ -104,6 +106,7 @@ void PhysicsTestScene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
 		tempDef.position.Set(float32(26.f), float32(50.f));
+		tempDef.fixedRotation = true;
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -114,21 +117,17 @@ void PhysicsTestScene::InitScene(float windowWidth, float windowHeight)
 		//fixture definition
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
+		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight(), b2Vec2(0, 0), 0);
 		myFixtureDef.shape = &polygonShape;
-		myFixtureDef.density = 1;
+		myFixtureDef.density = 2;
 
 		//add foot sensor fixture
-		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight(), b2Vec2(0, -25), 0);
-		myFixtureDef.isSensor = true;
-		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
-		footSensorFixture->SetUserData( (void*)3);
 		
+		//myFixtureDef.isSensor = true;
+		b2Fixture* bodyFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
+		//footSensorFixture->SetUserData( (void*)3);
 		
-
-
-
 		//Sets up the identifier 
-
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Box1"); 
 

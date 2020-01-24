@@ -37,7 +37,7 @@ void Game::InitGame()
 	//Replace this with your own scene.
 	
 	//m_scenes.push_back(new PhysicsTestScene("Physics Test Scene"));
-	m_scenes.push_back(new Level1Scene("Level 1 Scene"));
+	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene"));
 
 	//Sets active scene reference to our scene
 	m_activeScene = m_scenes[0];
@@ -206,28 +206,29 @@ void Game::GamepadTrigger(XInputController * con)
 
 void Game::KeyboardHold()
 {
-	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(0);
+	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(1); //For physics test scene, ent 1 for level 1 scene ent 0
+	//Change this to main player once the physics works properly
 	
-	b2Body* body = tempPhysBod.GetBody();
+	b2Body* playerBody = tempPhysBod.GetBody();
 	b2BodyDef tempDef;
 	
 	if (Input::GetKey(Key::S))
 	{
-		m_register->get<PhysicsBody>(0).ApplyForce(vec3(0.f, -99599.f, 0.f));
+		
 	}
 
 	if (Input::GetKey(Key::A))
 	{
-		m_register->get<PhysicsBody>(0).ApplyForce(vec3(-99599.f, 0.f, 0.f));
+		playerBody->SetLinearVelocity(b2Vec2(-55000.f, 0.f));
 	}
 
 	if (Input::GetKey(Key::D))
 	{
-		m_register->get<PhysicsBody>(0).ApplyForce(vec3(99959.f, 0.f, 0.f));
+		playerBody->SetLinearVelocity(b2Vec2(55000.f, 0.f));
 	}
 	if (Input::GetKey(Key::W))
 	{
-		m_register->get<PhysicsBody>(0).ApplyForce(vec3(0.f, 9999.f, 0.f));
+		
 	}
 	
 	//Active scene now captures this input and can use it
