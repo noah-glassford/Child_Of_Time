@@ -4,7 +4,7 @@
 Level1Scene::Level1Scene(std::string name)
 	: Scene(name)
 {
-	m_gravity = b2Vec2(float32(0.f), float32(-9.f));
+	m_gravity = b2Vec2(float32(0.f), float32(-150.f));
 	m_physicsWorld->SetGravity(m_gravity);
 }
 
@@ -32,7 +32,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<PhysicsBody>(entity);
 		//Sets up components 
 		std::string fileName = "Klock_Png.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 50, 50);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 30, 50);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 97.f));
 		//Grabs reference to various components 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -45,7 +45,12 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
+		tempDef.fixedRotation = true;
 		tempDef.position.Set(float32(26.f), float32(50.f));
+		tempDef.gravityScale = 1.5;
+		
+		
+		
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -57,11 +62,11 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
 		myFixtureDef.shape = &polygonShape;
-		myFixtureDef.density = 1;
+		myFixtureDef.density = 50;
 
 		//add foot sensor fixture
-		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight(), b2Vec2(0, -25), 0);
-		myFixtureDef.isSensor = true;
+		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight(), b2Vec2(0, 0), 0);
+		//myFixtureDef.isSensor = true;
 		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		footSensorFixture->SetUserData((void*)3);
 
@@ -115,12 +120,12 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 			b2FixtureDef myFixtureDef;
 			myFixtureDef.shape = &polygonShape;
 			myFixtureDef.density = 1;
-
+			myFixtureDef.friction = 1.f;
 			//Adds a fixture the size of the body
 			polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight() / 2.f, b2Vec2(0, 0), 0);
 			myFixtureDef.isSensor = true;
 			b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
-			//footSensorFixture->SetUserData((void*)3);
+			footSensorFixture->SetUserData((void*)3);
 
 			//Sets up the Identifier
 			unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
