@@ -206,17 +206,17 @@ void Game::GamepadTrigger(XInputController * con)
 
 void Game::KeyboardHold()
 {
-<<<<<<< Updated upstream
+
 	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(1); //For physics test scene, ent 1 for level 1 scene ent 0
 	//Change this to main player once the physics works properly
 	
 	b2Body* playerBody = tempPhysBod.GetBody();
-=======
+
 	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(0); //Player Body
 	
 	
 	b2Body* playerbody = tempPhysBod.GetBody();
->>>>>>> Stashed changes
+
 	b2BodyDef tempDef;
 
 	b2Vec2 velocity;
@@ -224,34 +224,32 @@ void Game::KeyboardHold()
 	
 	if (Input::GetKey(Key::S))
 	{
-<<<<<<< Updated upstream
+
 		
-=======
+
 		//Crouching will be done here
->>>>>>> Stashed changes
+
 	}
 
 	if (Input::GetKey(Key::A))
 	{
-<<<<<<< Updated upstream
+
 		playerBody->SetLinearVelocity(b2Vec2(-55000.f, 0.f));
-=======
+
 		
 		playerbody->SetLinearVelocity(velocity + b2Vec2(-50.f, 0.f));
->>>>>>> Stashed changes
+
 	}
 
 	if (Input::GetKey(Key::D))
 	{
-<<<<<<< Updated upstream
+
 		playerBody->SetLinearVelocity(b2Vec2(55000.f, 0.f));
 	}
 	if (Input::GetKey(Key::W))
 	{
-		
-=======
 		playerbody->SetLinearVelocity(velocity + b2Vec2(50,0));
->>>>>>> Stashed changes
+
 	}
 	
 	
