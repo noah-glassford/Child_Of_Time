@@ -3,6 +3,7 @@
 #include <random>
 
 
+
 Game::~Game()
 {
 	//If window isn't equal to nullptr
@@ -36,8 +37,8 @@ void Game::InitGame()
 	//Creates a new scene.
 	//Replace this with your own scene.
 	
-	//m_scenes.push_back(new PhysicsTestScene("Physics Test Scene"));
 	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene"));
+	//m_scenes.push_back(new Level1Scene("Level 1 Scene"));
 
 	//Sets active scene reference to our scene
 	m_activeScene = m_scenes[0];
@@ -99,6 +100,7 @@ void Game::Update()
 
 	//Updates the active scene
 	m_activeScene->Update();
+
 }
 
 void Game::GUI()
@@ -206,50 +208,48 @@ void Game::GamepadTrigger(XInputController * con)
 
 void Game::KeyboardHold()
 {
-
-	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(1); //For physics test scene, ent 1 for level 1 scene ent 0
+	
+	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(1); //Grabs the ECS's physics body for the player
+	
+	
+	auto& groundPhysBod = ECS::GetComponent<PhysicsBody>(0); //Grabs the ECS's physics Body for the ground
 	//Change this to main player once the physics works properly
 	
 	b2Body* playerBody = tempPhysBod.GetBody();
-
-	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(0); //Player Body
 	
-	
-	b2Body* playerbody = tempPhysBod.GetBody();
+	b2Body* GroundBody = groundPhysBod.GetBody();
 
 	b2BodyDef tempDef;
 
-	b2Vec2 velocity;
-	playerbody->GetLinearVelocity();
+	b2Vec2 point;
+	
+	bool isColliding = false;
+
+	if (playerBody->GetContactList() != 0)
+	{
+		isColliding = true;
+	}
+
+
 	
 	if (Input::GetKey(Key::S))
 	{
-
-		
-
 		//Crouching will be done here
-
 	}
-
 	if (Input::GetKey(Key::A))
 	{
-
-		playerBody->SetLinearVelocity(b2Vec2(-55000.f, 0.f));
-
-		
-		playerbody->SetLinearVelocity(velocity + b2Vec2(-50.f, 0.f));
-
+		ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(-500000.f, 0.f, 0.f));
 	}
-
 	if (Input::GetKey(Key::D))
 	{
-
-		playerBody->SetLinearVelocity(b2Vec2(55000.f, 0.f));
+		ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(500000.f, 0.f, 0.f));
 	}
 	if (Input::GetKey(Key::W))
 	{
-		playerbody->SetLinearVelocity(velocity + b2Vec2(50,0));
-
+		if (isColliding == true)
+		{
+			ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(0.f, 500000.f, 0.f));
+		}
 	}
 	
 	
@@ -260,13 +260,6 @@ void Game::KeyboardHold()
 
 void Game::KeyboardDown()
 {
-	//Active scene now captures this input and can use it
-	//Look at base Scene class for more info.
-	if (Input::GetKeyDown(Key::W))
-	{
-		m_register->get<PhysicsBody>(0).ApplyForce(vec3(0.f, 9699999999999999.f, 0.f));
-		
-	}
 	m_activeScene->KeyboardDown();
 }
 

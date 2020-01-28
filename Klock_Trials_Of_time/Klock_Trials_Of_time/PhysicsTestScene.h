@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Scene.h"
-#include "ContactListener.h"
-
 class PhysicsTestScene : public Scene
 {
 public:

@@ -4,8 +4,8 @@ PhysicsTestScene::PhysicsTestScene(std::string name)
 	: Scene(name)
 {
 	
-	MyContactListener listener;
-	m_gravity = b2Vec2(float32(0.f), float32(-50.f));
+	
+	m_gravity = b2Vec2(float32(0.f), float32(-9.8f));
 	m_physicsWorld->SetGravity(m_gravity);
 	//Physics world contact stuff breaks if this is uncommented
 	//m_physicsWorld->SetContactListener(&listener);
@@ -57,21 +57,6 @@ void PhysicsTestScene::InitScene(float windowWidth, float windowHeight)
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY),
 			vec2(0.f, (-tempSpr.GetHeight() / 16.f) * 6.f), false);
 
-
-
-		//fixture definition
-		b2PolygonShape polygonShape;
-		b2FixtureDef myFixtureDef;
-		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight() / 2.f, b2Vec2(0, 0), 0);
-		myFixtureDef.isSensor = false;
-		myFixtureDef.shape = &polygonShape;
-		myFixtureDef.density = 1;
-		
-
-		//Adds a fixture the size of the body
-		
-		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
-		//footSensorFixture->SetUserData((void*)3);
 	
 		//Sets up the Identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
@@ -113,19 +98,6 @@ void PhysicsTestScene::InitScene(float windowWidth, float windowHeight)
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
 			vec2(0.f, 0.f), true);
 	
-		
-		//fixture definition
-		b2PolygonShape polygonShape;
-		b2FixtureDef myFixtureDef;
-		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight(), b2Vec2(0, 0), 0);
-		myFixtureDef.shape = &polygonShape;
-		myFixtureDef.density = 2;
-
-		//add foot sensor fixture
-		
-		//myFixtureDef.isSensor = true;
-		b2Fixture* bodyFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
-		//footSensorFixture->SetUserData( (void*)3);
 		
 		//Sets up the identifier 
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();

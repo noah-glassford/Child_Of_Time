@@ -4,7 +4,7 @@
 Level1Scene::Level1Scene(std::string name)
 	: Scene(name)
 {
-	m_gravity = b2Vec2(float32(0.f), float32(-150.f));
+	m_gravity = b2Vec2(float32(0.f), float32(-100.f));
 	m_physicsWorld->SetGravity(m_gravity);
 }
 
