@@ -38,10 +38,10 @@ void Game::InitGame()
 	//Replace this with your own scene.
 	
 	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene"));
-	//m_scenes.push_back(new Level1Scene("Level 1 Scene"));
+	m_scenes.push_back(new Level1Scene("Level 1 Scene"));
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[0];
+	m_activeScene = m_scenes[1];
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -209,15 +209,15 @@ void Game::GamepadTrigger(XInputController * con)
 void Game::KeyboardHold()
 {
 	
-	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(1); //Grabs the ECS's physics body for the player
+	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(0); //Grabs the ECS's physics body for the player
 	
 	
-	auto& groundPhysBod = ECS::GetComponent<PhysicsBody>(0); //Grabs the ECS's physics Body for the ground
+	//auto& groundPhysBod = ECS::GetComponent<PhysicsBody>(0); //Grabs the ECS's physics Body for the ground
 	//Change this to main player once the physics works properly
 	
 	b2Body* playerBody = tempPhysBod.GetBody();
 	
-	b2Body* GroundBody = groundPhysBod.GetBody();
+	//b2Body* GroundBody = groundPhysBod.GetBody();
 
 	b2BodyDef tempDef;
 
