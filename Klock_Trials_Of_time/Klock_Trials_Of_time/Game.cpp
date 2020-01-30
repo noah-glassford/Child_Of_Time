@@ -238,18 +238,22 @@ void Game::KeyboardHold()
 	}
 	if (Input::GetKey(Key::A))
 	{
-		ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(-500000.f, 0.f, 0.f));
+		if (isColliding == true)
+			tempPhysBod.ApplyForce(vec3(-130000.f, 0.f, 0.f));
+		else
+			tempPhysBod.ApplyForce(vec3(-30000.f, 0.f, 0.f));
 	}
 	if (Input::GetKey(Key::D))
 	{
-		ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(500000.f, 0.f, 0.f));
-	}
-	if (Input::GetKey(Key::W))
-	{
 		if (isColliding == true)
-		{
-			ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(0.f, 500000.f, 0.f));
-		}
+			tempPhysBod.ApplyForce(vec3(130000.f, 0.f, 0.f));
+		else
+			tempPhysBod.ApplyForce(vec3(30000.f, 0.f, 0.f));
+	}
+	
+	if (Input::GetKey(Key::C))
+	{
+		std::cout << playerBody->GetContactList() << std::endl;
 	}
 	
 	
@@ -260,6 +264,24 @@ void Game::KeyboardHold()
 
 void Game::KeyboardDown()
 {
+	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(1); //Grabs the ECS's physics body for the player
+	
+	bool isColliding = false;
+
+	b2Body* playerBody = tempPhysBod.GetBody();
+
+
+	if (playerBody->GetContactList() != 0)
+	{
+		isColliding = true;
+	}
+
+	if (Input::GetKeyDown(Key::W))
+	{
+		if (isColliding == true)
+			playerBody->ApplyLinearImpulse(b2Vec2(0.f, 55555.f), b2Vec2(playerBody->GetPosition()), true) ;
+	}
+	
 	m_activeScene->KeyboardDown();
 }
 
