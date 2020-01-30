@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Scene.h"
-class PhysicsTestScene : public Scene
+
+class Level1Scene : public Scene
 {
 public:
-	PhysicsTestScene(std::string name);
+	Level1Scene(std::string name);
 
 	//Each Scene will need to have a different
 	//init, as each scene's content will be different

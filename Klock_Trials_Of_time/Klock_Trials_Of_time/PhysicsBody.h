@@ -48,6 +48,10 @@ public:
 
 	void DrawBody();
 
+	//Collision Functions
+	void startContact();
+	void endContact();
+
 	//Update physics stuffs
 	void Update(Transform* trans);
 
@@ -57,6 +61,8 @@ public:
 	void AddCollideID(unsigned int collideID);
 
 	//Getters
+	b2FixtureDef* GetFixture() const;
+	
 	//Get the Box2D physics body
 	b2Body* GetBody() const;
 	//Get position of body
@@ -111,6 +117,8 @@ public:
 	//Get whether or not we are currently drawing our physics bodies
 	static bool GetDraw();
 
+	bool GetColiding();
+	
 	//Setters
 	//Sets the pointer to the box2D body
 	void SetBody(b2Body* body);
@@ -165,10 +173,16 @@ public:
 	//Does the object not move?
 	void SetDynamic(bool isDynamic);
 
+
 private:
 	//The actual box2D body
 	b2Body* m_body = nullptr;
 	b2Vec2 m_position = b2Vec2(0.f, 0.f);
+
+	//Box2d fixture
+	b2FixtureDef* m_fixture = nullptr;
+
+	bool m_isColliding = 0;
 
 	//The applied force
 	vec3 m_appliedForce = vec3(0.f, 0.f, 0.f);
@@ -193,7 +207,7 @@ private:
 
 	//Mass of the body
 	float m_mass = 1.f;
-
+	
 	//Body type
 	BodyType m_bodyType = BodyType::CIRCLE;
 	//How far from the center of the sprite is it
@@ -223,6 +237,12 @@ private:
 	//Physics body drawing stuff
 	GLuint m_vao = GL_NONE;
 	GLuint m_vboPos = GL_NONE;
+};
+//For collision triggers
+class ContactListener : public b2ContactListener
+{
+	void BeginContact(b2Contact* contact);
+	void EndContact(b2Contact* contact);
 };
 
 //Sends body TO json file

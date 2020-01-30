@@ -162,6 +162,7 @@
     <ClInclude Include="include\imgui\imstb_truetype.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="JSON.h" />
+    <ClInclude Include="Level1Scene.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="PhysicsBody.h" />
     <ClInclude Include="PhysicsSystem.h" />
@@ -211,6 +212,7 @@
     <ClCompile Include="include\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="JSON.cpp" />
+    <ClCompile Include="Level1Scene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="PhysicsBody.cpp" />

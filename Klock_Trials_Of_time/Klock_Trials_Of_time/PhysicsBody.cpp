@@ -74,7 +74,7 @@ PhysicsBody::PhysicsBody(b2Body * body, float width, float height, vec2 centerOf
 	b2FixtureDef tempFixture;
 	tempFixture.shape = &tempShape;
 	tempFixture.density = 1.f;
-	tempFixture.friction = 0.3f;
+	tempFixture.friction = 10.f;
 
 	m_body = body;
 	m_body->CreateFixture(&tempFixture);
@@ -84,6 +84,8 @@ PhysicsBody::PhysicsBody(b2Body * body, float width, float height, vec2 centerOf
 
 	m_width = width;
 	m_height = height;
+
+	m_collideID = 0;
 
 	m_centerOffset = centerOffset;
 	m_bottomLeft = vec2(centerOffset.x - (width / 2.f), centerOffset.y - (height / 2.f));
@@ -139,10 +141,23 @@ void PhysicsBody::DrawBody()
 	glBindVertexArray(GL_NONE);
 }
 
+void PhysicsBody::startContact()
+{
+	m_isColliding = true;
+}
+
+void PhysicsBody::endContact()
+{
+	m_isColliding = false;
+}
+
 void PhysicsBody::Update(Transform * trans)
 {
 	//Stores the position;
 	m_position = m_body->GetPosition();
+
+	//Collision triggers
+	
 
 	//Sets the transform position to the position of the physics body
 	trans->SetPosition(vec3(m_body->GetPosition().x, m_body->GetPosition().y, trans->GetPosition().z));
@@ -298,6 +313,11 @@ bool PhysicsBody::GetDraw()
 	return m_drawBodies;
 }
 
+bool PhysicsBody::GetColiding()
+{
+	return m_isColliding;
+}
+
 void PhysicsBody::SetBody(b2Body * body)
 {
 	m_body = body;
@@ -430,4 +450,18 @@ void PhysicsBody::SetDynamic(bool isDynamic)
 {
 	//Is this body moving?
 	m_dynamic = isDynamic;
+}
+
+void ContactListener::BeginContact(b2Contact* contact)
+{
+	void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+	
+
+	bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+	PhysicsBody().startContact();
+	
+}
+
+void ContactListener::EndContact(b2Contact* contact)
+{
 }

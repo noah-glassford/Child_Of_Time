@@ -3,8 +3,12 @@
 PhysicsTestScene::PhysicsTestScene(std::string name)
 	: Scene(name)
 {
-	m_gravity = b2Vec2(float32(0.f), float32(-9.f));
+	
+	
+	m_gravity = b2Vec2(float32(0.f), float32(-9.8f));
 	m_physicsWorld->SetGravity(m_gravity);
+	//Physics world contact stuff breaks if this is uncommented
+	//m_physicsWorld->SetContactListener(&listener);
 }
 
 void PhysicsTestScene::InitScene(float windowWidth, float windowHeight)
@@ -18,7 +22,7 @@ void PhysicsTestScene::InitScene(float windowWidth, float windowHeight)
 	//Sets up aspect ratio for the camera
 	float aspectRatio = windowWidth / windowHeight;
 	
-	//Background and Ground Object
+	//Background and Ground Object entity 0
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -44,6 +48,7 @@ void PhysicsTestScene::InitScene(float windowWidth, float windowHeight)
 
 		b2Body* tempBody;
 		b2BodyDef tempDef;
+		
 		tempDef.type = b2_staticBody;
 		tempDef.position.Set(float32(0.f), float32(50.f));
 
@@ -52,31 +57,33 @@ void PhysicsTestScene::InitScene(float windowWidth, float windowHeight)
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY),
 			vec2(0.f, (-tempSpr.GetHeight() / 16.f) * 6.f), false);
 
+	
 		//Sets up the Identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
 	}
 	
-	//Setup box #1, entity 2
-	{
-		//Create new Entity
-		auto entity = ECS::CreateEntity();
-		//EntityIdentifier::MainPlayer(entity);
 
-		//Add components
+	//Setup box #1, entity 1
+	{
+		//Create new Entity 
+		auto entity = ECS::CreateEntity();
+		//EntityIdentifier::MainPlayer(entity); 
+
+		//Add components 
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 
 		ECS::AttachComponent<PhysicsBody>(entity);
-		//Sets up components
+		//Sets up components 
 		std::string fileName = "Box.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 25, 25);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 97.f));
-		//Grabs reference to various components
+		//Grabs reference to various components 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
 
-		//Physics body covers the entire sprite
+		//Physics body covers the entire sprite 
 		float shrinkX = tempSpr.GetWidth() / 2.f;
 		float shrinkY = tempSpr.GetHeight() / 2.f;
 
@@ -84,18 +91,17 @@ void PhysicsTestScene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
 		tempDef.position.Set(float32(26.f), float32(50.f));
+		tempDef.fixedRotation = true;
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
 			vec2(0.f, 0.f), true);
-
-
-
-		//Sets up the identifier
-
+	
+		
+		//Sets up the identifier 
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
-		ECS::SetUpIdentifier(entity, bitHolder, "Box1");
+		ECS::SetUpIdentifier(entity, bitHolder, "Box1"); 
 
 	}
 
