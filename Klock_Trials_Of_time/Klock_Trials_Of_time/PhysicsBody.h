@@ -61,7 +61,7 @@ public:
 	void AddCollideID(unsigned int collideID);
 
 	//Getters
-	b2FixtureDef* GetFixture() const;
+	//b2FixtureDef* GetFixture() const;
 	
 	//Get the Box2D physics body
 	b2Body* GetBody() const;

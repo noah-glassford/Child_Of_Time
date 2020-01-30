@@ -101,6 +101,19 @@ void Game::Update()
 	//Updates the active scene
 	m_activeScene->Update();
 
+	for (b2ContactEdge* ce = m_register->get<PhysicsBody>(1).GetBody()->GetContactList(); ce; ce = ce->next)
+	{
+		b2Contact* c = ce->contact;
+
+		if (c->IsTouching())
+		{
+			std::cout << "bruh theres a collision\n";
+		}
+
+	}
+
+	
+
 }
 
 void Game::GUI()
@@ -209,11 +222,9 @@ void Game::GamepadTrigger(XInputController * con)
 void Game::KeyboardHold()
 {
 	
-	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(0); //Grabs the ECS's physics body for the player
 	
 	
-	//auto& groundPhysBod = ECS::GetComponent<PhysicsBody>(0); //Grabs the ECS's physics Body for the ground
-	//Change this to main player once the physics works properly
+	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(1); //Grabs the ECS's physics body for the player
 	
 	b2Body* playerBody = tempPhysBod.GetBody();
 	
@@ -225,12 +236,16 @@ void Game::KeyboardHold()
 	
 	bool isColliding = false;
 
-	if (playerBody->GetContactList() != 0)
+	for (b2ContactEdge* ce = m_register->get<PhysicsBody>(1).GetBody()->GetContactList(); ce; ce = ce->next)
 	{
-		isColliding = true;
+		b2Contact* c = ce->contact;
+
+		if (c->IsTouching())
+		{
+			isColliding = true;
+		}
+
 	}
-
-
 	
 	if (Input::GetKey(Key::S))
 	{
@@ -270,16 +285,21 @@ void Game::KeyboardDown()
 
 	b2Body* playerBody = tempPhysBod.GetBody();
 
-
-	if (playerBody->GetContactList() != 0)
+	for (b2ContactEdge* ce = m_register->get<PhysicsBody>(1).GetBody()->GetContactList(); ce; ce = ce->next)
 	{
-		isColliding = true;
+		b2Contact* c = ce->contact;
+
+		if (c->IsTouching())
+		{
+			isColliding = true;
+		}
+
 	}
 
 	if (Input::GetKeyDown(Key::W))
 	{
 		if (isColliding == true)
-			playerBody->ApplyLinearImpulse(b2Vec2(0.f, 55555.f), b2Vec2(playerBody->GetPosition()), true) ;
+			playerBody->ApplyLinearImpulse(b2Vec2(0.f, 555000000055.f), b2Vec2(playerBody->GetPosition()), true) ;
 	}
 	
 	m_activeScene->KeyboardDown();
