@@ -1,9 +1,8 @@
 #include "PhysicsBody.h"
 
-unsigned int CollisionIDs::m_playerID		=0x1;
-unsigned int CollisionIDs::m_environmentID	=0x10;
-unsigned int CollisionIDs::m_enemyID		=0x100;
-
+unsigned int CollisionIDs::m_playerID = 0x1;
+unsigned int CollisionIDs::m_environmentID = 0x10;
+unsigned int CollisionIDs::m_enemyID = 0x100;
 
 unsigned int CollisionIDs::Player()
 {
@@ -23,7 +22,7 @@ unsigned int CollisionIDs::Enemy()
 vec3 PhysicsBody::m_gravityAcceleration = vec3(0.f, -35.f, 0.f);
 bool PhysicsBody::m_drawBodies = false;
 
-PhysicsBody::PhysicsBody(b2Body * body, float radius, vec2 centerOffset, bool isDynamic)
+PhysicsBody::PhysicsBody(b2Body* body, float radius, vec2 centerOffset, bool isDynamic)
 {
 	//Bodies don't reference a shape by themselves
 	//they need a shape that has been linked to a fixture
@@ -61,7 +60,7 @@ PhysicsBody::PhysicsBody(b2Body * body, float radius, vec2 centerOffset, bool is
 	InitBody();
 }
 
-PhysicsBody::PhysicsBody(b2Body * body, float width, float height, vec2 centerOffset, bool isDynamic)
+PhysicsBody::PhysicsBody(b2Body* body, float width, float height, vec2 centerOffset, bool isDynamic)
 {
 	//Bodies don't reference a shape by themselves
 	//they need a shape that has been linked to a fixture
@@ -73,8 +72,13 @@ PhysicsBody::PhysicsBody(b2Body * body, float width, float height, vec2 centerOf
 	//Creates the actual fixture (aka, shape, mass, etc);
 	b2FixtureDef tempFixture;
 	tempFixture.shape = &tempShape;
+<<<<<<< Updated upstream
 	tempFixture.density = 1.f;
 	tempFixture.friction = 0.3f;
+=======
+	tempFixture.density = 1.5f;
+	tempFixture.friction = 0.1f;
+>>>>>>> Stashed changes
 
 	m_body = body;
 	m_body->CreateFixture(&tempFixture);
@@ -151,13 +155,12 @@ void PhysicsBody::endContact()
 	m_isColliding = false;
 }
 
-void PhysicsBody::Update(Transform * trans)
+void PhysicsBody::Update(Transform* trans)
 {
 	//Stores the position;
 	m_position = m_body->GetPosition();
 
 	//Collision triggers
-	
 
 	//Sets the transform position to the position of the physics body
 	trans->SetPosition(vec3(m_body->GetPosition().x, m_body->GetPosition().y, trans->GetPosition().z));
@@ -167,9 +170,8 @@ void PhysicsBody::Update(Transform * trans)
 void PhysicsBody::ApplyForce(vec3 force)
 {
 	m_body->ApplyForce(b2Vec2(float32(force.x), float32(force.y)),
-						b2Vec2(float32(m_body->GetPosition().x), float32(m_body->GetPosition().y)),
-						 true);
-
+		b2Vec2(float32(m_body->GetPosition().x), float32(m_body->GetPosition().y)),
+		true);
 }
 
 void PhysicsBody::AddCollideID(unsigned int collideID)
@@ -178,7 +180,7 @@ void PhysicsBody::AddCollideID(unsigned int collideID)
 	m_collideID |= collideID;
 }
 
-b2Body * PhysicsBody::GetBody() const
+b2Body* PhysicsBody::GetBody() const
 {
 	return m_body;
 }
@@ -235,7 +237,6 @@ float PhysicsBody::GetMass() const
 	//Return the mass of this body
 	return m_mass;
 }
-
 
 BodyType PhysicsBody::GetBodyType() const
 {
@@ -318,7 +319,7 @@ bool PhysicsBody::GetColiding()
 	return m_isColliding;
 }
 
-void PhysicsBody::SetBody(b2Body * body)
+void PhysicsBody::SetBody(b2Body* body)
 {
 	m_body = body;
 }
@@ -455,11 +456,9 @@ void PhysicsBody::SetDynamic(bool isDynamic)
 void ContactListener::BeginContact(b2Contact* contact)
 {
 	void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-	
 
 	bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
 	PhysicsBody().startContact();
-	
 }
 
 void ContactListener::EndContact(b2Contact* contact)

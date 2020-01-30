@@ -2,8 +2,6 @@
 
 #include <random>
 
-
-
 Game::~Game()
 {
 	//If window isn't equal to nullptr
@@ -36,9 +34,14 @@ void Game::InitGame()
 
 	//Creates a new scene.
 	//Replace this with your own scene.
-	
+
 	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene"));
+<<<<<<< Updated upstream
 	m_scenes.push_back(new Level1Scene("Level 1 Scene"));
+=======
+	m_scenes.push_back(new Level1Scene("Chad poggers"));
+	//m_scenes.push_back(new Level1Scene("Level 1 Scene"));
+>>>>>>> Stashed changes
 
 	//Sets active scene reference to our scene
 	m_activeScene = m_scenes[1];
@@ -100,7 +103,6 @@ void Game::Update()
 
 	//Updates the active scene
 	m_activeScene->Update();
-
 }
 
 void Game::GUI()
@@ -138,7 +140,7 @@ void Game::AcceptInput()
 {
 	XInputManager::Update();
 
-	//Just calls all the other input functions 
+	//Just calls all the other input functions
 	GamepadInput();
 
 	KeyboardHold();
@@ -171,35 +173,35 @@ void Game::GamepadInput()
 	}
 }
 
-void Game::GamepadStroke(XInputController * con)
+void Game::GamepadStroke(XInputController* con)
 {
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->GamepadStroke(con);
 }
 
-void Game::GamepadUp(XInputController * con)
+void Game::GamepadUp(XInputController* con)
 {
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->GamepadUp(con);
 }
 
-void Game::GamepadDown(XInputController * con)
+void Game::GamepadDown(XInputController* con)
 {
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->GamepadDown(con);
 }
 
-void Game::GamepadStick(XInputController * con)
+void Game::GamepadStick(XInputController* con)
 {
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->GamepadStick(con);
 }
 
-void Game::GamepadTrigger(XInputController * con)
+void Game::GamepadTrigger(XInputController* con)
 {
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
@@ -208,30 +210,40 @@ void Game::GamepadTrigger(XInputController * con)
 
 void Game::KeyboardHold()
 {
+<<<<<<< Updated upstream
 	
 	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(0); //Grabs the ECS's physics body for the player
 	
 	
 	//auto& groundPhysBod = ECS::GetComponent<PhysicsBody>(0); //Grabs the ECS's physics Body for the ground
+=======
+	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(0); //Grabs the ECS's physics body for the player
+
+	auto& groundPhysBod = ECS::GetComponent<PhysicsBody>(1); //Grabs the ECS's physics Body for the ground
+>>>>>>> Stashed changes
 	//Change this to main player once the physics works properly
-	
+
 	b2Body* playerBody = tempPhysBod.GetBody();
+<<<<<<< Updated upstream
 	
 	//b2Body* GroundBody = groundPhysBod.GetBody();
+=======
+
+	b2Body* GroundBody = groundPhysBod.GetBody();
+>>>>>>> Stashed changes
 
 	b2BodyDef tempDef;
 
 	b2Vec2 point;
-	
+
 	bool isColliding = false;
 
 	if (playerBody->GetContactList() != 0)
-	{
-		isColliding = true;
-	}
+		if (Input::GetKey(Key::S))
+		{
+			isColliding = true;
+		}
 
-
-	
 	if (Input::GetKey(Key::S))
 	{
 		//Crouching will be done here
@@ -250,13 +262,7 @@ void Game::KeyboardHold()
 		else
 			tempPhysBod.ApplyForce(vec3(30000.f, 0.f, 0.f));
 	}
-	
-	if (Input::GetKey(Key::C))
-	{
-		std::cout << playerBody->GetContactList() << std::endl;
-	}
-	
-	
+
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->KeyboardHold();
@@ -265,11 +271,10 @@ void Game::KeyboardHold()
 void Game::KeyboardDown()
 {
 	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(1); //Grabs the ECS's physics body for the player
-	
+
 	bool isColliding = false;
 
 	b2Body* playerBody = tempPhysBod.GetBody();
-
 
 	if (playerBody->GetContactList() != 0)
 	{
@@ -279,32 +284,15 @@ void Game::KeyboardDown()
 	if (Input::GetKeyDown(Key::W))
 	{
 		if (isColliding == true)
-			playerBody->ApplyLinearImpulse(b2Vec2(0.f, 55555.f), b2Vec2(playerBody->GetPosition()), true) ;
+			playerBody->ApplyLinearImpulse(b2Vec2(0.f, 55555.f), b2Vec2(playerBody->GetPosition()), true);
 	}
-	
+
 	m_activeScene->KeyboardDown();
 }
 
 void Game::KeyboardUp()
 {
-
-	//Active scene now captures this input and can use it
-	//Look at base Scene class for more info.
 	m_activeScene->KeyboardUp();
-
-	if (Input::GetKeyUp(Key::F1))
-	{
-		if (!UI::m_isInit)
-		{
-			UI::InitImGUI();
-		}
-		m_guiActive = !m_guiActive;
-	}
-	if (Input::GetKeyUp(Key::P))
-	{
-		PhysicsBody::SetDraw(!PhysicsBody::GetDraw());
-	}
-	
 }
 
 void Game::MouseMotion(SDL_MouseMotionEvent evnt)
@@ -319,7 +307,6 @@ void Game::MouseMotion(SDL_MouseMotionEvent evnt)
 
 		if (!ImGui::GetIO().WantCaptureMouse)
 		{
-
 		}
 	}
 
