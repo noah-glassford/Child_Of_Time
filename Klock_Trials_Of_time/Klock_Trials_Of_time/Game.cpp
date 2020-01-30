@@ -103,6 +103,23 @@ void Game::Update()
 
 	//Updates the active scene
 	m_activeScene->Update();
+<<<<<<< HEAD
+=======
+
+	for (b2ContactEdge* ce = m_register->get<PhysicsBody>(1).GetBody()->GetContactList(); ce; ce = ce->next)
+	{
+		b2Contact* c = ce->contact;
+
+		if (c->IsTouching())
+		{
+			std::cout << "bruh theres a collision\n";
+		}
+
+	}
+
+	
+
+>>>>>>> Noah_Branch
 }
 
 void Game::GUI()
@@ -212,9 +229,9 @@ void Game::KeyboardHold()
 {
 <<<<<<< Updated upstream
 	
-	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(0); //Grabs the ECS's physics body for the player
 	
 	
+<<<<<<< HEAD
 	//auto& groundPhysBod = ECS::GetComponent<PhysicsBody>(0); //Grabs the ECS's physics Body for the ground
 =======
 	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(0); //Grabs the ECS's physics body for the player
@@ -223,6 +240,10 @@ void Game::KeyboardHold()
 >>>>>>> Stashed changes
 	//Change this to main player once the physics works properly
 
+=======
+	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(1); //Grabs the ECS's physics body for the player
+	
+>>>>>>> Noah_Branch
 	b2Body* playerBody = tempPhysBod.GetBody();
 <<<<<<< Updated upstream
 	
@@ -238,12 +259,25 @@ void Game::KeyboardHold()
 
 	bool isColliding = false;
 
+<<<<<<< HEAD
 	if (playerBody->GetContactList() != 0)
 		if (Input::GetKey(Key::S))
+=======
+	for (b2ContactEdge* ce = m_register->get<PhysicsBody>(1).GetBody()->GetContactList(); ce; ce = ce->next)
+	{
+		b2Contact* c = ce->contact;
+
+		if (c->IsTouching())
+>>>>>>> Noah_Branch
 		{
 			isColliding = true;
 		}
 
+<<<<<<< HEAD
+=======
+	}
+	
+>>>>>>> Noah_Branch
 	if (Input::GetKey(Key::S))
 	{
 		//Crouching will be done here
@@ -276,15 +310,29 @@ void Game::KeyboardDown()
 
 	b2Body* playerBody = tempPhysBod.GetBody();
 
+<<<<<<< HEAD
 	if (playerBody->GetContactList() != 0)
+=======
+	for (b2ContactEdge* ce = m_register->get<PhysicsBody>(1).GetBody()->GetContactList(); ce; ce = ce->next)
+>>>>>>> Noah_Branch
 	{
-		isColliding = true;
+		b2Contact* c = ce->contact;
+
+		if (c->IsTouching())
+		{
+			isColliding = true;
+		}
+
 	}
 
 	if (Input::GetKeyDown(Key::W))
 	{
 		if (isColliding == true)
+<<<<<<< HEAD
 			playerBody->ApplyLinearImpulse(b2Vec2(0.f, 55555.f), b2Vec2(playerBody->GetPosition()), true);
+=======
+			playerBody->ApplyLinearImpulse(b2Vec2(0.f, 555000000055.f), b2Vec2(playerBody->GetPosition()), true) ;
+>>>>>>> Noah_Branch
 	}
 
 	m_activeScene->KeyboardDown();
