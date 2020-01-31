@@ -29,7 +29,7 @@ Game::~Game()
 void Game::InitGame()
 {
 	//Initializes the backend with window width and height values
-	BackEnd::InitBackEnd(719.f, 436.f);
+	BackEnd::InitBackEnd(1280.f, 720.f);
 
 	//Grabs the initialized window
 	m_window = BackEnd::GetWindow();
@@ -101,16 +101,7 @@ void Game::Update()
 	//Updates the active scene
 	m_activeScene->Update();
 
-	for (b2ContactEdge* ce = m_register->get<PhysicsBody>(1).GetBody()->GetContactList(); ce; ce = ce->next)
-	{
-		b2Contact* c = ce->contact;
 
-		if (c->IsTouching())
-		{
-			std::cout << "bruh theres a collision\n";
-		}
-
-	}
 
 	
 
@@ -268,7 +259,8 @@ void Game::KeyboardHold()
 	
 	if (Input::GetKey(Key::C))
 	{
-		std::cout << playerBody->GetContactList() << std::endl;
+		if (isColliding == true)
+			std::cout << "BRUH COLLISION CHECK MOMENT\n";
 	}
 	
 	

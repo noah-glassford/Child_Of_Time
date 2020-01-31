@@ -31,8 +31,8 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<PhysicsBody>(entity);
 
 		//Sets up components
-		std::string fileName = "ConceptArt_Background.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 940, 500);
+		std::string fileName = "Level1_BG.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 6400, 1200);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 1.f));
 
 		//Grabs reference to various components
@@ -42,7 +42,6 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		//Physics body covers half the sprite
 			//Id type is environment
 		float shrinkX = 0.f;
-		float shrinkY = (tempSpr.GetHeight() / 2.f);
 
 		b2Body* tempBody;
 		b2BodyDef tempDef;
@@ -52,7 +51,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
-		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY),
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() / 4.f),
 			vec2(0.f, (-tempSpr.GetHeight() / 16.f) * 6.f), false);
 
 
@@ -74,8 +73,8 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<PhysicsBody>(entity);
 		//Sets up components 
 		std::string fileName = "Klock_png.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 25, 25);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 97.f));
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 28.5, 43.8);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
 		//Grabs reference to various components 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
