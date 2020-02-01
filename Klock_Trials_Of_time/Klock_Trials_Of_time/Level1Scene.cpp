@@ -33,6 +33,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		//Sets up components
 		std::string fileName = "Level1_BG.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 6400, 1200);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 1.f));
 
 		//Grabs reference to various components
