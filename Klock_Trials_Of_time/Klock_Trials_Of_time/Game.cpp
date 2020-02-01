@@ -36,14 +36,11 @@ void Game::InitGame()
 	//Replace this with your own scene.
 
 	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene"));
-<<<<<<< Updated upstream
 	m_scenes.push_back(new Level1Scene("Level 1 Scene"));
-=======
 	m_scenes.push_back(new Level1Scene("Chad poggers"));
 	//m_scenes.push_back(new Level1Scene("Level 1 Scene"));
->>>>>>> Stashed changes
 
-	//Sets active scene reference to our scene
+		//Sets active scene reference to our scene
 	m_activeScene = m_scenes[1];
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -103,8 +100,6 @@ void Game::Update()
 
 	//Updates the active scene
 	m_activeScene->Update();
-<<<<<<< HEAD
-=======
 
 	for (b2ContactEdge* ce = m_register->get<PhysicsBody>(1).GetBody()->GetContactList(); ce; ce = ce->next)
 	{
@@ -114,12 +109,32 @@ void Game::Update()
 		{
 			std::cout << "bruh theres a collision\n";
 		}
-
 	}
 
-	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//     a.i     testing
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	auto& playerBod = ECS::GetComponent<PhysicsBody>(1);
+	auto& AIBodDefault = ECS::GetComponent<PhysicsBody>(2);
+	auto& AIBodSprinter = ECS::GetComponent<PhysicsBody>(3);
 
->>>>>>> Noah_Branch
+	float distance1 = AIBodDefault.GetPosition().x - playerBod.GetPosition().x;
+	float distance2 = AIBodSprinter.GetPosition().x - playerBod.GetPosition().x;
+
+	//default enemy
+	if (distance1 < 165 && distance1 > -165) {
+		if (distance1 > 0)
+			AIBodDefault.ApplyForce(vec3(-100000.f, 0.f, 0.f));
+		if (distance1 < 0)
+			AIBodDefault.ApplyForce(vec3(100000.f, 0.f, 0.f));
+	}
+	//sprinter enemy
+	if (distance2 < 120 && distance2 > -120) {
+		if (distance2 > 0)
+			AIBodSprinter.ApplyForce(vec3(-150000.f, 0.f, 0.f));
+		if (distance2 < 0)
+			AIBodSprinter.ApplyForce(vec3(150000.f, 0.f, 0.f));
+	}
 }
 
 void Game::GUI()
@@ -227,31 +242,17 @@ void Game::GamepadTrigger(XInputController* con)
 
 void Game::KeyboardHold()
 {
-<<<<<<< Updated upstream
-	
-	
-	
-<<<<<<< HEAD
 	//auto& groundPhysBod = ECS::GetComponent<PhysicsBody>(0); //Grabs the ECS's physics Body for the ground
-=======
-	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(0); //Grabs the ECS's physics body for the player
+	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(1); //Grabs the ECS's physics body for the player
 
-	auto& groundPhysBod = ECS::GetComponent<PhysicsBody>(1); //Grabs the ECS's physics Body for the ground
->>>>>>> Stashed changes
+	auto& groundPhysBod = ECS::GetComponent<PhysicsBody>(0); //Grabs the ECS's physics Body for the ground
 	//Change this to main player once the physics works properly
 
-=======
-	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(1); //Grabs the ECS's physics body for the player
-	
->>>>>>> Noah_Branch
 	b2Body* playerBody = tempPhysBod.GetBody();
-<<<<<<< Updated upstream
-	
+
 	//b2Body* GroundBody = groundPhysBod.GetBody();
-=======
 
 	b2Body* GroundBody = groundPhysBod.GetBody();
->>>>>>> Stashed changes
 
 	b2BodyDef tempDef;
 
@@ -259,25 +260,16 @@ void Game::KeyboardHold()
 
 	bool isColliding = false;
 
-<<<<<<< HEAD
-	if (playerBody->GetContactList() != 0)
-		if (Input::GetKey(Key::S))
-=======
 	for (b2ContactEdge* ce = m_register->get<PhysicsBody>(1).GetBody()->GetContactList(); ce; ce = ce->next)
 	{
 		b2Contact* c = ce->contact;
 
 		if (c->IsTouching())
->>>>>>> Noah_Branch
 		{
 			isColliding = true;
 		}
-
-<<<<<<< HEAD
-=======
 	}
-	
->>>>>>> Noah_Branch
+
 	if (Input::GetKey(Key::S))
 	{
 		//Crouching will be done here
@@ -285,16 +277,17 @@ void Game::KeyboardHold()
 	if (Input::GetKey(Key::A))
 	{
 		if (isColliding == true)
-			tempPhysBod.ApplyForce(vec3(-130000.f, 0.f, 0.f));
+			tempPhysBod.ApplyForce(vec3(-180000.f, 0.f, 0.f));
 		else
-			tempPhysBod.ApplyForce(vec3(-30000.f, 0.f, 0.f));
+			tempPhysBod.ApplyForce(vec3(-160000.f, 0.f, 0.f));
 	}
 	if (Input::GetKey(Key::D))
 	{
 		if (isColliding == true)
-			tempPhysBod.ApplyForce(vec3(130000.f, 0.f, 0.f));
+			tempPhysBod.ApplyForce(vec3(180000.f, 0.f, 0.f));
+
 		else
-			tempPhysBod.ApplyForce(vec3(30000.f, 0.f, 0.f));
+			tempPhysBod.ApplyForce(vec3(160000.f, 0.f, 0.f));
 	}
 
 	//Active scene now captures this input and can use it
@@ -310,11 +303,7 @@ void Game::KeyboardDown()
 
 	b2Body* playerBody = tempPhysBod.GetBody();
 
-<<<<<<< HEAD
-	if (playerBody->GetContactList() != 0)
-=======
 	for (b2ContactEdge* ce = m_register->get<PhysicsBody>(1).GetBody()->GetContactList(); ce; ce = ce->next)
->>>>>>> Noah_Branch
 	{
 		b2Contact* c = ce->contact;
 
@@ -322,17 +311,17 @@ void Game::KeyboardDown()
 		{
 			isColliding = true;
 		}
-
 	}
 
 	if (Input::GetKeyDown(Key::W))
 	{
 		if (isColliding == true)
-<<<<<<< HEAD
-			playerBody->ApplyLinearImpulse(b2Vec2(0.f, 55555.f), b2Vec2(playerBody->GetPosition()), true);
-=======
-			playerBody->ApplyLinearImpulse(b2Vec2(0.f, 555000000055.f), b2Vec2(playerBody->GetPosition()), true) ;
->>>>>>> Noah_Branch
+			tempPhysBod.ApplyForce(vec3(0.f, 130000000.f, 0.f));
+	}
+	if (Input::GetKeyDown(Key::S))
+	{
+		if (!isColliding)
+			tempPhysBod.ApplyForce(vec3(0.f, -999999999.f, 0.f));
 	}
 
 	m_activeScene->KeyboardDown();
