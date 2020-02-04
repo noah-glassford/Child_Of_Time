@@ -85,7 +85,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(0.f), float32(50.f));
+		tempDef.position.Set(float32(-300.f), float32(50.f));
 		tempDef.fixedRotation = true;
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -97,7 +97,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
 		myFixtureDef.shape = &polygonShape;
-		myFixtureDef.density = 1;
+		myFixtureDef.density = 10;
 		myFixtureDef.friction = 1.f;
 		//Adds a fixture the size of the body
 		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight() / 2.f, b2Vec2(0, 0), 0);
@@ -135,7 +135,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(160.f), float32(80.f));
+		tempDef.position.Set(float32(300.f), float32(80.f));
 		tempDef.fixedRotation = true;
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -198,6 +198,105 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		myFixtureDef.shape = &polygonShape;
 		myFixtureDef.density = 4;
 		myFixtureDef.friction = 1.f;
+		//Adds a fixture the size of the body
+		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight() / 2.f, b2Vec2(0, 0), 0);
+		myFixtureDef.isSensor = true;
+		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
+		footSensorFixture->SetUserData((void*)3);
+
+		//Sets up the identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Box1");
+	}
+	//Setup wall test, entity 4
+	{
+		//Create new Entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		ECS::AttachComponent<PhysicsBody>(entity);
+		//Sets up components
+		std::string fileName = "Box.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 10, 200);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 98.f));
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers the entire sprite
+		float shrinkX = tempSpr.GetWidth() / 2.f;
+		float shrinkY = tempSpr.GetHeight() / 2.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_dynamicBody;
+		tempDef.position.Set(float32(-240.f), float32(100.f));
+		tempDef.fixedRotation = true;
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
+			vec2(0.f, 0.f), true);
+
+		//fixture definition
+		b2PolygonShape polygonShape;
+		b2FixtureDef myFixtureDef;
+		myFixtureDef.shape = &polygonShape;
+		myFixtureDef.density = 999999.f;
+		myFixtureDef.friction = 999999.f;
+		//Adds a fixture the size of the body
+		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight() / 2.f, b2Vec2(0, 0), 0);
+		myFixtureDef.isSensor = true;
+		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
+		footSensorFixture->SetUserData((void*)3);
+
+		//Sets up the identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Box1");
+	}
+
+	//Setup wall test, entity 5
+	{
+		//Create new Entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		ECS::AttachComponent<PhysicsBody>(entity);
+		//Sets up components
+		std::string fileName = "Box.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 10, 200);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 98.f));
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers the entire sprite
+		float shrinkX = tempSpr.GetWidth() / 2.f;
+		float shrinkY = tempSpr.GetHeight() / 2.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_dynamicBody;
+		tempDef.position.Set(float32(-350.f), float32(100.f));
+		tempDef.fixedRotation = true;
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
+			vec2(0.f, 0.f), true);
+
+		//fixture definition
+		b2PolygonShape polygonShape;
+		b2FixtureDef myFixtureDef;
+		myFixtureDef.shape = &polygonShape;
+		myFixtureDef.density = 999999.f;
+		myFixtureDef.friction = 999999.f;
 		//Adds a fixture the size of the body
 		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight() / 2.f, b2Vec2(0, 0), 0);
 		myFixtureDef.isSensor = true;
