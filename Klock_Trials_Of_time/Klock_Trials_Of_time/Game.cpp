@@ -101,13 +101,7 @@ void Game::Update()
 	//Updates the active scene
 	m_activeScene->Update();
 
-
-		if (c->IsTouching())
-		{
-			std::cout << "collision\n";
-		}
-		else std::cout << "no collision\n";
-	}
+	
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//     a.i     testing
