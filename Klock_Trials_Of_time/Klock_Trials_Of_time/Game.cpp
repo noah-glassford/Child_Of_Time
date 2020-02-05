@@ -271,7 +271,7 @@ void Game::KeyboardHold()
 		if (isColliding == true)
 			tempPhysBod.ApplyForce(vec3(-1800000.f, 0.f, 0.f));
 		else
-			tempPhysBod.ApplyForce(vec3(-1600000.f, 0.f, 0.f));
+			tempPhysBod.ApplyForce(vec3(-160000.f, 0.f, 0.f));
 	}
 	if (Input::GetKey(Key::D))
 	{
@@ -279,7 +279,7 @@ void Game::KeyboardHold()
 			tempPhysBod.ApplyForce(vec3(1800000.f, 0.f, 0.f));
 
 		else
-			tempPhysBod.ApplyForce(vec3(1600000.f, 0.f, 0.f));
+			tempPhysBod.ApplyForce(vec3(160000.f, 0.f, 0.f));
 	}
 
 	//Active scene now captures this input and can use it
