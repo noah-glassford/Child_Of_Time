@@ -104,8 +104,9 @@ void Game::Update()
 
 		if (c->IsTouching())
 		{
-			std::cout << "bruh theres a collision\n";
+			std::cout << "collision\n";
 		}
+		else std::cout << "no collision\n";
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,9 +121,9 @@ void Game::Update()
 
 	//default enemy
 	if (distance1 < 165 && distance1 > -165) {
-		if (distance1 > 0)
+		if (distance1 > 40)
 			AIBodDefault.ApplyForce(vec3(-100000.f, 0.f, 0.f));
-		if (distance1 < 0)
+		if (distance1 < -40)
 			AIBodDefault.ApplyForce(vec3(100000.f, 0.f, 0.f));
 	}
 	//sprinter enemy
@@ -274,17 +275,17 @@ void Game::KeyboardHold()
 	if (Input::GetKey(Key::A))
 	{
 		if (isColliding == true)
-			tempPhysBod.ApplyForce(vec3(-180000.f, 0.f, 0.f));
+			tempPhysBod.ApplyForce(vec3(-1800000.f, 0.f, 0.f));
 		else
-			tempPhysBod.ApplyForce(vec3(-160000.f, 0.f, 0.f));
+			tempPhysBod.ApplyForce(vec3(-1600000.f, 0.f, 0.f));
 	}
 	if (Input::GetKey(Key::D))
 	{
 		if (isColliding == true)
-			tempPhysBod.ApplyForce(vec3(180000.f, 0.f, 0.f));
+			tempPhysBod.ApplyForce(vec3(1800000.f, 0.f, 0.f));
 
 		else
-			tempPhysBod.ApplyForce(vec3(160000.f, 0.f, 0.f));
+			tempPhysBod.ApplyForce(vec3(1600000.f, 0.f, 0.f));
 	}
 
 	//Active scene now captures this input and can use it
@@ -318,7 +319,7 @@ void Game::KeyboardDown()
 	if (Input::GetKeyDown(Key::S))
 	{
 		if (!isColliding)
-			tempPhysBod.ApplyForce(vec3(0.f, -999999999.f, 0.f));
+			tempPhysBod.ApplyForce(vec3(0.f, -999999999999.f, 0.f));
 	}
 
 	m_activeScene->KeyboardDown();
