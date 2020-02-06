@@ -3,7 +3,7 @@
 Level1Scene::Level1Scene(std::string name)
 	: Scene(name)
 {
-	m_gravity = b2Vec2(float32(0.f), float32(-55.f));
+	m_gravity = b2Vec2(float32(0.f), float32(-70.f));
 	m_physicsWorld->SetGravity(m_gravity);
 }
 
@@ -29,8 +29,9 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<PhysicsBody>(entity);
 
 		//Sets up components
-		std::string fileName = "ConceptArt_Background.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 940, 500);
+		std::string fileName = "Level1_BG.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 6400, 700);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 1.f));
 
 		//Grabs reference to various components
@@ -40,7 +41,6 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		//Physics body covers half the sprite
 			//Id type is environment
 		float shrinkX = 0.f;
-		float shrinkY = (tempSpr.GetHeight() / 2.f);
 
 		b2Body* tempBody;
 		b2BodyDef tempDef;
@@ -50,8 +50,8 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
-		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY),
-			vec2(0.f, (-tempSpr.GetHeight() / 16.f) * 6.f), false);
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() / 4.f),
+			vec2(0.f, (-tempSpr.GetHeight() / 20.f)*8.f), false);
 
 		//Sets up the Identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
@@ -68,13 +68,20 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
-
+		//Sets up components 
 		std::string fileName = "spriteSheet.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 28.5, 43.8);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
+		//Grabs reference to various components 
+
+
+		
 
 		//Sets up components
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 25, 25);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 97.f));
 		//Grabs reference to various components
+
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
 
@@ -87,6 +94,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		tempDef.type = b2_dynamicBody;
 		tempDef.position.Set(float32(-300.f), float32(50.f));
 		tempDef.fixedRotation = true;
+		
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -98,7 +106,8 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2FixtureDef myFixtureDef;
 		myFixtureDef.shape = &polygonShape;
 		myFixtureDef.density = 10;
-		myFixtureDef.friction = 1.f;
+		//myFixtureDef.friction = 1.f;
+
 		//Adds a fixture the size of the body
 		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight() / 2.f, b2Vec2(0, 0), 0);
 		myFixtureDef.isSensor = true;
@@ -208,7 +217,8 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Box1");
 	}
-	//Setup wall test, entity 4
+	
+	//Setup image for the platforms
 	{
 		//Create new Entity
 		auto entity = ECS::CreateEntity();
@@ -216,17 +226,37 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		//Add components
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
-
-		ECS::AttachComponent<PhysicsBody>(entity);
+	
 		//Sets up components
-		std::string fileName = "Box.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 10, 200);
+		std::string fileName = "tut_lv.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 2500,200);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 98.f));
 		//Grabs reference to various components
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		
+		//Sets up the identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Box1");
+	}
+	//Setup wall test, entity 4 
+	{
+		//Create new Entity 
+		auto entity = ECS::CreateEntity();
+
+		//Add components 
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		ECS::AttachComponent<PhysicsBody>(entity);
+		//Sets up components 
+		std::string fileName = "Box.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 10, 200);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 98.f));
+		//Grabs reference to various components 
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
 
-		//Physics body covers the entire sprite
+		//Physics body covers the entire sprite 
 		float shrinkX = tempSpr.GetWidth() / 2.f;
 		float shrinkY = tempSpr.GetHeight() / 2.f;
 
@@ -241,42 +271,42 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
 			vec2(0.f, 0.f), true);
 
-		//fixture definition
+		//fixture definition 
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
 		myFixtureDef.shape = &polygonShape;
 		myFixtureDef.density = 999999.f;
 		myFixtureDef.friction = 999999.f;
-		//Adds a fixture the size of the body
+		//Adds a fixture the size of the body 
 		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight() / 2.f, b2Vec2(0, 0), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		footSensorFixture->SetUserData((void*)3);
 
-		//Sets up the identifier
+		//Sets up the identifier 
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Box1");
 	}
 
-	//Setup wall test, entity 5
+	//Setup wall test, entity 5 
 	{
-		//Create new Entity
+		//Create new Entity 
 		auto entity = ECS::CreateEntity();
 
-		//Add components
+		//Add components 
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 
 		ECS::AttachComponent<PhysicsBody>(entity);
-		//Sets up components
+		//Sets up components 
 		std::string fileName = "Box.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 10, 200);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 98.f));
-		//Grabs reference to various components
+		//Grabs reference to various components 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
 
-		//Physics body covers the entire sprite
+		//Physics body covers the entire sprite 
 		float shrinkX = tempSpr.GetWidth() / 2.f;
 		float shrinkY = tempSpr.GetHeight() / 2.f;
 
@@ -291,19 +321,19 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
 			vec2(0.f, 0.f), true);
 
-		//fixture definition
+		//fixture definition 
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
 		myFixtureDef.shape = &polygonShape;
 		myFixtureDef.density = 999999.f;
 		myFixtureDef.friction = 999999.f;
-		//Adds a fixture the size of the body
+		//Adds a fixture the size of the body 
 		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight() / 2.f, b2Vec2(0, 0), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		footSensorFixture->SetUserData((void*)3);
 
-		//Sets up the identifier
+		//Sets up the identifier 
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Box1");
 	}

@@ -27,7 +27,7 @@ Game::~Game()
 void Game::InitGame()
 {
 	//Initializes the backend with window width and height values
-	BackEnd::InitBackEnd(719.f, 436.f);
+	BackEnd::InitBackEnd(1280.f, 720.f);
 
 	//Grabs the initialized window
 	m_window = BackEnd::GetWindow();
@@ -101,16 +101,7 @@ void Game::Update()
 	//Updates the active scene
 	m_activeScene->Update();
 
-	for (b2ContactEdge* ce = m_register->get<PhysicsBody>(1).GetBody()->GetContactList(); ce; ce = ce->next)
-	{
-		b2Contact* c = ce->contact;
-
-		if (c->IsTouching())
-		{
-			std::cout << "collision\n";
-		}
-		else std::cout << "no collision\n";
-	}
+	
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//     a.i     testing
@@ -280,7 +271,7 @@ void Game::KeyboardHold()
 		if (isColliding == true)
 			tempPhysBod.ApplyForce(vec3(-1800000.f, 0.f, 0.f));
 		else
-			tempPhysBod.ApplyForce(vec3(-1600000.f, 0.f, 0.f));
+			tempPhysBod.ApplyForce(vec3(-160000.f, 0.f, 0.f));
 	}
 	if (Input::GetKey(Key::D))
 	{
@@ -288,7 +279,7 @@ void Game::KeyboardHold()
 			tempPhysBod.ApplyForce(vec3(1800000.f, 0.f, 0.f));
 
 		else
-			tempPhysBod.ApplyForce(vec3(1600000.f, 0.f, 0.f));
+			tempPhysBod.ApplyForce(vec3(160000.f, 0.f, 0.f));
 	}
 
 	//Active scene now captures this input and can use it
