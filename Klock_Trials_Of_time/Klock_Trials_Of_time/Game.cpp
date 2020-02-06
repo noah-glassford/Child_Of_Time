@@ -101,7 +101,18 @@ void Game::Update()
 	//Updates the active scene
 	m_activeScene->Update();
 
+<<<<<<< Updated upstream
 	
+=======
+	for (b2ContactEdge* ce = m_register->get<PhysicsBody>(1).GetBody()->GetContactList(); ce; ce = ce->next)
+	{
+		b2Contact* c = ce->contact;
+
+		if (c->IsTouching())
+		{
+		}
+	}
+>>>>>>> Stashed changes
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//     a.i     testing
@@ -269,18 +280,29 @@ void Game::KeyboardHold()
 	if (Input::GetKey(Key::A))
 	{
 		if (isColliding == true)
-			tempPhysBod.ApplyForce(vec3(-1800000.f, 0.f, 0.f));
+			tempPhysBod.ApplyForce(vec3(-1800000.f, playerBody->GetLinearVelocity().y * 5, 0.f));
 		else
+<<<<<<< Updated upstream
 			tempPhysBod.ApplyForce(vec3(-160000.f, 0.f, 0.f));
+=======
+			tempPhysBod.ApplyForce(vec3(-1600000.f, playerBody->GetLinearVelocity().y * 5, 0.f));
+>>>>>>> Stashed changes
 	}
 	if (Input::GetKey(Key::D))
 	{
 		if (isColliding == true)
-			tempPhysBod.ApplyForce(vec3(1800000.f, 0.f, 0.f));
+			tempPhysBod.ApplyForce(vec3(1800000.f, playerBody->GetLinearVelocity().y * 5, 0.f));
 
 		else
+<<<<<<< Updated upstream
 			tempPhysBod.ApplyForce(vec3(160000.f, 0.f, 0.f));
+=======
+			tempPhysBod.ApplyForce(vec3(1600000.f, playerBody->GetLinearVelocity().y * 5, 0.f));
+>>>>>>> Stashed changes
 	}
+
+	std::cout << "\nSpeed X: " << playerBody->GetLinearVelocity().x;
+	//std::cout << "\nSpeed Y: " << playerBody->GetLinearVelocity().y;
 
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
@@ -308,12 +330,12 @@ void Game::KeyboardDown()
 	if (Input::GetKeyDown(Key::W))
 	{
 		if (isColliding == true)
-			tempPhysBod.ApplyForce(vec3(0.f, 130000000.f, 0.f));
+			tempPhysBod.ApplyForce(vec3(playerBody->GetLinearVelocity().x * 5, 130000000.f, 0.f));
 	}
 	if (Input::GetKeyDown(Key::S))
 	{
 		if (!isColliding)
-			tempPhysBod.ApplyForce(vec3(0.f, -999999999999.f, 0.f));
+			tempPhysBod.ApplyForce(vec3(playerBody->GetLinearVelocity().x * 5, -999999999999.f, 0.f));
 	}
 
 	m_activeScene->KeyboardDown();

@@ -105,9 +105,15 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
 		myFixtureDef.shape = &polygonShape;
+<<<<<<< Updated upstream
 		myFixtureDef.density = 10;
 		//myFixtureDef.friction = 1.f;
 
+=======
+		myFixtureDef.density = 1.0;
+		myFixtureDef.friction = 1.0f;
+		tempBody->SetGravityScale(4);
+>>>>>>> Stashed changes
 		//Adds a fixture the size of the body
 		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight() / 2.f, b2Vec2(0, 0), 0);
 		myFixtureDef.isSensor = true;
@@ -158,6 +164,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		myFixtureDef.shape = &polygonShape;
 		myFixtureDef.density = 4;
 		myFixtureDef.friction = 1.f;
+		tempBody->SetGravityScale(0);
 		//Adds a fixture the size of the body
 		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight() / 2.f, b2Vec2(0, 0), 0);
 		myFixtureDef.isSensor = true;
@@ -207,6 +214,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		myFixtureDef.shape = &polygonShape;
 		myFixtureDef.density = 4;
 		myFixtureDef.friction = 1.f;
+		tempBody->SetGravityScale(0);
 		//Adds a fixture the size of the body
 		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight() / 2.f, b2Vec2(0, 0), 0);
 		myFixtureDef.isSensor = true;
