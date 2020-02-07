@@ -18,7 +18,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 	//Sets up aspect ratio for the camera
 	float aspectRatio = windowWidth / windowHeight;
 
-	//Background and Ground Object entity 0
+	//Setup the first platform
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -29,8 +29,8 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<PhysicsBody>(entity);
 
 		//Sets up components
-		std::string fileName = "Level1_BG.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 6400, 700);
+		std::string fileName = "Level1_Platform.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 200, 200);
 		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 1.f));
 
@@ -46,16 +46,16 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(0.f), float32(50.f));
+		tempDef.position.Set(float32(-50.f), float32(-200.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
-		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() / 4.f),
-			vec2(0.f, (-tempSpr.GetHeight() / 20.f)*8.f), false);
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() ), float(tempSpr.GetHeight()),
+			vec2(0.f, 0.f), false);
 
 		//Sets up the Identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
-		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
 	}
 
 	//Setup klock, entity 1
@@ -92,7 +92,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(-300.f), float32(50.f));
+		tempDef.position.Set(float32(-40.f), float32(-40.f));
 		tempDef.fixedRotation = true;
 		
 
@@ -225,27 +225,8 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Box1");
 	}
-	
-	//Setup image for the platforms
-	{
-		//Create new Entity
-		auto entity = ECS::CreateEntity();
 
-		//Add components
-		ECS::AttachComponent<Sprite>(entity);
-		ECS::AttachComponent<Transform>(entity);
-	
-		//Sets up components
-		std::string fileName = "tut_lv.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 2500,200);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 98.f));
-		//Grabs reference to various components
-		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
-		
-		//Sets up the identifier
-		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
-		ECS::SetUpIdentifier(entity, bitHolder, "Box1");
-	}
+
 	//Setup wall test, entity 4 
 	{
 		//Create new Entity 
@@ -345,6 +326,27 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Box1");
 	}
+	//Background
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+
+		//Sets up components
+		std::string fileName = "Level1_BG.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 6400, 700);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 1.f));
+
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
+
+	}
+
 
 	//Main Camera
 	{//Creates camera entity
