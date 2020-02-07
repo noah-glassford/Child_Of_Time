@@ -50,8 +50,13 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
+<<<<<<< Updated upstream
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() ), float(tempSpr.GetHeight()),
 			vec2(0.f, 0.f), false);
+=======
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() / 4.f),
+			vec2(0.f, (-tempSpr.GetHeight() / 20.f) * 8.f), false);
+>>>>>>> Stashed changes
 
 		//Sets up the Identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
@@ -68,14 +73,11 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
-		//Sets up components 
+		//Sets up components
 		std::string fileName = "spriteSheet.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 28.5, 43.8);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
-		//Grabs reference to various components 
-
-
-		
+		//Grabs reference to various components
 
 		//Sets up components
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 25, 25);
@@ -94,7 +96,6 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		tempDef.type = b2_dynamicBody;
 		tempDef.position.Set(float32(-40.f), float32(-40.f));
 		tempDef.fixedRotation = true;
-		
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -105,15 +106,12 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
 		myFixtureDef.shape = &polygonShape;
-<<<<<<< Updated upstream
 		myFixtureDef.density = 10;
 		//myFixtureDef.friction = 1.f;
 
-=======
 		myFixtureDef.density = 1.0;
 		myFixtureDef.friction = 1.0f;
 		tempBody->SetGravityScale(4);
->>>>>>> Stashed changes
 		//Adds a fixture the size of the body
 		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight() / 2.f, b2Vec2(0, 0), 0);
 		myFixtureDef.isSensor = true;
@@ -225,27 +223,52 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Box1");
 	}
+<<<<<<< Updated upstream
 
 
 	//Setup wall test, entity 4 
+=======
+
+	//Setup image for the platforms
 	{
-		//Create new Entity 
+		//Create new Entity
 		auto entity = ECS::CreateEntity();
 
-		//Add components 
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Sets up components
+		std::string fileName = "tut_lv.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 2500, 200);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 98.f));
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+
+		//Sets up the identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Box1");
+	}
+	//Setup wall test, entity 4
+>>>>>>> Stashed changes
+	{
+		//Create new Entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 
 		ECS::AttachComponent<PhysicsBody>(entity);
-		//Sets up components 
+		//Sets up components
 		std::string fileName = "Box.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 10, 200);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 98.f));
-		//Grabs reference to various components 
+		//Grabs reference to various components
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
 
-		//Physics body covers the entire sprite 
+		//Physics body covers the entire sprite
 		float shrinkX = tempSpr.GetWidth() / 2.f;
 		float shrinkY = tempSpr.GetHeight() / 2.f;
 
@@ -260,42 +283,42 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
 			vec2(0.f, 0.f), true);
 
-		//fixture definition 
+		//fixture definition
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
 		myFixtureDef.shape = &polygonShape;
 		myFixtureDef.density = 999999.f;
 		myFixtureDef.friction = 999999.f;
-		//Adds a fixture the size of the body 
+		//Adds a fixture the size of the body
 		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight() / 2.f, b2Vec2(0, 0), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		footSensorFixture->SetUserData((void*)3);
 
-		//Sets up the identifier 
+		//Sets up the identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Box1");
 	}
 
-	//Setup wall test, entity 5 
+	//Setup wall test, entity 5
 	{
-		//Create new Entity 
+		//Create new Entity
 		auto entity = ECS::CreateEntity();
 
-		//Add components 
+		//Add components
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 
 		ECS::AttachComponent<PhysicsBody>(entity);
-		//Sets up components 
+		//Sets up components
 		std::string fileName = "Box.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 10, 200);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 98.f));
-		//Grabs reference to various components 
+		//Grabs reference to various components
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
 
-		//Physics body covers the entire sprite 
+		//Physics body covers the entire sprite
 		float shrinkX = tempSpr.GetWidth() / 2.f;
 		float shrinkY = tempSpr.GetHeight() / 2.f;
 
@@ -310,19 +333,19 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
 			vec2(0.f, 0.f), true);
 
-		//fixture definition 
+		//fixture definition
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
 		myFixtureDef.shape = &polygonShape;
 		myFixtureDef.density = 999999.f;
 		myFixtureDef.friction = 999999.f;
-		//Adds a fixture the size of the body 
+		//Adds a fixture the size of the body
 		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight() / 2.f, b2Vec2(0, 0), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		footSensorFixture->SetUserData((void*)3);
 
-		//Sets up the identifier 
+		//Sets up the identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Box1");
 	}
