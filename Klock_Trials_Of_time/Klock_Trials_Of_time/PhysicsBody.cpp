@@ -60,7 +60,7 @@ PhysicsBody::PhysicsBody(b2Body* body, float radius, vec2 centerOffset, bool isD
 	InitBody();
 }
 
-PhysicsBody::PhysicsBody(b2Body* body, float width, float height, vec2 centerOffset, bool isDynamic)
+PhysicsBody::PhysicsBody(b2Body* body, float width, float height, vec2 centerOffset, bool isDynamic, float friction)
 {
 	//Bodies don't reference a shape by themselves
 	//they need a shape that has been linked to a fixture
@@ -73,7 +73,7 @@ PhysicsBody::PhysicsBody(b2Body* body, float width, float height, vec2 centerOff
 	b2FixtureDef tempFixture;
 	tempFixture.shape = &tempShape;
 	tempFixture.density = 1.f;
-	tempFixture.friction = 1.5f;
+	tempFixture.friction = friction;
 	
 
 	m_body = body;

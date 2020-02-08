@@ -116,16 +116,16 @@ void Game::Update()
 	//default enemy
 	if (distance1 < 165 && distance1 > -165) {
 		if (distance1 > 40)
-			AIBodDefault.ApplyForce(vec3(-100000.f, 0.f, 0.f));
+			AIBodDefault.ApplyForce(vec3(-1000000.f, 0.f, 0.f));
 		if (distance1 < -40)
-			AIBodDefault.ApplyForce(vec3(100000.f, 0.f, 0.f));
+			AIBodDefault.ApplyForce(vec3(1000000.f, 0.f, 0.f));
 	}
 	//sprinter enemy
 	if (distance2 < 120 && distance2 > -120) {
 		if (distance2 > 0)
-			AIBodSprinter.ApplyForce(vec3(-150000.f, 0.f, 0.f));
+			AIBodSprinter.ApplyForce(vec3(-1500000.f, 0.f, 0.f));
 		if (distance2 < 0)
-			AIBodSprinter.ApplyForce(vec3(150000.f, 0.f, 0.f));
+			AIBodSprinter.ApplyForce(vec3(1500000.f, 0.f, 0.f));
 	}
 }
 
@@ -237,14 +237,13 @@ void Game::KeyboardHold()
 	//auto& groundPhysBod = ECS::GetComponent<PhysicsBody>(0); //Grabs the ECS's physics Body for the ground
 	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(1); //Grabs the ECS's physics body for the player
 
-	auto& groundPhysBod = ECS::GetComponent<PhysicsBody>(0); //Grabs the ECS's physics Body for the ground
+
 	//Change this to main player once the physics works properly
 
 	b2Body* playerBody = tempPhysBod.GetBody();
 
 	//b2Body* GroundBody = groundPhysBod.GetBody();
 
-	b2Body* GroundBody = groundPhysBod.GetBody();
 
 	b2BodyDef tempDef;
 
@@ -271,7 +270,7 @@ void Game::KeyboardHold()
 		if (isColliding == true)
 			tempPhysBod.ApplyForce(vec3(-1800000.f, 0.f, 0.f));
 		else
-			tempPhysBod.ApplyForce(vec3(-160000.f, 0.f, 0.f));
+			tempPhysBod.ApplyForce(vec3(-560000.f, 0.f, 0.f));
 	}
 	if (Input::GetKey(Key::D))
 	{
@@ -279,7 +278,7 @@ void Game::KeyboardHold()
 			tempPhysBod.ApplyForce(vec3(1800000.f, 0.f, 0.f));
 
 		else
-			tempPhysBod.ApplyForce(vec3(160000.f, 0.f, 0.f));
+			tempPhysBod.ApplyForce(vec3(560000.f, 0.f, 0.f));
 	}
 
 	//Active scene now captures this input and can use it
