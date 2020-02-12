@@ -101,7 +101,7 @@ void Game::Update()
 	//Updates the active scene
 	m_activeScene->Update();
 
-	
+/*
 	//platform movement
 	auto& platformBod = ECS::GetComponent<PhysicsBody>(9);
 	b2Body* platformb2body = platformBod.GetBody();
@@ -110,7 +110,8 @@ void Game::Update()
 	b2Vec2 velocity = b2Vec2(10.f, 0.f);
 	bool direction{ 0 }; //True = platform moving left and false = platform moving right
 
-	if (position >= 1500)
+	position = platformBod.GetPosition().x;
+	if (position >= 1200)
 	{
 		direction = true;
 	}
@@ -128,8 +129,10 @@ void Game::Update()
 		velocity = b2Vec2(10.f, 0.f);
 	}
 
-	platformb2body->SetLinearVelocity(velocity);
+	platformb2body->SetTransform(b2Vec2(position + velocity.x, vertPosition),0);
+	std::cout << position;
 
+	*/
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//     a.i     testing
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
