@@ -112,55 +112,6 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<PhysicsBody>(entity);
 		//Sets up components
 		std::string fileName = "Box.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 20, 35);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 98.f));
-		//Grabs reference to various components
-		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
-		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
-
-		//Physics body covers the entire sprite
-		float shrinkX = tempSpr.GetWidth() / 2.f;
-		float shrinkY = tempSpr.GetHeight() / 2.f;
-
-		b2Body* tempBody;
-		b2BodyDef tempDef;
-		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(300.f), float32(80.f));
-		tempDef.fixedRotation = true;
-
-		tempBody = m_physicsWorld->CreateBody(&tempDef);
-
-		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
-			vec2(0.f, 0.f), true, 1.5f);
-
-		//fixture definition
-		b2PolygonShape polygonShape;
-		b2FixtureDef myFixtureDef;
-		myFixtureDef.shape = &polygonShape;
-		myFixtureDef.density = 4;
-		myFixtureDef.friction = 1.f;
-		//Adds a fixture the size of the body
-		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight() / 2.f, b2Vec2(0, 0), 0);
-		myFixtureDef.isSensor = true;
-		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
-		footSensorFixture->SetUserData((void*)3);
-
-		//Sets up the identifier
-		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
-		ECS::SetUpIdentifier(entity, bitHolder, "Ai enemy 1");
-	}
-	//Setup ai test enemy, entity 3
-	{
-		//Create new Entity
-		auto entity = ECS::CreateEntity();
-
-		//Add components
-		ECS::AttachComponent<Sprite>(entity);
-		ECS::AttachComponent<Transform>(entity);
-
-		ECS::AttachComponent<PhysicsBody>(entity);
-		//Sets up components
-		std::string fileName = "Box.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 20, 20);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 98.f));
 		//Grabs reference to various components
@@ -180,19 +131,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
-			vec2(0.f, 0.f), true, 0.7f);
-
-		//fixture definition
-		b2PolygonShape polygonShape;
-		b2FixtureDef myFixtureDef;
-		myFixtureDef.shape = &polygonShape;
-		myFixtureDef.density = 4;
-		myFixtureDef.friction = 1.f;
-		//Adds a fixture the size of the body
-		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight() / 2.f, b2Vec2(0, 0), 0);
-		myFixtureDef.isSensor = true;
-		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
-		footSensorFixture->SetUserData((void*)3);
+			vec2(0.f, 0.f), true, 0.2f);
 
 		//Sets up the identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
@@ -202,7 +141,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 #pragma endregion
 
 #pragma region platforms
-	//Setup the first platform ent 4
+	//Setup the first platform ent 3
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -241,7 +180,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
 	}
-	//Setup second platform ent 5
+	//Setup second platform ent 4
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -280,7 +219,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 2");
 	}
-	//setup third platform ent 6
+	//setup third platform ent 5
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -320,7 +259,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 3");
 	}
 
-	//setup fourth platform ent 7
+	//setup fourth platform ent 6
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -361,7 +300,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 	}
 
 
-	//setup fifth platform ent 8
+	//setup fifth platform ent 7
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -401,7 +340,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 5");
 	}
 
-	//setup sixth platform ent 9 moving plat
+	//setup sixth platform ent 8 moving plat
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -429,7 +368,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(-75.f), float32(-30.f));
+		tempDef.position.Set(float32(-75.f), float32(30.f));
 		tempDef.fixedRotation = true;
 		tempDef.gravityScale = 0.f;
 

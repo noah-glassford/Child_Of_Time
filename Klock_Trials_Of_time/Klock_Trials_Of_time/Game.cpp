@@ -103,7 +103,7 @@ void Game::Update()
 
 
 	//platform movement
-	auto& platformBod = ECS::GetComponent<PhysicsBody>(9);
+	auto& platformBod = ECS::GetComponent<PhysicsBody>(8);
 	b2Body* platformb2body = platformBod.GetBody();
 	float position = platformBod.GetPosition().x;
 	float vertPosition = platformBod.GetPosition().y;
@@ -130,9 +130,9 @@ void Game::Update()
 	//default enemy
 	if (distance1 < 165 && distance1 > -165) {
 		if (distance1 > 40)
-			AIBodDefault.ApplyForce(vec3(-100000.f, 0.f, 0.f));
+			AIBodDefault.ApplyForce(vec3(-89999.f, 0.f, 0.f));
 		if (distance1 < -40)
-			AIBodDefault.ApplyForce(vec3(100000.f, 0.f, 0.f));
+			AIBodDefault.ApplyForce(vec3(89999.f, 0.f, 0.f));
 	}
 	//sprinter enemy
 	if (distance2 < 120 && distance2 > -120) {
