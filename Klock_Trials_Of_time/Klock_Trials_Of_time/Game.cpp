@@ -101,38 +101,22 @@ void Game::Update()
 	//Updates the active scene
 	m_activeScene->Update();
 
-/*
+
 	//platform movement
 	auto& platformBod = ECS::GetComponent<PhysicsBody>(9);
 	b2Body* platformb2body = platformBod.GetBody();
 	float position = platformBod.GetPosition().x;
 	float vertPosition = platformBod.GetPosition().y;
-	b2Vec2 velocity = b2Vec2(10.f, 0.f);
+	b2Vec2 velocity = b2Vec2(0.3f, 0.f);
 	bool direction{ 0 }; //True = platform moving left and false = platform moving right
 
 	position = platformBod.GetPosition().x;
-	if (position >= 1200)
-	{
-		direction = true;
-	}
-	if (position <= 1000)
-	{
-		direction = false;
-	}
 	
-	if (direction)
-	{
-		velocity = (b2Vec2(-10.f, 0.f));
-	}
-	else if (!direction)
-	{
-		velocity = b2Vec2(10.f, 0.f);
-	}
 
-	platformb2body->SetTransform(b2Vec2(position + velocity.x, vertPosition),0);
+	platformb2body->SetTransform(b2Vec2(position + velocity.x, -30),0);
 	std::cout << position;
 
-	*/
+	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//     a.i     testing
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -146,16 +130,16 @@ void Game::Update()
 	//default enemy
 	if (distance1 < 165 && distance1 > -165) {
 		if (distance1 > 40)
-			AIBodDefault.ApplyForce(vec3(-200000.f, 0.f, 0.f));
+			AIBodDefault.ApplyForce(vec3(-100000.f, 0.f, 0.f));
 		if (distance1 < -40)
-			AIBodDefault.ApplyForce(vec3(200000.f, 0.f, 0.f));
+			AIBodDefault.ApplyForce(vec3(100000.f, 0.f, 0.f));
 	}
 	//sprinter enemy
 	if (distance2 < 120 && distance2 > -120) {
 		if (distance2 > 0)
-			AIBodSprinter.ApplyForce(vec3(-250000.f, 0.f, 0.f));
+			AIBodSprinter.ApplyForce(vec3(-150000.f, 0.f, 0.f));
 		if (distance2 < 0)
-			AIBodSprinter.ApplyForce(vec3(250000.f, 0.f, 0.f));
+			AIBodSprinter.ApplyForce(vec3(150000.f, 0.f, 0.f));
 	}
 }
 

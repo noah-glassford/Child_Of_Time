@@ -50,7 +50,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 		//Sets up components 
-		std::string fileName = "spriteSheet.png";
+		std::string fileName = "Klock_Png.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 28.5, 43.8);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
 		//Grabs reference to various components 
@@ -180,7 +180,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
-			vec2(0.f, 0.f), true, 1.5f);
+			vec2(0.f, 0.f), true, 0.7f);
 
 		//fixture definition
 		b2PolygonShape polygonShape;
@@ -429,7 +429,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(1000.f), float32(70.f));
+		tempDef.position.Set(float32(-75.f), float32(-30.f));
 		tempDef.fixedRotation = true;
 		tempDef.gravityScale = 0.f;
 
