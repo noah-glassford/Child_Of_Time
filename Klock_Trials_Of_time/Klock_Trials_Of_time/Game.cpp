@@ -101,6 +101,7 @@ void Game::Update()
 	//Updates the active scene
 	m_activeScene->Update();
 
+<<<<<<< HEAD
 	for (b2ContactEdge* ce = m_register->get<PhysicsBody>(1).GetBody()->GetContactList(); ce; ce = ce->next)
 	{
 		b2Contact* c = ce->contact;
@@ -109,7 +110,24 @@ void Game::Update()
 		{
 		}
 	}
+=======
 
+	//platform movement
+	auto& platformBod = ECS::GetComponent<PhysicsBody>(8);
+	b2Body* platformb2body = platformBod.GetBody();
+	float position = platformBod.GetPosition().x;
+	float vertPosition = platformBod.GetPosition().y;
+	b2Vec2 velocity = b2Vec2(0.3f, 0.f);
+	bool direction{ 0 }; //True = platform moving left and false = platform moving right
+
+	position = platformBod.GetPosition().x;
+	
+>>>>>>> Noah_Branch
+
+	platformb2body->SetTransform(b2Vec2(position + velocity.x, -30),0);
+	std::cout << position;
+
+	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//     a.i     testing
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,9 +141,9 @@ void Game::Update()
 	//default enemy
 	if (distance1 < 165 && distance1 > -165) {
 		if (distance1 > 40)
-			AIBodDefault.ApplyForce(vec3(-100000.f, 0.f, 0.f));
+			AIBodDefault.ApplyForce(vec3(-89999.f, 0.f, 0.f));
 		if (distance1 < -40)
-			AIBodDefault.ApplyForce(vec3(100000.f, 0.f, 0.f));
+			AIBodDefault.ApplyForce(vec3(89999.f, 0.f, 0.f));
 	}
 	//sprinter enemy
 	if (distance2 < 120 && distance2 > -120) {
@@ -244,14 +262,13 @@ void Game::KeyboardHold()
 	//auto& groundPhysBod = ECS::GetComponent<PhysicsBody>(0); //Grabs the ECS's physics Body for the ground
 	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(1); //Grabs the ECS's physics body for the player
 
-	auto& groundPhysBod = ECS::GetComponent<PhysicsBody>(0); //Grabs the ECS's physics Body for the ground
+
 	//Change this to main player once the physics works properly
 
 	b2Body* playerBody = tempPhysBod.GetBody();
 
 	//b2Body* GroundBody = groundPhysBod.GetBody();
 
-	b2Body* GroundBody = groundPhysBod.GetBody();
 
 	b2BodyDef tempDef;
 
@@ -278,7 +295,11 @@ void Game::KeyboardHold()
 		if (isColliding == true)
 			tempPhysBod.ApplyForce(vec3(-1800000.f, playerBody->GetLinearVelocity().y * 5, 0.f));
 		else
+<<<<<<< HEAD
 			tempPhysBod.ApplyForce(vec3(playerBody->GetLinearVelocity().x * 30, playerBody->GetLinearVelocity().y * 5, 0.f));
+=======
+			tempPhysBod.ApplyForce(vec3(-560000.f, 0.f, 0.f));
+>>>>>>> Noah_Branch
 	}
 	if (Input::GetKey(Key::D))
 	{
@@ -286,7 +307,11 @@ void Game::KeyboardHold()
 			tempPhysBod.ApplyForce(vec3(1800000.f, playerBody->GetLinearVelocity().y * 5, 0.f));
 
 		else
+<<<<<<< HEAD
 			tempPhysBod.ApplyForce(vec3(playerBody->GetLinearVelocity().x * 30, playerBody->GetLinearVelocity().y * 5, 0.f));
+=======
+			tempPhysBod.ApplyForce(vec3(560000.f, 0.f, 0.f));
+>>>>>>> Noah_Branch
 	}
 
 	//std::cout << "\nSpeed X: " << playerBody->GetLinearVelocity().x;

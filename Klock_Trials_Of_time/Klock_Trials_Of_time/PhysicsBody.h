@@ -39,7 +39,7 @@ public:
 	//Constructs a circle collider
 	PhysicsBody(b2Body* body, float radius, vec2 centerOffset, bool isDynamic);
 	//Constructs a box collider
-	PhysicsBody(b2Body* body, float width, float height, vec2 centerOffset, bool isDynamic);
+	PhysicsBody(b2Body* body, float width, float height, vec2 centerOffset, bool isDynamic, float friction);
 
 	void DeleteBody();
 

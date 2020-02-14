@@ -55,7 +55,7 @@ void PhysicsTestScene::InitScene(float windowWidth, float windowHeight)
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY),
-			vec2(0.f, (-tempSpr.GetHeight() / 16.f) * 6.f), false);
+			vec2(0.f, (-tempSpr.GetHeight() / 16.f) * 6.f), false, 1.5f);
 
 	
 		//Sets up the Identifier
@@ -96,7 +96,7 @@ void PhysicsTestScene::InitScene(float windowWidth, float windowHeight)
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
-			vec2(0.f, 0.f), true);
+			vec2(0.f, 0.f), true, 1.5f);
 	
 		
 		//Sets up the identifier 
@@ -134,7 +134,7 @@ void PhysicsTestScene::InitScene(float windowWidth, float windowHeight)
 	tempBody = m_physicsWorld->CreateBody(&tempDef);
 
 	tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
-		vec2(0.f, 0.f), true);
+		vec2(0.f, 0.f), true, 1.5f);
 
 
 	//Sets up the identifier 
