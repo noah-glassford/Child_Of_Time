@@ -101,26 +101,34 @@ void Game::Update()
 	//Updates the active scene
 	m_activeScene->Update();
 
-
-	//platform movement
-	auto& platformBod = ECS::GetComponent<PhysicsBody>(8);
-	b2Body* platformb2body = platformBod.GetBody();
-	float position = platformBod.GetPosition().x;
-	float vertPosition = platformBod.GetPosition().y;
-	b2Vec2 velocity = b2Vec2(0.3f, 0.f);
-	bool direction{ 0 }; //True = platform moving left and false = platform moving right
-
-	position = platformBod.GetPosition().x;
+	MovementSystem Klock; //We will need a object for klock since the platform will move him too
+	Klock.SetBothBodies(1);
 	
+	MovementSystem Level1Platform1;
+	Level1Platform1.SetBothBodies(8);
+	Level1Platform1.TeleportMovementRight(0.3f);
 
-	platformb2body->SetTransform(b2Vec2(position + velocity.x, -30),0);
-	std::cout << position;
+	for (b2ContactEdge* ce = m_register->get<PhysicsBody>(8).GetBody()->GetContactList(); ce; ce = ce->next) //Platform Contact Check to see if we need to move klock
+	{
+		b2Contact* c = ce->contact;
 
+		if (c->IsTouching())
+		{
+			Level1Platform1.SetIsTouching(true);
+		}
+		else
+			Level1Platform1.SetIsTouching(false);
+	}
+
+	if (Level1Platform1.GetIsTouching())
+		Klock.GetB2Body()->SetTransform(b2Vec2(0.3 + Klock.GetB2Body()->GetPosition().x, Klock.GetB2Body()->GetPosition().y), 0); //Not Sure why but the movement system stuff breaks here
+	
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//     a.i     testing
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	auto& playerBod = ECS::GetComponent<PhysicsBody>(1);
+	/*
+	All this stuff will be changed soon
 	auto& AIBodDefault = ECS::GetComponent<PhysicsBody>(2);
 	auto& AIBodSprinter = ECS::GetComponent<PhysicsBody>(3);
 
@@ -141,6 +149,7 @@ void Game::Update()
 		if (distance2 < 0)
 			AIBodSprinter.ApplyForce(vec3(150000.f, 0.f, 0.f));
 	}
+	*/
 }
 
 void Game::GUI()
@@ -248,31 +257,21 @@ void Game::GamepadTrigger(XInputController* con)
 
 void Game::KeyboardHold()
 {
-	//auto& groundPhysBod = ECS::GetComponent<PhysicsBody>(0); //Grabs the ECS's physics Body for the ground
-	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(1); //Grabs the ECS's physics body for the player
-
-
-	//Change this to main player once the physics works properly
-
-	b2Body* playerBody = tempPhysBod.GetBody();
-
-	//b2Body* GroundBody = groundPhysBod.GetBody();
-
-
-	b2BodyDef tempDef;
-
-	b2Vec2 point;
-
+	MovementSystem Klock; //Handles all the movement functions for Klock
+	Klock.SetBothBodies(1);
+	
 	bool isColliding = false;
 
-	for (b2ContactEdge* ce = m_register->get<PhysicsBody>(1).GetBody()->GetContactList(); ce; ce = ce->next)
+	for (b2ContactEdge* ce = m_register->get<PhysicsBody>(1).GetBody()->GetContactList(); ce; ce = ce->next) //Klock Contact Check
 	{
 		b2Contact* c = ce->contact;
 
 		if (c->IsTouching())
 		{
-			isColliding = true;
+			Klock.SetIsTouching(true);
 		}
+		else
+			Klock.SetIsTouching(false);
 	}
 
 	if (Input::GetKey(Key::S))
@@ -281,18 +280,17 @@ void Game::KeyboardHold()
 	}
 	if (Input::GetKey(Key::A))
 	{
-		if (isColliding == true)
-			tempPhysBod.ApplyForce(vec3(-1800000.f, 0.f, 0.f));
+		if (Klock.GetIsTouching())
+			Klock.MoveLeft(1800000.f);
 		else
-			tempPhysBod.ApplyForce(vec3(-560000.f, 0.f, 0.f));
+			Klock.MoveLeft(560000.f);
 	}
 	if (Input::GetKey(Key::D))
 	{
-		if (isColliding == true)
-			tempPhysBod.ApplyForce(vec3(1800000.f, 0.f, 0.f));
-
+		if (Klock.GetIsTouching())
+			Klock.MoveRight(1800000.f);
 		else
-			tempPhysBod.ApplyForce(vec3(560000.f, 0.f, 0.f));
+			Klock.MoveRight(560000.f);
 	}
 
 	//Active scene now captures this input and can use it
@@ -302,31 +300,28 @@ void Game::KeyboardHold()
 
 void Game::KeyboardDown()
 {
-	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(1); //Grabs the ECS's physics body for the player
-
-	bool isColliding = false;
-
-	b2Body* playerBody = tempPhysBod.GetBody();
+	MovementSystem Klock;
+	Klock.SetBothBodies(1);
 
 	for (b2ContactEdge* ce = m_register->get<PhysicsBody>(1).GetBody()->GetContactList(); ce; ce = ce->next)
 	{
 		b2Contact* c = ce->contact;
 
 		if (c->IsTouching())
-		{
-			isColliding = true;
-		}
+			Klock.SetIsTouching(true);
+		else
+			Klock.SetIsTouching(false);
 	}
 
 	if (Input::GetKeyDown(Key::W))
 	{
-		if (isColliding == true)
-			tempPhysBod.ApplyForce(vec3(0.f, 130000000.f, 0.f));
+		if (Klock.GetIsTouching())
+			Klock.Jump(130000000.f);
 	}
 	if (Input::GetKeyDown(Key::S))
 	{
-		if (!isColliding)
-			tempPhysBod.ApplyForce(vec3(0.f, -999999999999.f, 0.f));
+		if (!Klock.GetIsTouching())
+			Klock.DownMove(999999999999.f);
 	}
 
 	m_activeScene->KeyboardDown();
