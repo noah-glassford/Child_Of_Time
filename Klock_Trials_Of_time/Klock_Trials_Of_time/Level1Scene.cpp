@@ -5,6 +5,7 @@ Level1Scene::Level1Scene(std::string name)
 {
 	m_gravity = b2Vec2(float32(0.f), float32(-70.f));
 	m_physicsWorld->SetGravity(m_gravity);
+	m_physicsWorld->SetContactListener(&listener);
 }
 
 void Level1Scene::InitScene(float windowWidth, float windowHeight)
