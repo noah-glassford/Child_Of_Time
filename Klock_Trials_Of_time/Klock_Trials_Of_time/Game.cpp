@@ -101,6 +101,9 @@ void Game::Update()
 	//Updates the active scene
 	m_activeScene->Update();
 
+	/*
+	Some bullshit
+
 	MovementSystem Klock; //We will need a object for klock since the platform will move him too
 	Klock.SetBothBodies(1);
 	
@@ -114,7 +117,7 @@ void Game::Update()
 
 		if (c->IsTouching())
 		{
-			Level1Platform1.SetIsTouching(true);
+			Level1Platform1.SetIsTouching();
 		}
 		else
 			Level1Platform1.SetIsTouching(false);
@@ -122,7 +125,7 @@ void Game::Update()
 
 	if (Level1Platform1.GetIsTouching())
 		Klock.GetB2Body()->SetTransform(b2Vec2(0.3 + Klock.GetB2Body()->GetPosition().x, Klock.GetB2Body()->GetPosition().y), 0); //Not Sure why but the movement system stuff breaks here
-	
+	*/
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//     a.i     testing
@@ -260,19 +263,7 @@ void Game::KeyboardHold()
 	MovementSystem Klock; //Handles all the movement functions for Klock
 	Klock.SetBothBodies(1);
 	
-	bool isColliding = false;
-
-	for (b2ContactEdge* ce = m_register->get<PhysicsBody>(1).GetBody()->GetContactList(); ce; ce = ce->next) //Klock Contact Check
-	{
-		b2Contact* c = ce->contact;
-
-		if (c->IsTouching())
-		{
-			Klock.SetIsTouching(true);
-		}
-		else
-			Klock.SetIsTouching(false);
-	}
+	Klock.SetIsTouching(); //Klock specific contact updating
 
 	if (Input::GetKey(Key::S))
 	{
@@ -281,16 +272,21 @@ void Game::KeyboardHold()
 	if (Input::GetKey(Key::A))
 	{
 		if (Klock.GetIsTouching())
-			Klock.MoveLeft(1800000.f);
+		{
+			Klock.MoveLeft(98000.f);
+		}
 		else
-			Klock.MoveLeft(560000.f);
+		{
+			Klock.MoveLeft(16000.f);
+		}
+
 	}
 	if (Input::GetKey(Key::D))
 	{
 		if (Klock.GetIsTouching())
-			Klock.MoveRight(1800000.f);
+			Klock.MoveRight(98000.f);
 		else
-			Klock.MoveRight(560000.f);
+			Klock.MoveRight(16000.f);
 	}
 
 	//Active scene now captures this input and can use it
@@ -302,21 +298,13 @@ void Game::KeyboardDown()
 {
 	MovementSystem Klock;
 	Klock.SetBothBodies(1);
-
-	for (b2ContactEdge* ce = m_register->get<PhysicsBody>(1).GetBody()->GetContactList(); ce; ce = ce->next)
-	{
-		b2Contact* c = ce->contact;
-
-		if (c->IsTouching())
-			Klock.SetIsTouching(true);
-		else
-			Klock.SetIsTouching(false);
-	}
+	
+	Klock.SetIsTouching();//Updates the isTouching
 
 	if (Input::GetKeyDown(Key::W))
 	{
 		if (Klock.GetIsTouching())
-			Klock.Jump(130000000.f);
+			Klock.Jump(4300000.f);
 	}
 	if (Input::GetKeyDown(Key::S))
 	{

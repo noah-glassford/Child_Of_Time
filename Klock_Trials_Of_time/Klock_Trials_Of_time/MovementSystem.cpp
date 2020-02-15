@@ -31,9 +31,17 @@ void MovementSystem::SetB2Body(b2Body* body)
 	B2Body = body;
 }
 
-void MovementSystem::SetIsTouching(bool Touching)
+void MovementSystem::SetIsTouching()
 {
-	isTouching = Touching;
+	if (PhysicsBod.Grounded == true)
+		isTouching = true;
+	else
+		isTouching = false;
+}
+
+void MovementSystem::SetIsTouching(bool touching)
+{
+	isTouching = touching;
 }
 
 void MovementSystem::MoveLeft(float Force)

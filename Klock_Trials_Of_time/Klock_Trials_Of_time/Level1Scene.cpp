@@ -91,7 +91,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		//myFixtureDef.friction = 1.f;
 
 		//Adds a fixture the size of the body
-		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight() / 2.f, b2Vec2(0, 0), 0);
+		polygonShape.SetAsBox(12.f , 0.0001 , b2Vec2(0.f, -15.f), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		footSensorFixture->SetUserData((void*)3);
@@ -436,7 +436,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 
 		//Sets up components
 		std::string fileName = "Level1_Platform.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 6400, 1);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 6400, 5);
 		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 50.f));
 
