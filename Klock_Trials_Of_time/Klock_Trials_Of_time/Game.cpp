@@ -2,6 +2,9 @@
 
 #include <random>
 
+//Yo can I just put a bool here for it to be global lmao
+bool isSlowed;
+
 Game::~Game()
 {
 	//If window isn't equal to nullptr
@@ -104,16 +107,12 @@ void Game::Update()
 	
 
 
+		//Tests the slow bois
+	if (!isSlowed)
+		ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(100.f, 0.f));
+	else if (isSlowed)
+		ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(10.f, 0.f));
 	
-	
-	
-	ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(100.f,0.f));
-	
-	if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x > 100.f)
-	{
-		ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(0, 0));
-
-	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//     a.i     testing
@@ -261,22 +260,26 @@ void Game::KeyboardHold()
 	{
 		if (Klock.GetIsTouching())
 		{
-			Klock.MoveLeft(98000.f);
+			Klock.MoveLeft(13000000.f);
 		}
 		else
 		{
-			Klock.MoveLeft(16000.f);
+			Klock.MoveLeft(1600000.f);
 		}
 
 	}
 	if (Input::GetKey(Key::D))
 	{
 		if (Klock.GetIsTouching())
-			Klock.MoveRight(98000.f);
+			Klock.MoveRight(13000000.f);
 		else
-			Klock.MoveRight(16000.f);
+			Klock.MoveRight(1600000.f);
 	}
 
+	if (Input::GetKey(Key::E))
+		isSlowed = true;
+	else
+		isSlowed = false;
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->KeyboardHold();
@@ -285,7 +288,7 @@ void Game::KeyboardHold()
 void Game::KeyboardDown()
 {
 	MovementSystem Klock;
-	Klock.SetBothBodies(1);
+	Klock.SetBothBodies(1); //Overcomplicated shit
 	
 	Klock.SetIsTouching();//Updates the isTouching
 

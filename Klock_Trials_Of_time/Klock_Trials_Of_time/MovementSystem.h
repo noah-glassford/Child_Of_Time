@@ -1,11 +1,12 @@
 #pragma once
 #include "PhysicsBody.h"
 #include "ECS.h"
+#include "Timer.h"
 /*
 This class is likely useless, if it is I'll just get rid of it later, but I want to try to see if I can clean everything up a bit
 Im sorta just creating one class that handles all the data required for movement to simplify moving stuff
 */
-class MovementSystem //Create an object of this class in game.cpp for every object that will be moving, EX: MovementSystem Klock; for klock movement
+class MovementSystem : public Timer //Create an object of this class in game.cpp for every object that will be moving, EX: MovementSystem Klock; for klock movement
 {
 public:
 	//Getters and Setters

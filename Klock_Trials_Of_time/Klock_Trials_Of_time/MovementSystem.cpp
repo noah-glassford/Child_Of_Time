@@ -58,12 +58,13 @@ void MovementSystem::SetOnPlatform(bool onPlat)
 
 void MovementSystem::MoveLeft(float Force)
 {
-	PhysicsBod.ApplyForce(vec3(-Force, 0, 0));
+	
+	PhysicsBod.ApplyForce(vec3(-Force * deltaTime, 0, 0));
 }
 
 void MovementSystem::MoveRight(float Force)
 {
-	PhysicsBod.ApplyForce(vec3(Force, 0, 0));
+	PhysicsBod.ApplyForce(vec3(Force * deltaTime, 0, 0));
 }
 
 void MovementSystem::Jump(float Force)
