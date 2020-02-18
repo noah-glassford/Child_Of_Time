@@ -5,6 +5,7 @@
 #include "ECS.h"
 #include "Xinput.h"
 #include <SDL2/SDL.h>
+#include "CollisionSystem.h"
 
 
 class Scene
@@ -68,12 +69,16 @@ public:
 	void SetWindowSize(float windowWidth, float windowHeight);
 protected:
 	b2World* m_physicsWorld = nullptr;
+
 	b2Vec2 m_gravity = b2Vec2(float32(0.f), float32(0.f));
+
+	CollisionListener listener;
 
 	vec4 m_clearColor = vec4(0.15f, 0.33f, 0.58f, 1.f);
 
 	entt::registry* m_sceneReg = nullptr;	
 	std::string m_name = "Default Name";
+	
 };
 
 #ifndef __SCENEJSON_H__

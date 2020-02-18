@@ -2,7 +2,6 @@
 
 #include <random>
 
-
 Game::~Game()
 {
 	//If window isn't equal to nullptr
@@ -28,18 +27,23 @@ Game::~Game()
 void Game::InitGame()
 {
 	//Initializes the backend with window width and height values
-	BackEnd::InitBackEnd(719.f, 436.f);
+	BackEnd::InitBackEnd(1280.f, 720.f);
 
 	//Grabs the initialized window
 	m_window = BackEnd::GetWindow();
 
 	//Creates a new scene.
 	//Replace this with your own scene.
-	m_scenes.push_back(new Scene("Default Scene"));
 
-	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[0];
+	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene"));
+	m_scenes.push_back(new Level1Scene("Level 1 Scene"));
+	m_scenes.push_back(new Level1Scene("Chad poggers"));
+	//m_scenes.push_back(new Level1Scene("Level 1 Scene"));
 
+		//Sets active scene reference to our scene
+	m_activeScene = m_scenes[1];
+
+	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 
 	//Sets m_register to point to the register in the active scene
@@ -96,6 +100,47 @@ void Game::Update()
 
 	//Updates the active scene
 	m_activeScene->Update();
+
+	
+
+
+	
+	
+	
+	ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(100.f,0.f));
+	
+	if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x > 100.f)
+	{
+		ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(0, 0));
+
+	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//     a.i     testing
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/*
+	All this stuff will be changed soon
+	auto& AIBodDefault = ECS::GetComponent<PhysicsBody>(2);
+	auto& AIBodSprinter = ECS::GetComponent<PhysicsBody>(3);
+
+	float distance1 = AIBodDefault.GetPosition().x - playerBod.GetPosition().x;
+	float distance2 = AIBodSprinter.GetPosition().x - playerBod.GetPosition().x;
+
+	//default enemy
+	if (distance1 < 165 && distance1 > -165) {
+		if (distance1 > 40)
+			AIBodDefault.ApplyForce(vec3(-89999.f, 0.f, 0.f));
+		if (distance1 < -40)
+			AIBodDefault.ApplyForce(vec3(89999.f, 0.f, 0.f));
+	}
+	//sprinter enemy
+	if (distance2 < 120 && distance2 > -120) {
+		if (distance2 > 0)
+			AIBodSprinter.ApplyForce(vec3(-150000.f, 0.f, 0.f));
+		if (distance2 < 0)
+			AIBodSprinter.ApplyForce(vec3(150000.f, 0.f, 0.f));
+	}
+	*/
 }
 
 void Game::GUI()
@@ -133,7 +178,7 @@ void Game::AcceptInput()
 {
 	XInputManager::Update();
 
-	//Just calls all the other input functions 
+	//Just calls all the other input functions
 	GamepadInput();
 
 	KeyboardHold();
@@ -166,35 +211,35 @@ void Game::GamepadInput()
 	}
 }
 
-void Game::GamepadStroke(XInputController * con)
+void Game::GamepadStroke(XInputController* con)
 {
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->GamepadStroke(con);
 }
 
-void Game::GamepadUp(XInputController * con)
+void Game::GamepadUp(XInputController* con)
 {
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->GamepadUp(con);
 }
 
-void Game::GamepadDown(XInputController * con)
+void Game::GamepadDown(XInputController* con)
 {
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->GamepadDown(con);
 }
 
-void Game::GamepadStick(XInputController * con)
+void Game::GamepadStick(XInputController* con)
 {
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->GamepadStick(con);
 }
 
-void Game::GamepadTrigger(XInputController * con)
+void Game::GamepadTrigger(XInputController* con)
 {
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
@@ -203,6 +248,35 @@ void Game::GamepadTrigger(XInputController * con)
 
 void Game::KeyboardHold()
 {
+	MovementSystem Klock; //Handles all the movement functions for Klock
+	Klock.SetBothBodies(1);
+	
+	Klock.SetIsTouching(); //Klock specific contact updating
+
+	if (Input::GetKey(Key::S))
+	{
+		//Crouching will be done here
+	}
+	if (Input::GetKey(Key::A))
+	{
+		if (Klock.GetIsTouching())
+		{
+			Klock.MoveLeft(98000.f);
+		}
+		else
+		{
+			Klock.MoveLeft(16000.f);
+		}
+
+	}
+	if (Input::GetKey(Key::D))
+	{
+		if (Klock.GetIsTouching())
+			Klock.MoveRight(98000.f);
+		else
+			Klock.MoveRight(16000.f);
+	}
+
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->KeyboardHold();
@@ -210,29 +284,28 @@ void Game::KeyboardHold()
 
 void Game::KeyboardDown()
 {
-	//Active scene now captures this input and can use it
-	//Look at base Scene class for more info.
+	MovementSystem Klock;
+	Klock.SetBothBodies(1);
+	
+	Klock.SetIsTouching();//Updates the isTouching
+
+	if (Input::GetKeyDown(Key::W))
+	{
+		if (Klock.GetIsTouching())
+			Klock.Jump(4300000.f);
+	}
+	if (Input::GetKeyDown(Key::S))
+	{
+		if (!Klock.GetIsTouching())
+			Klock.DownMove(999999999999.f);
+	}
+
 	m_activeScene->KeyboardDown();
 }
 
 void Game::KeyboardUp()
 {
-	//Active scene now captures this input and can use it
-	//Look at base Scene class for more info.
 	m_activeScene->KeyboardUp();
-
-	if (Input::GetKeyUp(Key::F1))
-	{
-		if (!UI::m_isInit)
-		{
-			UI::InitImGUI();
-		}
-		m_guiActive = !m_guiActive;
-	}
-	if (Input::GetKeyUp(Key::P))
-	{
-		PhysicsBody::SetDraw(!PhysicsBody::GetDraw());
-	}
 }
 
 void Game::MouseMotion(SDL_MouseMotionEvent evnt)
@@ -247,7 +320,6 @@ void Game::MouseMotion(SDL_MouseMotionEvent evnt)
 
 		if (!ImGui::GetIO().WantCaptureMouse)
 		{
-
 		}
 	}
 
