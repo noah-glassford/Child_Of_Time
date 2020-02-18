@@ -104,16 +104,14 @@ void Game::Update()
 	
 
 
-	MovementSystem Klock; //We will need a object for klock since the platform will move him too
-	Klock.SetBothBodies(1);
 	
-	MovementSystem Level1Platform1;
-	Level1Platform1.SetBothBodies(8);
-	Level1Platform1.GetB2Body()->SetLinearVelocity(b2Vec2(100.f,0.f));
-	bool bruh{ 0 };
-	if (Level1Platform1.GetPhysicsBody().GetPosition().x > 100.f)
+	
+	
+	ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(100.f,0.f));
+	
+	if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x > 100.f)
 	{
-		Level1Platform1.GetB2Body()->SetLinearVelocity(b2Vec2(0, 0));
+		ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(0, 0));
 
 	}
 	
