@@ -12,12 +12,14 @@ public:
 	PhysicsBody GetPhysicsBody();
 	b2Body* GetB2Body();
 	bool GetIsTouching();
+	bool GetOnPlatform();//Returns the bool for if klock is on the platform
 	
 	void SetBothBodies(int entity);//Sets the ECS physicsbody, and then also automatically sets the b2body to be the same
 	void SetPhysicsBody(PhysicsBody PhysBod);
 	void SetB2Body(b2Body* body);
 	void SetIsTouching();//Specifically made for klock foot sensor
 	void SetIsTouching(bool touching);//Overloaded function for other things
+	void SetOnPlatform(bool onPlat); //Sets the ECS physicsbody onPlatform variable to make life easier
 
 	//Member Function aka actual movement
 	void MoveLeft(float Force);//Uses apply force to move the object left

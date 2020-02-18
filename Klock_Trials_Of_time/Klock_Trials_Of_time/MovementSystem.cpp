@@ -15,6 +15,11 @@ bool MovementSystem::GetIsTouching()
 	return isTouching;
 }
 
+bool MovementSystem::GetOnPlatform()
+{
+	return PhysicsBod.onPlatform;
+}
+
 void MovementSystem::SetBothBodies(int entity)
 {
 	PhysicsBod = ECS::GetComponent<PhysicsBody>(entity);
@@ -43,6 +48,13 @@ void MovementSystem::SetIsTouching(bool touching)
 {
 	isTouching = touching;
 }
+
+void MovementSystem::SetOnPlatform(bool onPlat)
+{
+	PhysicsBod.onPlatform = onPlat;
+}
+
+
 
 void MovementSystem::MoveLeft(float Force)
 {

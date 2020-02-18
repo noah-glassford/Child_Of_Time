@@ -101,31 +101,21 @@ void Game::Update()
 	//Updates the active scene
 	m_activeScene->Update();
 
-	/*
-	Some bullshit
+	
+
 
 	MovementSystem Klock; //We will need a object for klock since the platform will move him too
 	Klock.SetBothBodies(1);
 	
 	MovementSystem Level1Platform1;
 	Level1Platform1.SetBothBodies(8);
-	Level1Platform1.TeleportMovementRight(0.3f);
-
-	for (b2ContactEdge* ce = m_register->get<PhysicsBody>(8).GetBody()->GetContactList(); ce; ce = ce->next) //Platform Contact Check to see if we need to move klock
+	Level1Platform1.GetB2Body()->SetLinearVelocity(b2Vec2(100.f,0.f));
+	bool bruh{ 0 };
+	if (Level1Platform1.GetPhysicsBody().GetPosition().x > 100.f)
 	{
-		b2Contact* c = ce->contact;
+		Level1Platform1.GetB2Body()->SetLinearVelocity(b2Vec2(0, 0));
 
-		if (c->IsTouching())
-		{
-			Level1Platform1.SetIsTouching();
-		}
-		else
-			Level1Platform1.SetIsTouching(false);
 	}
-
-	if (Level1Platform1.GetIsTouching())
-		Klock.GetB2Body()->SetTransform(b2Vec2(0.3 + Klock.GetB2Body()->GetPosition().x, Klock.GetB2Body()->GetPosition().y), 0); //Not Sure why but the movement system stuff breaks here
-	*/
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//     a.i     testing

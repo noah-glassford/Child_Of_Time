@@ -52,13 +52,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<PhysicsBody>(entity);
 		//Sets up components 
 		std::string fileName = "Klock_Png.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 28.5, 43.8);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
-		//Grabs reference to various components 
-
-
 		
-
 		//Sets up components
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 25, 25);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 97.f));
@@ -74,7 +68,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(-75.f), float32(-40.f));
+		tempDef.position.Set(float32(-75.f), float32(55.f));
 		tempDef.fixedRotation = true;
 		
 
@@ -300,7 +294,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 4");
 	}
 
-
+	
 	//setup fifth platform ent 7
 	{
 		//Create new entity
@@ -340,7 +334,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 5");
 	}
-
+	
 	//setup sixth platform ent 8 moving plat
 	{
 		//Create new entity
@@ -368,8 +362,8 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 
-		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(-75.f), float32(30.f));
+		tempDef.type = b2_kinematicBody;
+		tempDef.position.Set(float32(-85.f), float32(55.f));
 		tempDef.fixedRotation = true;
 		tempDef.gravityScale = 0.f;
 
@@ -378,13 +372,27 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
 			vec2(0.f, 0.f), false, 1.5f);
 
+		//fixture definition
+		b2PolygonShape polygonShape;
+		b2FixtureDef myFixtureDef;
+		myFixtureDef.shape = &polygonShape;
+		myFixtureDef.density = 10;
+		//myFixtureDef.friction = 1.f;
+
+		//Adds a fixture the size of the body
+		polygonShape.SetAsBox(tempSpr.GetWidth(), tempSpr.GetHeight(), b2Vec2(0.f, 0.f), 0);
+		myFixtureDef.isSensor = true;
+		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
+		footSensorFixture->SetUserData((void*)4);
+
 		//Sets up the Identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 6");
 	}
 
 
-	//setup fifth platform ent 8
+	//setup fifth platform ent 9
+
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
