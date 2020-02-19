@@ -5,7 +5,7 @@
 //Yo can I just put a bool here for it to be global lmao
 //Fuck it float here too this is probably bad but I don't care
 bool isSlowed;
-float bruh{ 0 };
+float UsedUpTime{ 0 };
 
 Game::~Game()
 {
@@ -32,7 +32,7 @@ Game::~Game()
 void Game::InitGame()
 {
 	//Initializes the backend with window width and height values
-	BackEnd::InitBackEnd(1280.f, 720.f);
+	BackEnd::InitBackEnd(500.f, 500.f);
 
 	//Grabs the initialized window
 	m_window = BackEnd::GetWindow();
@@ -42,8 +42,6 @@ void Game::InitGame()
 
 	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene"));
 	m_scenes.push_back(new Level1Scene("Level 1 Scene"));
-	m_scenes.push_back(new Level1Scene("Chad poggers"));
-	//m_scenes.push_back(new Level1Scene("Level 1 Scene"));
 
 		//Sets active scene reference to our scene
 	m_activeScene = m_scenes[1];
@@ -103,11 +101,10 @@ void Game::Update()
 	//Update Physics System
 	PhysicsSystem::Update(m_register, m_activeScene->GetPhysicsWorld());
 
+	std::cout << UsedUpTime << " " << isSlowed << std::endl;
 	//Updates the active scene
-	m_activeScene->Update();
-
-	//Testing limiting time slowed
-	std::cout << bruh;
+	if (UsedUpTime > 0)
+		UsedUpTime = UsedUpTime - deltaTime / 3;
 
 	//Anything that can be affected by the time controls is done in this if statement
 	if (!isSlowed)
@@ -115,7 +112,7 @@ void Game::Update()
 	else if (isSlowed)
 		ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(10.f, 0.f));
 	
-	
+	m_activeScene->Update();
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//     a.i     testing
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -280,11 +277,12 @@ void Game::KeyboardHold()
 
 	if (Input::GetKey(Key::E))
 	{
-		bruh = bruh + deltaTime;
-		
-		if (bruh < 2.f)
+		if (UsedUpTime <= 2.f)
+			UsedUpTime = UsedUpTime + deltaTime;
+			
+		if (UsedUpTime < 2.f)
 			isSlowed = true;
-		else
+		else if (UsedUpTime > 2.f)
 			isSlowed = false;
 	}
 	//Active scene now captures this input and can use it
@@ -316,7 +314,7 @@ void Game::KeyboardDown()
 void Game::KeyboardUp()
 {
 	if (Input::GetKeyUp(Key::E))
-		bruh = 0;
+		isSlowed = 0;
 	m_activeScene->KeyboardUp();
 }
 
