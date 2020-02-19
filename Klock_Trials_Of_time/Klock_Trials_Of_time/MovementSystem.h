@@ -32,7 +32,6 @@ public:
 	void TeleportMovementUp(float velocity);
 	void TeleportMovementDown(float velocity);
 
-
 private:
 	PhysicsBody PhysicsBod; //The framework physicsbody
 	b2Body* B2Body; //Box2D body

@@ -8,7 +8,7 @@
 #include "MovementSystem.h"
 
 //Our main class for running our game
-class Game
+class Game : public Timer
 {
 public:
 	//Empty constructor

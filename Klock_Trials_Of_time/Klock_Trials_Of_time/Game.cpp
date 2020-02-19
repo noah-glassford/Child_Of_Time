@@ -3,7 +3,9 @@
 #include <random>
 
 //Yo can I just put a bool here for it to be global lmao
+//Fuck it float here too this is probably bad but I don't care
 bool isSlowed;
+float bruh{ 0 };
 
 Game::~Game()
 {
@@ -104,10 +106,10 @@ void Game::Update()
 	//Updates the active scene
 	m_activeScene->Update();
 
-	
+	//Testing limiting time slowed
+	std::cout << bruh;
 
-
-		//Tests the slow bois
+	//Anything that can be affected by the time controls is done in this if statement
 	if (!isSlowed)
 		ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(100.f, 0.f));
 	else if (isSlowed)
@@ -118,7 +120,7 @@ void Game::Update()
 	//     a.i     testing
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*
-	All this stuff will be changed soon
+	All this stuff will be changed soon bu tkeeping the code here because it do kinda be working tho
 	auto& AIBodDefault = ECS::GetComponent<PhysicsBody>(2);
 	auto& AIBodSprinter = ECS::GetComponent<PhysicsBody>(3);
 
@@ -277,9 +279,14 @@ void Game::KeyboardHold()
 	}
 
 	if (Input::GetKey(Key::E))
-		isSlowed = true;
-	else
-		isSlowed = false;
+	{
+		bruh = bruh + deltaTime;
+		
+		if (bruh < 2.f)
+			isSlowed = true;
+		else
+			isSlowed = false;
+	}
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->KeyboardHold();
@@ -308,6 +315,8 @@ void Game::KeyboardDown()
 
 void Game::KeyboardUp()
 {
+	if (Input::GetKeyUp(Key::E))
+		bruh = 0;
 	m_activeScene->KeyboardUp();
 }
 

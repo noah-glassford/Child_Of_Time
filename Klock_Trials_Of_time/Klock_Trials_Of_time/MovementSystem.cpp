@@ -57,8 +57,7 @@ void MovementSystem::SetOnPlatform(bool onPlat)
 
 
 void MovementSystem::MoveLeft(float Force)
-{
-	
+{	
 	PhysicsBod.ApplyForce(vec3(-Force * deltaTime, 0, 0));
 }
 
