@@ -173,6 +173,7 @@ public:
 	//Does the object not move?
 	void SetDynamic(bool isDynamic);
 
+	bool Grounded;
 
 private:
 	//The actual box2D body
