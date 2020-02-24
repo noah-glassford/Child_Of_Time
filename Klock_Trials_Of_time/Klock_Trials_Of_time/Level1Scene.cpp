@@ -68,7 +68,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(-75.f), float32(55.f));
+		tempDef.position.Set(float32(175.f), float32(55.f));
 		tempDef.fixedRotation = true;
 		
 
@@ -203,7 +203,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(250.f), float32(-150.f));
+		tempDef.position.Set(float32(250.f), float32(-175.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -242,7 +242,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(550.f), float32(-150.f));
+		tempDef.position.Set(float32(50.f), float32(-150.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -282,7 +282,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(700.f), float32(20.f));
+		tempDef.position.Set(float32(430.f), float32(-50.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -323,7 +323,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(850.f), float32(50.f));
+		tempDef.position.Set(float32(650.f), float32(50.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -363,7 +363,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_kinematicBody;
-		tempDef.position.Set(float32(-85.f), float32(55.f));
+		tempDef.position.Set(float32(485.f), float32(55.f));
 		tempDef.fixedRotation = true;
 		tempDef.gravityScale = 0.f;
 

@@ -110,9 +110,13 @@ void Game::Update()
 
 	//Anything that can be affected by the time controls is done in this if statement
 	if (!isSlowed)
-		ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(50.f, 0.f));
+		if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x < 800)
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(50.f, 0.f));
+		if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x > 400)
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(-50.f, 0.f));
 	else if (isSlowed)
-		ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(10.f, 0.f));
+	
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(10.f, 0.f));
 	
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -261,22 +265,11 @@ void Game::KeyboardHold()
 	}
 	if (Input::GetKey(Key::A))
 	{
-		if (Klock.GetIsTouching())
-		{
-			Klock.MoveLeft(12000000.f);
-		}
-		else
-		{
-			Klock.MoveLeft(1600000.f);
-		}
-
+		Klock.MoveLeft(25.f);
 	}
 	if (Input::GetKey(Key::D))
 	{
-		if (Klock.GetIsTouching())
-			Klock.MoveRight(12000000.f);
-		else
-			Klock.MoveRight(1600000.f);
+		Klock.MoveRight(25.f);	
 	}
 
 	if (Input::GetKey(Key::E))
@@ -304,7 +297,7 @@ void Game::KeyboardDown()
 	if (Input::GetKeyDown(Key::W))
 	{
 		if (Klock.GetIsTouching())
-			Klock.Jump((4300000.f)/2);
+			Klock.Jump(3000000.f);
 	}
 	if (Input::GetKeyDown(Key::S))
 	{
