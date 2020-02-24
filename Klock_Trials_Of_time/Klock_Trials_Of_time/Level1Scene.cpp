@@ -3,7 +3,7 @@
 Level1Scene::Level1Scene(std::string name)
 	: Scene(name)
 {
-	m_gravity = b2Vec2(float32(0.f), float32(-70.f));
+	m_gravity = b2Vec2(float32(0.f), float32(-35.f));
 	m_physicsWorld->SetGravity(m_gravity);
 	m_physicsWorld->SetContactListener(&listener);
 }
@@ -68,7 +68,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(-75.f), float32(55.f));
+		tempDef.position.Set(float32(175.f), float32(55.f));
 		tempDef.fixedRotation = true;
 		
 
@@ -203,7 +203,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(250.f), float32(-150.f));
+		tempDef.position.Set(float32(250.f), float32(-175.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -242,7 +242,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(550.f), float32(-150.f));
+		tempDef.position.Set(float32(50.f), float32(-150.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -282,7 +282,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(700.f), float32(20.f));
+		tempDef.position.Set(float32(430.f), float32(-50.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -323,7 +323,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(850.f), float32(50.f));
+		tempDef.position.Set(float32(650.f), float32(50.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -363,7 +363,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_kinematicBody;
-		tempDef.position.Set(float32(-85.f), float32(55.f));
+		tempDef.position.Set(float32(485.f), float32(55.f));
 		tempDef.fixedRotation = true;
 		tempDef.gravityScale = 0.f;
 
@@ -432,7 +432,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 5");
 	}
 
-	//setup floor platform ent 9
+	//setup floor platform ent 10
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -474,7 +474,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 
 #pragma endregion
 
-	//Main Camera ent 10
+	//Main Camera ent 11
 	{//Creates camera entity
 		auto entity = ECS::CreateEntity();
 		EntityIdentifier::MainCamera(entity);
@@ -487,6 +487,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		vec4 temp = ECS::GetComponent<Camera>(entity).GetOrthoSize();
 		ECS::GetComponent<Camera>(entity).SetWindowSize(vec2(float(windowWidth), float(windowHeight)));
 		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
+		ECS::GetComponent<Camera>(entity).Zoom(-15);
 
 		ECS::GetComponent<HorizontalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
 		ECS::GetComponent<HorizontalScroll>(entity).SetOffset(15.f);
@@ -497,6 +498,8 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::HoriScrollCameraBit() | EntityIdentifier::VertScrollCameraBit() | EntityIdentifier::CameraBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Main Scrolling Camera");
 		ECS::SetIsMainCamera(entity, true);
+
+		
 	}
 	//Makes the camera focus on the main player
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));

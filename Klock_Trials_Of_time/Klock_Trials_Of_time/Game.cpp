@@ -4,6 +4,8 @@
 
 //Yo can I just put a bool here for it to be global lmao
 //Fuck it float here too this is probably bad but I don't care
+//Both of these are used for the time slowing stuff because they are used in multiple functions in game.cpp
+//so I just said fuck it and made them global
 bool isSlowed;
 float UsedUpTime{ 0 };
 
@@ -102,17 +104,21 @@ void Game::Update()
 	PhysicsSystem::Update(m_register, m_activeScene->GetPhysicsWorld());
 
 	std::cout << UsedUpTime << " " << isSlowed << std::endl;
-	//Updates the active scene
+	
 	if (UsedUpTime > 0)
 		UsedUpTime = UsedUpTime - deltaTime / 3;
 
 	//Anything that can be affected by the time controls is done in this if statement
 	if (!isSlowed)
-		ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(100.f, 0.f));
+		if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x < 800)
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(50.f, 0.f));
+		if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x > 400)
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(-50.f, 0.f));
 	else if (isSlowed)
-		ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(10.f, 0.f));
 	
-	m_activeScene->Update();
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(10.f, 0.f));
+	
+	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//     a.i     testing
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -139,6 +145,8 @@ void Game::Update()
 			AIBodSprinter.ApplyForce(vec3(150000.f, 0.f, 0.f));
 	}
 	*/
+	
+	m_activeScene->Update();
 }
 
 void Game::GUI()
@@ -257,22 +265,11 @@ void Game::KeyboardHold()
 	}
 	if (Input::GetKey(Key::A))
 	{
-		if (Klock.GetIsTouching())
-		{
-			Klock.MoveLeft(13000000.f);
-		}
-		else
-		{
-			Klock.MoveLeft(1600000.f);
-		}
-
+		Klock.MoveLeft(25.f);
 	}
 	if (Input::GetKey(Key::D))
 	{
-		if (Klock.GetIsTouching())
-			Klock.MoveRight(13000000.f);
-		else
-			Klock.MoveRight(1600000.f);
+		Klock.MoveRight(25.f);	
 	}
 
 	if (Input::GetKey(Key::E))
@@ -300,7 +297,7 @@ void Game::KeyboardDown()
 	if (Input::GetKeyDown(Key::W))
 	{
 		if (Klock.GetIsTouching())
-			Klock.Jump(4300000.f);
+			Klock.Jump(3000000.f);
 	}
 	if (Input::GetKeyDown(Key::S))
 	{
@@ -316,6 +313,9 @@ void Game::KeyboardUp()
 	if (Input::GetKeyUp(Key::E))
 		isSlowed = 0;
 	m_activeScene->KeyboardUp();
+
+	if (Input::GetKeyUp(Key::I))
+		ECS::GetComponent<Camera>(11).Zoom(-50);
 }
 
 void Game::MouseMotion(SDL_MouseMotionEvent evnt)
