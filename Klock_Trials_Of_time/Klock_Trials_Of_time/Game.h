@@ -24,7 +24,8 @@ public:
 	//*Initializes GLEW
 	//*Create Main Camera Entity
 	//*Creates all other entities and adds them to register
-	void InitGame();
+	void InitGame
+	();
 
 	//Runs the game
 	//*While window is open
