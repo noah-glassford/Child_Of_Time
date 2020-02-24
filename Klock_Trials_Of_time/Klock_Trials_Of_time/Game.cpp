@@ -2,6 +2,13 @@
 
 #include <random>
 
+//Yo can I just put a bool here for it to be global lmao
+//Fuck it float here too this is probably bad but I don't care
+//Both of these are used for the time slowing stuff because they are used in multiple functions in game.cpp
+//so I just said fuck it and made them global
+bool isSlowed;
+float UsedUpTime{ 0 };
+
 Game::~Game()
 {
 	//If window isn't equal to nullptr
@@ -27,7 +34,7 @@ Game::~Game()
 void Game::InitGame()
 {
 	//Initializes the backend with window width and height values
-	BackEnd::InitBackEnd(1280.f, 720.f);
+	BackEnd::InitBackEnd(500.f, 500.f);
 
 	//Grabs the initialized window
 	m_window = BackEnd::GetWindow();
@@ -37,8 +44,6 @@ void Game::InitGame()
 
 	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene"));
 	m_scenes.push_back(new Level1Scene("Level 1 Scene"));
-	m_scenes.push_back(new Level1Scene("Chad poggers"));
-	//m_scenes.push_back(new Level1Scene("Level 1 Scene"));
 
 		//Sets active scene reference to our scene
 	m_activeScene = m_scenes[1];
@@ -98,28 +103,23 @@ void Game::Update()
 	//Update Physics System
 	PhysicsSystem::Update(m_register, m_activeScene->GetPhysicsWorld());
 
-	//Updates the active scene
-	m_activeScene->Update();
+	std::cout << UsedUpTime << " " << isSlowed << std::endl;
+	
+	if (UsedUpTime > 0)
+		UsedUpTime = UsedUpTime - deltaTime / 3;
 
+	//Anything that can be affected by the time controls is done in this if statement
+	if (!isSlowed)
+		ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(50.f, 0.f));
+	else if (isSlowed)
+		ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(10.f, 0.f));
 	
-
-
-	
-	
-	
-	ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(100.f,0.f));
-	
-	if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x > 100.f)
-	{
-		ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(0, 0));
-
-	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//     a.i     testing
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*
-	All this stuff will be changed soon
+	All this stuff will be changed soon bu tkeeping the code here because it do kinda be working tho
 	auto& AIBodDefault = ECS::GetComponent<PhysicsBody>(2);
 	auto& AIBodSprinter = ECS::GetComponent<PhysicsBody>(3);
 
@@ -141,6 +141,8 @@ void Game::Update()
 			AIBodSprinter.ApplyForce(vec3(150000.f, 0.f, 0.f));
 	}
 	*/
+	
+	m_activeScene->Update();
 }
 
 void Game::GUI()
@@ -261,22 +263,32 @@ void Game::KeyboardHold()
 	{
 		if (Klock.GetIsTouching())
 		{
-			Klock.MoveLeft(98000.f);
+			Klock.MoveLeft(12000000.f);
 		}
 		else
 		{
-			Klock.MoveLeft(16000.f);
+			Klock.MoveLeft(1600000.f);
 		}
 
 	}
 	if (Input::GetKey(Key::D))
 	{
 		if (Klock.GetIsTouching())
-			Klock.MoveRight(98000.f);
+			Klock.MoveRight(12000000.f);
 		else
-			Klock.MoveRight(16000.f);
+			Klock.MoveRight(1600000.f);
 	}
 
+	if (Input::GetKey(Key::E))
+	{
+		if (UsedUpTime <= 2.f)
+			UsedUpTime = UsedUpTime + deltaTime;
+			
+		if (UsedUpTime < 2.f)
+			isSlowed = true;
+		else if (UsedUpTime > 2.f)
+			isSlowed = false;
+	}
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->KeyboardHold();
@@ -285,14 +297,14 @@ void Game::KeyboardHold()
 void Game::KeyboardDown()
 {
 	MovementSystem Klock;
-	Klock.SetBothBodies(1);
+	Klock.SetBothBodies(1); //Overcomplicated shit
 	
 	Klock.SetIsTouching();//Updates the isTouching
 
 	if (Input::GetKeyDown(Key::W))
 	{
 		if (Klock.GetIsTouching())
-			Klock.Jump(4300000.f);
+			Klock.Jump((4300000.f)/2);
 	}
 	if (Input::GetKeyDown(Key::S))
 	{
@@ -305,7 +317,12 @@ void Game::KeyboardDown()
 
 void Game::KeyboardUp()
 {
+	if (Input::GetKeyUp(Key::E))
+		isSlowed = 0;
 	m_activeScene->KeyboardUp();
+
+	if (Input::GetKeyUp(Key::I))
+		ECS::GetComponent<Camera>(11).Zoom(-50);
 }
 
 void Game::MouseMotion(SDL_MouseMotionEvent evnt)
