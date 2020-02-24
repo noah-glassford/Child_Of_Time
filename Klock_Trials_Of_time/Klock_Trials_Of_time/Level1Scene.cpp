@@ -363,7 +363,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_kinematicBody;
-		tempDef.position.Set(float32(485.f), float32(55.f));
+		tempDef.position.Set(float32(410.f), float32(55.f));
 		tempDef.fixedRotation = true;
 		tempDef.gravityScale = 0.f;
 

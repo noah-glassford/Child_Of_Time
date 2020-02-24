@@ -8,6 +8,7 @@
 //so I just said fuck it and made them global
 bool isSlowed;
 float UsedUpTime{ 0 };
+bool direction{ 0 }; //1 for right, 0 for left
 
 Game::~Game()
 {
@@ -103,20 +104,37 @@ void Game::Update()
 	//Update Physics System
 	PhysicsSystem::Update(m_register, m_activeScene->GetPhysicsWorld());
 
-	std::cout << UsedUpTime << " " << isSlowed << std::endl;
+	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
 	
 	if (UsedUpTime > 0)
 		UsedUpTime = UsedUpTime - deltaTime / 3;
 
+	
+	
+	//Used to set direction
+	
+	if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x > 800)
+		direction = 0;
+	else if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x < 400)
+		direction = 1;
+
+	std::cout << ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x << std::endl;
 	//Anything that can be affected by the time controls is done in this if statement
 	if (!isSlowed)
-		if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x < 800)
+	{
+		if (direction)
 			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(50.f, 0.f));
-		if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x > 400)
+		if (!direction)
 			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(-50.f, 0.f));
+	}
 	else if (isSlowed)
-	
+	{
+		if (direction)
 			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(10.f, 0.f));
+		if (!direction)
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(-10.f, 0.f));
+	}
+		
 	
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
