@@ -43,8 +43,9 @@ void Game::InitGame()
 	//Creates a new scene.
 	//Replace this with your own scene.
 
-	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene"));
-	m_scenes.push_back(new Level1Scene("Level 1 Scene"));
+	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene")); //0
+	m_scenes.push_back(new Level1Scene("Level 1 Scene")); //1
+	m_scenes.push_back(new Level2Scene("Level 2 Scene")); //2
 
 		//Sets active scene reference to our scene
 	m_activeScene = m_scenes[1];
@@ -112,13 +113,13 @@ void Game::Update()
 	
 	
 	//Used to set direction
-	
+
 	if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x > 800)
 		direction = 0;
 	else if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x < 400)
 		direction = 1;
 
-	std::cout << ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x << std::endl;
+	//std::cout << ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x << std::endl;
 	//Anything that can be affected by the time controls is done in this if statement
 	if (!isSlowed)
 	{
@@ -136,7 +137,7 @@ void Game::Update()
 	}
 		
 	
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//     a.i     testing
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -163,6 +164,7 @@ void Game::Update()
 			AIBodSprinter.ApplyForce(vec3(150000.f, 0.f, 0.f));
 	}
 	*/
+
 	
 	m_activeScene->Update();
 }
@@ -283,11 +285,11 @@ void Game::KeyboardHold()
 	}
 	if (Input::GetKey(Key::A))
 	{
-		Klock.MoveLeft(25.f);
+		Klock.MoveLeft(30.f);
 	}
 	if (Input::GetKey(Key::D))
 	{
-		Klock.MoveRight(25.f);	
+		Klock.MoveRight(30.f);	
 	}
 
 	if (Input::GetKey(Key::E))
