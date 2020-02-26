@@ -81,11 +81,23 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		myFixtureDef.density = 10;
 		//myFixtureDef.friction = 1.f;
 
-		//Adds a fixture the size of the body
+		//Adds a foot sensor fixture under the body
 		polygonShape.SetAsBox(12.f, 0.0001, b2Vec2(0.f, -15.f), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		footSensorFixture->SetUserData((void*)3);
+		
+		//Adds a fixture the right side of the body
+		polygonShape.SetAsBox(0.001f, 12.f, b2Vec2(15.f, 0.f), 0);
+		myFixtureDef.isSensor = true;
+		b2Fixture* RightSideFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
+		RightSideFixture->SetUserData((void*)4);
+		
+		//Adds a fixture the left side of the body
+		polygonShape.SetAsBox(0.001, 12.f, b2Vec2(-15.f, 0.f), 0);
+		myFixtureDef.isSensor = true;
+		b2Fixture* LeftSideFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
+		LeftSideFixture->SetUserData((void*)5);
 
 		//Sets up the identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();

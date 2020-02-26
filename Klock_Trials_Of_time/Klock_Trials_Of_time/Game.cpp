@@ -285,11 +285,13 @@ void Game::KeyboardHold()
 	}
 	if (Input::GetKey(Key::A))
 	{
+		if (!Klock.GetPhysicsBody().OnWallLeft)
 		Klock.MoveLeft(30.f);
 	}
 	if (Input::GetKey(Key::D))
 	{
-		Klock.MoveRight(30.f);	
+		if (!Klock.GetPhysicsBody().OnWallRight)
+			Klock.MoveRight(30.f);	
 	}
 
 	if (Input::GetKey(Key::E))

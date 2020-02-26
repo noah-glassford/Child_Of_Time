@@ -15,10 +15,6 @@ bool MovementSystem::GetIsTouching()
 	return isTouching;
 }
 
-bool MovementSystem::GetOnPlatform()
-{
-	return PhysicsBod.onPlatform;
-}
 
 void MovementSystem::SetBothBodies(int entity)
 {
@@ -49,10 +45,6 @@ void MovementSystem::SetIsTouching(bool touching)
 	isTouching = touching;
 }
 
-void MovementSystem::SetOnPlatform(bool onPlat)
-{
-	PhysicsBod.onPlatform = onPlat;
-}
 
 
 
