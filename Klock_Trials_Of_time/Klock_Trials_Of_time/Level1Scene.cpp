@@ -343,7 +343,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 5");
 	}
 
-	//setup floor platform ent 10
+	//setup floor platform ent 8
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -385,7 +385,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 
 #pragma endregion
 
-	//Main Camera ent 11
+	//Main Camera ent 9
 	{//Creates camera entity
 		auto entity = ECS::CreateEntity();
 		EntityIdentifier::MainCamera(entity);
@@ -413,4 +413,9 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 	//Makes the camera focus on the main player
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
+}
+
+void Level1Scene::Update()
+{
+	
 }
