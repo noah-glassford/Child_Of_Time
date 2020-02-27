@@ -52,6 +52,8 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 		ECS::AttachComponent<AnimationController>(entity);
+		ECS::AttachComponent<PlayerData>(entity);
+
 		//Sets up components 
 		std::string fileName = "spritesheet.png";
 		auto& animController = ECS::GetComponent<AnimationController>(entity);
@@ -681,7 +683,7 @@ void Level1Scene::Update()
 		createdint = 0;
 		std::cout << "deleting shit";
 	}
-	if (ECS::GetComponent<PhysicsBody>(1).isAttacking)
+	if (ECS::GetComponent<PlayerData>(1).isAttacking)
 	{
 		createdint = 1;
 		auto entity = ECS::CreateEntity();

@@ -296,12 +296,12 @@ void Game::KeyboardHold()
 	}
 	if (Input::GetKey(Key::A))
 	{
-		if (!Klock.GetPhysicsBody().OnWallLeft)
+		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft)
 		Klock.MoveLeft(30.f);
 	}
 	if (Input::GetKey(Key::D))
 	{
-		if (!Klock.GetPhysicsBody().OnWallRight)
+		if (!ECS::GetComponent<PlayerData>(1).OnWallRight)
 			Klock.MoveRight(30.f);	
 	}
 
@@ -323,15 +323,12 @@ void Game::KeyboardHold()
 
 void Game::KeyboardDown()
 {
-
 	MovementSystem Klock;
-	Klock.SetBothBodies(1); //Overcomplicated shit
-
-	Klock.SetIsTouching();//Updates the isTouching
+	Klock.SetBothBodies(1);
 
 	if (Input::GetKeyDown(Key::W))
 	{
-		if (Klock.GetIsTouching())
+		if (ECS::GetComponent<PlayerData>(1).Grounded)
 			Klock.Jump(3000000.f);
 	}
 	if (Input::GetKeyDown(Key::S))
@@ -342,9 +339,9 @@ void Game::KeyboardDown()
 			*/
 	}
 	if (Input::GetKeyDown(Key::R))
-		ECS::GetComponent<PhysicsBody>(1).isAttacking = true;
+		ECS::GetComponent<PlayerData>(1).isAttacking = true;
 	else
-		ECS::GetComponent<PhysicsBody>(1).isAttacking = false;
+		ECS::GetComponent<PlayerData>(1).isAttacking = false;
 
 	m_activeScene->KeyboardDown();
 }

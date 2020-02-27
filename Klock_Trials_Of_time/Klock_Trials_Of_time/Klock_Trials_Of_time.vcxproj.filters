@@ -171,6 +171,9 @@
     <ClInclude Include="Level2Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationController.cpp">

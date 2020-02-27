@@ -16,6 +16,7 @@ public:
 	bool GetIsAttacking();
 	
 	void SetBothBodies(int entity);//Sets the ECS physicsbody, and then also automatically sets the b2body to be the same
+	void SetPlayerData(int entity);//Sets the ECS playerdata for other stuff
 	void SetPhysicsBody(PhysicsBody PhysBod);
 	void SetB2Body(b2Body* body);
 	void SetIsTouching();//Specifically made for klock foot sensor
@@ -35,6 +36,7 @@ public:
 private:
 	PhysicsBody PhysicsBod; //The framework physicsbody
 	b2Body* B2Body; //Box2D body
+	PlayerData PlData;
 	bool isTouching;
 	bool isAttacking;
 

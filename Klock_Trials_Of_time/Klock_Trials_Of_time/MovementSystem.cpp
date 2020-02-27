@@ -17,7 +17,7 @@ bool MovementSystem::GetIsTouching()
 
 bool MovementSystem::GetIsAttacking()
 {
-	return PhysicsBod.isAttacking;
+	return PlData.isAttacking;
 }
 
 
@@ -25,6 +25,11 @@ void MovementSystem::SetBothBodies(int entity)
 {
 	PhysicsBod = ECS::GetComponent<PhysicsBody>(entity);
 	B2Body = PhysicsBod.GetBody();
+}
+
+void MovementSystem::SetPlayerData(int entity)
+{
+	PlData = ECS::GetComponent<PlayerData>(1);
 }
 
 void MovementSystem::SetPhysicsBody(PhysicsBody PhysBod)
@@ -39,7 +44,7 @@ void MovementSystem::SetB2Body(b2Body* body)
 
 void MovementSystem::SetIsTouching()
 {
-	if (PhysicsBod.Grounded == true)
+	if (PlData.Grounded == true)
 		isTouching = true;
 	else
 		isTouching = false;
@@ -52,7 +57,7 @@ void MovementSystem::SetIsTouching(bool touching)
 
 void MovementSystem::SetIsAttacking(bool Attacking)
 {
-	PhysicsBod.isAttacking = Attacking;
+	PlData.isAttacking = Attacking;
 }
 
 
