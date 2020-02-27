@@ -10,9 +10,6 @@ bool isSlowed;
 float UsedUpTime{ 0 };
 bool direction{ 0 }; //1 for right, 0 for left
 
-//moving platforms shit i guess
-float platformBSpeed = 5.f;
-float platDSpeed = 20.f;
 
 Game::~Game()
 {
@@ -114,35 +111,11 @@ void Game::Update()
 	if (UsedUpTime > 0)
 		UsedUpTime = UsedUpTime - deltaTime / 3;
 
-	std::cout << UsedUpTime << " " << isSlowed << std::endl;
+	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
 
 	
 	//Adding the time slow as a proof of concept
-	//platform B
-	if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y > 120)
-		platformBSpeed = -5.f;
-	else if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y < 100)
-		platformBSpeed = 5.f;
-	
-	ECS::GetComponent<PhysicsBody>(6).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed));
 
-
-	if (ECS::GetComponent<PhysicsBody>(10).GetPosition().x > 1350)
-		platDSpeed = 180;
-
-
-	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 450 && ECS::GetComponent<PhysicsBody>(10).GetPosition().x < 1750)
-		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(b2Vec2(platDSpeed, platformBSpeed));
-	else
-		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed));
-
-	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 1850 && ECS::GetComponent<PhysicsBody>(12).GetPosition().x < 2075)
-		ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(platDSpeed, -platformBSpeed));
-	else
-		ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed));
-
-
-	ECS::GetComponent<PhysicsBody>(14).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed * 6));
 
 	//Used to set direction
 

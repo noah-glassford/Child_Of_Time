@@ -1,5 +1,10 @@
 #include "Level1Scene.h"
 
+//moving platforms shit i guess
+float platformBSpeed = 5.f;
+float platDSpeed = 20.f;
+
+
 Level1Scene::Level1Scene(std::string name)
 	: Scene(name)
 {
@@ -71,12 +76,12 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		//Sets up components
 
 		//Sets up components
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 25, 35, true, &animController);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 97.f));
 
 		//Grabs reference to various components
 		//Sets up components
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 25, 25);
+		//ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 25, 25);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 49.f));
 		//Grabs reference to various components
 
@@ -112,13 +117,13 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		footSensorFixture->SetUserData((void*)3);
 
 		//Adds a fixture the right side of the body
-		polygonShape.SetAsBox(0.001f, 12.f, b2Vec2(15.f, 0.f), 0);
+		polygonShape.SetAsBox(0.001f, 12.f, b2Vec2(25.f, 0.f), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* RightSideFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		RightSideFixture->SetUserData((void*)4);
 
 		//Adds a fixture the left side of the body
-		polygonShape.SetAsBox(0.001, 12.f, b2Vec2(-15.f, 0.f), 0);
+		polygonShape.SetAsBox(0.001, 12.f, b2Vec2(-25.f, 0.f), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* LeftSideFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		LeftSideFixture->SetUserData((void*)5);
@@ -752,4 +757,31 @@ void Level1Scene::Update()
 	//Makes the camera focus on the main player
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
+
+	//platform B
+	if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y > 120)
+		platformBSpeed = -5.f;
+	else if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y < 100)
+		platformBSpeed = 5.f;
+
+	ECS::GetComponent<PhysicsBody>(6).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed));
+
+
+	if (ECS::GetComponent<PhysicsBody>(10).GetPosition().x > 1350)
+		platDSpeed = 180;
+
+
+	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 450 && ECS::GetComponent<PhysicsBody>(10).GetPosition().x < 1750)
+		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(b2Vec2(platDSpeed, platformBSpeed));
+	else
+		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed));
+
+	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 1850 && ECS::GetComponent<PhysicsBody>(12).GetPosition().x < 2075)
+		ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(platDSpeed, -platformBSpeed));
+	else
+		ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed));
+
+
+	ECS::GetComponent<PhysicsBody>(14).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed * 6));
+
 }
