@@ -38,34 +38,43 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
 	}
 #pragma region game_objects
-	//Setup klock, entity 1
+	//Setup klock, entity 1 
 	{
-		//Some JSON shit
-		auto klockAnimation = File::LoadJSON("klockJSON.json");
+		//Some JSON shit 
+		//auto klockAnimation = File::LoadJSON("klockmovement.json"); 
 
-		//Create new Entity
+		//Create new Entity 
 		auto entity = ECS::CreateEntity();
 		ECS::SetIsMainPlayer(entity, true);
 
-		//Add components
+		//Add components 
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 		ECS::AttachComponent<AnimationController>(entity);
-		//Sets up components
+		//Sets up components 
 		std::string fileName = "spritesheet.png";
 		auto& animController = ECS::GetComponent<AnimationController>(entity);
 		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(0);
+		auto& anim = animController.GetAnimation(0);
+		anim.AddFrame(vec2(0.f, 544.f), vec2(376.f, 0.f));
+		anim.AddFrame(vec2(376.f, 544.f), vec2(752, 0.f));
+		anim.AddFrame(vec2(752.f, 544.f), vec2(1128.f, 0.f));
+		anim.AddFrame(vec2(376.f, 544.f), vec2(752, 0.f));
+		anim.SetRepeating(true);
+		anim.SetSecPerFrame(0.1f);
 
-		//Sets up components
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 25, 25);
+		//Sets up components 
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 25, 35, true, &animController);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 97.f));
-		//Grabs reference to various components
+		//Grabs reference to various components 
 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
 
-		//Physics body covers the entire sprite
+		//Physics body covers the entire sprite 
 		float shrinkX = tempSpr.GetWidth() / 2.f;
 		float shrinkY = tempSpr.GetHeight() / 2.f;
 
@@ -80,35 +89,36 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
 			vec2(0.f, 0.f), true, 1.5f);
 
-		//fixture definition
+		//fixture definition 
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
 		myFixtureDef.shape = &polygonShape;
 		myFixtureDef.density = 10;
-		//myFixtureDef.friction = 1.f;
+		//myFixtureDef.friction = 1.f; 
 
-		//Adds a foot sensor fixture under the body
+		//Adds a foot sensor fixture under the body 
 		polygonShape.SetAsBox(12.f, 0.0001, b2Vec2(0.f, -15.f), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		footSensorFixture->SetUserData((void*)3);
-		
-		//Adds a fixture the right side of the body
+
+		//Adds a fixture the right side of the body 
 		polygonShape.SetAsBox(0.001f, 12.f, b2Vec2(15.f, 0.f), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* RightSideFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		RightSideFixture->SetUserData((void*)4);
-		
-		//Adds a fixture the left side of the body
+
+		//Adds a fixture the left side of the body 
 		polygonShape.SetAsBox(0.001, 12.f, b2Vec2(-15.f, 0.f), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* LeftSideFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		LeftSideFixture->SetUserData((void*)5);
 
-		//Sets up the identifier
-		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		//Sets up the identifier 
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit() | EntityIdentifier::AnimationBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Klock");
 	}
+
 
 	//Setup ai test enemy, entity 2
 	{
