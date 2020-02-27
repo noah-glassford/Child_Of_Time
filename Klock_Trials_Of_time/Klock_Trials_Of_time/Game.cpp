@@ -323,7 +323,7 @@ void Game::KeyboardDown()
 	if (Input::GetKeyDown(Key::W))
 	{
 		if (Klock.GetIsTouching())
-			Klock.Jump(3000000.f);
+			Klock.Jump(3900000.f);
 	}
 	if (Input::GetKeyDown(Key::S))
 	{

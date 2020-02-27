@@ -93,11 +93,11 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
 		myFixtureDef.shape = &polygonShape;
-		myFixtureDef.density = 10;
+		myFixtureDef.density = 3;
 		//myFixtureDef.friction = 1.f; 
 
 		//Adds a foot sensor fixture under the body 
-		polygonShape.SetAsBox(12.f, 0.0001, b2Vec2(0.f, -15.f), 0);
+		polygonShape.SetAsBox(12.f, 0.0001, b2Vec2(0.f, -35.f), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		footSensorFixture->SetUserData((void*)3);
