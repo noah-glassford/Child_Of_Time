@@ -38,19 +38,40 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
 	}
 #pragma region game_objects
-	//Setup klock, entity 1
+	//Setup klock, entity 1 
 	{
-		//Create new Entity
+		//Some JSON shit 
+		//auto klockAnimation = File::LoadJSON("klockmovement.json"); 
+
+		//Create new Entity 
 		auto entity = ECS::CreateEntity();
 		ECS::SetIsMainPlayer(entity, true);
 
-		//Add components
+		//Add components 
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
+		ECS::AttachComponent<AnimationController>(entity);
+		//Sets up components 
+		std::string fileName = "spritesheet.png";
+		auto& animController = ECS::GetComponent<AnimationController>(entity);
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(0);
+		auto& anim = animController.GetAnimation(0);
+		anim.AddFrame(vec2(0.f, 544.f), vec2(376.f, 0.f));
+		anim.AddFrame(vec2(376.f, 544.f), vec2(752, 0.f));
+		anim.AddFrame(vec2(752.f, 544.f), vec2(1128.f, 0.f));
+		anim.AddFrame(vec2(376.f, 544.f), vec2(752, 0.f));
+		anim.SetRepeating(true);
+		anim.SetSecPerFrame(0.1f);
 		//Sets up components
-		std::string fileName = "Box.png";
 
+
+		//Sets up components 
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 25, 35, true, &animController);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 97.f));
+		//Grabs reference to various components 
 		//Sets up components
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 25, 25);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 49.f));
@@ -59,7 +80,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
 
-		//Physics body covers the entire sprite
+		//Physics body covers the entire sprite 
 		float shrinkX = tempSpr.GetWidth() / 2.f;
 		float shrinkY = tempSpr.GetHeight() / 2.f;
 
@@ -74,23 +95,36 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
 			vec2(0.f, 0.f), true, 1.5f);
 
-		//fixture definition
+		//fixture definition 
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
 		myFixtureDef.shape = &polygonShape;
-		myFixtureDef.density = 10;
-		//myFixtureDef.friction = 1.f;
+		myFixtureDef.density = 3;
+		//myFixtureDef.friction = 1.f; 
 
-		//Adds a fixture the size of the body
-		polygonShape.SetAsBox(12.f, 0.0001, b2Vec2(0.f, -15.f), 0);
+		//Adds a foot sensor fixture under the body 
+		polygonShape.SetAsBox(12.f, 0.0001, b2Vec2(0.f, -25.f), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		footSensorFixture->SetUserData((void*)3);
 
-		//Sets up the identifier
-		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		//Adds a fixture the right side of the body 
+		polygonShape.SetAsBox(0.001f, 12.f, b2Vec2(15.f, 0.f), 0);
+		myFixtureDef.isSensor = true;
+		b2Fixture* RightSideFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
+		RightSideFixture->SetUserData((void*)4);
+
+		//Adds a fixture the left side of the body 
+		polygonShape.SetAsBox(0.001, 12.f, b2Vec2(-15.f, 0.f), 0);
+		myFixtureDef.isSensor = true;
+		b2Fixture* LeftSideFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
+		LeftSideFixture->SetUserData((void*)5);
+
+		//Sets up the identifier 
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit() | EntityIdentifier::AnimationBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Klock");
 	}
+
 
 	//Setup ai test enemy, entity 2
 	{
@@ -606,7 +640,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 	}
 #pragma endregion
 
-	//Main Camera ent 11
+	//Main Camera ent 9
 	{//Creates camera entity
 		auto entity = ECS::CreateEntity();
 		EntityIdentifier::MainCamera(entity);
@@ -635,3 +669,71 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
 }
+
+void Level1Scene::Update()
+{
+	//std::cout << ECS::GetComponent<PhysicsBody>(1).isAttacking;
+	
+	//Creating test hitbox entity
+	if (createdint)
+	{
+		ECS::DestroyEntity(tempent);
+		createdint = 0;
+		std::cout << "deleting shit";
+	}
+	if (ECS::GetComponent<PhysicsBody>(1).isAttacking)
+	{
+		createdint = 1;
+		auto entity = ECS::CreateEntity();
+		tempent = entity;
+		//std::cout << entity << " " << tempent;
+		//Add components
+		ECS::AttachComponent<Transform>(entity);
+
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 98.f));
+
+		//Grabs reference to various components
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_dynamicBody;
+		tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x + 15), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
+		tempDef.fixedRotation = true;
+		tempDef.gravityScale = 0;
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(1), float(1),
+			vec2(0.f, 0.f), true, true);
+
+		//fixture definition
+		b2PolygonShape polygonShape;
+		b2FixtureDef myFixtureDef;
+		myFixtureDef.shape = &polygonShape;
+		myFixtureDef.density = 0;
+		myFixtureDef.isSensor = 1;
+		//myFixtureDef.friction = 1.f;
+
+		//Combat fixture
+		polygonShape.SetAsBox(12.f, 12.f, b2Vec2(0.f, 25.f), 0);
+		myFixtureDef.isSensor = true;
+		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
+		footSensorFixture->SetUserData((void*)7);
+
+		//Sets up the identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "da hitbox");
+		std::cout << entity << "\n" << tempent << "\n";
+	}
+	
+	//Makes the camera focus on the main player
+	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
+	ECS::GetComponent<VerticalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
+
+}
+

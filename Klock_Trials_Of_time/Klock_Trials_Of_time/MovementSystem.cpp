@@ -15,10 +15,11 @@ bool MovementSystem::GetIsTouching()
 	return isTouching;
 }
 
-bool MovementSystem::GetOnPlatform()
+bool MovementSystem::GetIsAttacking()
 {
-	return PhysicsBod.onPlatform;
+	return PhysicsBod.isAttacking;
 }
+
 
 void MovementSystem::SetBothBodies(int entity)
 {
@@ -49,10 +50,11 @@ void MovementSystem::SetIsTouching(bool touching)
 	isTouching = touching;
 }
 
-void MovementSystem::SetOnPlatform(bool onPlat)
+void MovementSystem::SetIsAttacking(bool Attacking)
 {
-	PhysicsBod.onPlatform = onPlat;
+	PhysicsBod.isAttacking = Attacking;
 }
+
 
 
 
