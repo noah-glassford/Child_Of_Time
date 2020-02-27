@@ -12,7 +12,7 @@ bool direction{ 0 }; //1 for right, 0 for left
 
 //moving platforms shit i guess
 float platformBSpeed = 5.f;
-float platDSpeed = 40.f;
+float platDSpeed = 20.f;
 
 Game::~Game()
 {
@@ -110,7 +110,7 @@ void Game::Update()
 	PhysicsSystem::Update(m_register, m_activeScene->GetPhysicsWorld());
 
 	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
-	
+
 	if (UsedUpTime > 0)
 		UsedUpTime = UsedUpTime - deltaTime / 3;
 
@@ -133,10 +133,8 @@ void Game::Update()
 	else
 		ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed));
 
-	ECS::GetComponent<PhysicsBody>(14).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed * 12));
+	ECS::GetComponent<PhysicsBody>(14).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed * 6));
 
-	
-	
 	//Used to set direction
 
 	if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x > 800)
@@ -160,8 +158,6 @@ void Game::Update()
 		if (!direction)
 			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(-10.f, 0.f));
 	}
-		
-	
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//     a.i     testing
@@ -174,7 +170,6 @@ void Game::Update()
 			ECS::GetComponent<PhysicsBody>(6).GetBody()->SetLinearVelocity(b2Vec2(-50.f, 0.f));
 			*/
 
-	
 	m_activeScene->Update();
 }
 
@@ -284,7 +279,7 @@ void Game::GamepadTrigger(XInputController* con)
 void Game::KeyboardHold()
 {
 	//Make sure that the player is always entity 1
-	
+
 	MovementSystem Klock; //Handles all the movement functions for Klock
 	Klock.SetBothBodies(1);
 
@@ -297,22 +292,22 @@ void Game::KeyboardHold()
 	if (Input::GetKey(Key::A))
 	{
 		if (!Klock.GetPhysicsBody().OnWallLeft)
-		Klock.MoveLeft(30.f);
+			Klock.MoveLeft(60.f);
 	}
 	if (Input::GetKey(Key::D))
 	{
 		if (!Klock.GetPhysicsBody().OnWallRight)
-			Klock.MoveRight(30.f);	
+			Klock.MoveRight(60.f);
 	}
 
 	if (Input::GetKey(Key::E))
 	{
 		if (UsedUpTime <= 2.f)
 			UsedUpTime = UsedUpTime + deltaTime;
-		
+
 		if (UsedUpTime < 2.f)
 			isSlowed = true;
-		
+
 		else if (UsedUpTime > 2.f)
 			isSlowed = false;
 	}
@@ -323,7 +318,6 @@ void Game::KeyboardHold()
 
 void Game::KeyboardDown()
 {
-
 	MovementSystem Klock;
 	Klock.SetBothBodies(1); //Overcomplicated shit
 
@@ -336,10 +330,8 @@ void Game::KeyboardDown()
 	}
 	if (Input::GetKeyDown(Key::S))
 	{
-		/*
 		if (!Klock.GetIsTouching())
 			Klock.DownMove(999999999999.f);
-			*/
 	}
 	if (Input::GetKeyDown(Key::R))
 		ECS::GetComponent<PhysicsBody>(1).isAttacking = true;
@@ -353,12 +345,11 @@ void Game::KeyboardUp()
 {
 	if (Input::GetKeyUp(Key::E))
 		isSlowed = 0;
-	
 
 	if (Input::GetKeyUp(Key::I))
 		ECS::GetComponent<Camera>(9).Zoom(-50);
 
-		m_activeScene->KeyboardUp();
+	m_activeScene->KeyboardUp();
 }
 
 void Game::MouseMotion(SDL_MouseMotionEvent evnt)
