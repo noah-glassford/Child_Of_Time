@@ -8,6 +8,7 @@
 //so I just said fuck it and made them global
 bool isSlowed;
 float UsedUpTime{ 0 };
+bool direction{ 0 }; //1 for right, 0 for left
 
 Game::~Game()
 {
@@ -42,8 +43,9 @@ void Game::InitGame()
 	//Creates a new scene.
 	//Replace this with your own scene.
 
-	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene"));
-	m_scenes.push_back(new Level1Scene("Level 1 Scene"));
+	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene")); //0
+	m_scenes.push_back(new Level1Scene("Level 1 Scene")); //1
+	m_scenes.push_back(new Level2Scene("Level 2 Scene")); //2
 
 		//Sets active scene reference to our scene
 	m_activeScene = m_scenes[1];
@@ -103,18 +105,39 @@ void Game::Update()
 	//Update Physics System
 	PhysicsSystem::Update(m_register, m_activeScene->GetPhysicsWorld());
 
-	std::cout << UsedUpTime << " " << isSlowed << std::endl;
+	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
 	
 	if (UsedUpTime > 0)
 		UsedUpTime = UsedUpTime - deltaTime / 3;
 
+	
+	
+	//Used to set direction
+
+	if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x > 800)
+		direction = 0;
+	else if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x < 400)
+		direction = 1;
+
+	//std::cout << ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x << std::endl;
 	//Anything that can be affected by the time controls is done in this if statement
 	if (!isSlowed)
-		ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(50.f, 0.f));
+	{
+		if (direction)
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(50.f, 0.f));
+		if (!direction)
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(-50.f, 0.f));
+	}
 	else if (isSlowed)
-		ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(10.f, 0.f));
+	{
+		if (direction)
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(10.f, 0.f));
+		if (!direction)
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(-10.f, 0.f));
+	}
+		
 	
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//     a.i     testing
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,6 +164,7 @@ void Game::Update()
 			AIBodSprinter.ApplyForce(vec3(150000.f, 0.f, 0.f));
 	}
 	*/
+
 	
 	m_activeScene->Update();
 }
@@ -261,22 +285,13 @@ void Game::KeyboardHold()
 	}
 	if (Input::GetKey(Key::A))
 	{
-		if (Klock.GetIsTouching())
-		{
-			Klock.MoveLeft(12000000.f);
-		}
-		else
-		{
-			Klock.MoveLeft(1600000.f);
-		}
-
+		if (!Klock.GetPhysicsBody().OnWallLeft)
+		Klock.MoveLeft(30.f);
 	}
 	if (Input::GetKey(Key::D))
 	{
-		if (Klock.GetIsTouching())
-			Klock.MoveRight(12000000.f);
-		else
-			Klock.MoveRight(1600000.f);
+		if (!Klock.GetPhysicsBody().OnWallRight)
+			Klock.MoveRight(30.f);	
 	}
 
 	if (Input::GetKey(Key::E))
@@ -304,7 +319,7 @@ void Game::KeyboardDown()
 	if (Input::GetKeyDown(Key::W))
 	{
 		if (Klock.GetIsTouching())
-			Klock.Jump((4300000.f)/2);
+			Klock.Jump(3000000.f);
 	}
 	if (Input::GetKeyDown(Key::S))
 	{

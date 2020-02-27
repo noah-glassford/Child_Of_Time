@@ -173,9 +173,12 @@ public:
 	//Does the object not move?
 	void SetDynamic(bool isDynamic);
 
+	//Could I make this private? (The proper way) Yes. Am I going to? No.
 	bool Grounded;
 
-	bool onPlatform;
+	bool OnWallRight;
+
+	bool OnWallLeft;
 
 private:
 	//The actual box2D body
