@@ -114,15 +114,23 @@ void Game::Update()
 	if (UsedUpTime > 0)
 		UsedUpTime = UsedUpTime - deltaTime / 3;
 
+	std::cout << UsedUpTime << " " << isSlowed << std::endl;
+
+	
+	//Adding the time slow as a proof of concept
 	//platform B
 	if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y > 120)
 		platformBSpeed = -5.f;
 	else if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y < 100)
 		platformBSpeed = 5.f;
+	
 	ECS::GetComponent<PhysicsBody>(6).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed));
+
 
 	if (ECS::GetComponent<PhysicsBody>(10).GetPosition().x > 1350)
 		platDSpeed = 180;
+
+
 	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 450 && ECS::GetComponent<PhysicsBody>(10).GetPosition().x < 1750)
 		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(b2Vec2(platDSpeed, platformBSpeed));
 	else
@@ -132,6 +140,7 @@ void Game::Update()
 		ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(platDSpeed, -platformBSpeed));
 	else
 		ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed));
+
 
 	ECS::GetComponent<PhysicsBody>(14).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed * 6));
 
