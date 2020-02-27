@@ -117,13 +117,13 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		footSensorFixture->SetUserData((void*)3);
 
 		//Adds a fixture the right side of the body
-		polygonShape.SetAsBox(0.001f, 12.f, b2Vec2(25.f, 0.f), 0);
+		polygonShape.SetAsBox(0.001f, 22.f, b2Vec2(25.f, 0.f), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* RightSideFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		RightSideFixture->SetUserData((void*)4);
 
 		//Adds a fixture the left side of the body
-		polygonShape.SetAsBox(0.001, 12.f, b2Vec2(-25.f, 0.f), 0);
+		polygonShape.SetAsBox(0.001, 22.f, b2Vec2(-25.f, 0.f), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* LeftSideFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		LeftSideFixture->SetUserData((void*)5);
@@ -743,7 +743,7 @@ void Level1Scene::Update()
 		//myFixtureDef.friction = 1.f;
 
 		//Combat fixture
-		polygonShape.SetAsBox(12.f, 12.f, b2Vec2(0.f, 25.f), 0);
+		polygonShape.SetAsBox(12.f, 12.f, b2Vec2(0.f, 35.f), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		footSensorFixture->SetUserData((void*)7);
