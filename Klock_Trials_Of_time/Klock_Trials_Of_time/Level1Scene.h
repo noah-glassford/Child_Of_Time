@@ -11,4 +11,6 @@ public:
 	//init, as each scene's content will be different
 	void InitScene(float windowWidth, float windowHeight) override;
 	void Update() override;
+	bool createdint{ 0 };
+	unsigned int tempent;
 };

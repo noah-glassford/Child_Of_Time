@@ -28,7 +28,9 @@ unsigned ECS::CreateEntity()
 
 void ECS::DestroyEntity(unsigned entity)
 {
-	//Destroys the entity
+	if (m_reg->has<PhysicsBody>(entity))
+		m_reg->get<PhysicsBody>(entity).DeleteBody();
+
 	m_reg->destroy(entity);
 }
 

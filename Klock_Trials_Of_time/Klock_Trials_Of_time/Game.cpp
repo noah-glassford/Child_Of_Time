@@ -10,6 +10,10 @@ bool isSlowed;
 float UsedUpTime{ 0 };
 bool direction{ 0 }; //1 for right, 0 for left
 
+//moving platforms shit i guess
+float platformBSpeed = 5.f;
+float platDSpeed = 20.f;
+
 Game::~Game()
 {
 	//If window isn't equal to nullptr
@@ -47,7 +51,7 @@ void Game::InitGame()
 	m_scenes.push_back(new Level1Scene("Level 1 Scene")); //1
 	m_scenes.push_back(new Level2Scene("Level 2 Scene")); //2
 
-		//Sets active scene reference to our scene
+	//Sets active scene reference to our scene
 	m_activeScene = m_scenes[1];
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -106,12 +110,40 @@ void Game::Update()
 	PhysicsSystem::Update(m_register, m_activeScene->GetPhysicsWorld());
 
 	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
-	
+
 	if (UsedUpTime > 0)
 		UsedUpTime = UsedUpTime - deltaTime / 3;
 
+	std::cout << UsedUpTime << " " << isSlowed << std::endl;
+
 	
+	//Adding the time slow as a proof of concept
+	//platform B
+	if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y > 120)
+		platformBSpeed = -5.f;
+	else if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y < 100)
+		platformBSpeed = 5.f;
 	
+	ECS::GetComponent<PhysicsBody>(6).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed));
+
+
+	if (ECS::GetComponent<PhysicsBody>(10).GetPosition().x > 1350)
+		platDSpeed = 180;
+
+
+	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 450 && ECS::GetComponent<PhysicsBody>(10).GetPosition().x < 1750)
+		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(b2Vec2(platDSpeed, platformBSpeed));
+	else
+		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed));
+
+	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 1850 && ECS::GetComponent<PhysicsBody>(12).GetPosition().x < 2075)
+		ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(platDSpeed, -platformBSpeed));
+	else
+		ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed));
+
+
+	ECS::GetComponent<PhysicsBody>(14).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed * 6));
+
 	//Used to set direction
 
 	if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x > 800)
@@ -135,37 +167,18 @@ void Game::Update()
 		if (!direction)
 			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(-10.f, 0.f));
 	}
-		
-	
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//     a.i     testing
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*
-	All this stuff will be changed soon bu tkeeping the code here because it do kinda be working tho
-	auto& AIBodDefault = ECS::GetComponent<PhysicsBody>(2);
-	auto& AIBodSprinter = ECS::GetComponent<PhysicsBody>(3);
+		if (ECS::GetComponent<PhysicsBody>(6).GetBody()->GetPosition().y < 50)
+			ECS::GetComponent<PhysicsBody>(6).GetBody()->SetLinearVelocity(b2Vec2(0.f, 5.f));
 
-	float distance1 = AIBodDefault.GetPosition().x - playerBod.GetPosition().x;
-	float distance2 = AIBodSprinter.GetPosition().x - playerBod.GetPosition().x;
+		else if (ECS::GetComponent<PhysicsBody>(6).GetBody()->GetPosition().y > 400)
+			ECS::GetComponent<PhysicsBody>(6).GetBody()->SetLinearVelocity(b2Vec2(-50.f, 0.f));
+			*/
 
-	//default enemy
-	if (distance1 < 165 && distance1 > -165) {
-		if (distance1 > 40)
-			AIBodDefault.ApplyForce(vec3(-89999.f, 0.f, 0.f));
-		if (distance1 < -40)
-			AIBodDefault.ApplyForce(vec3(89999.f, 0.f, 0.f));
-	}
-	//sprinter enemy
-	if (distance2 < 120 && distance2 > -120) {
-		if (distance2 > 0)
-			AIBodSprinter.ApplyForce(vec3(-150000.f, 0.f, 0.f));
-		if (distance2 < 0)
-			AIBodSprinter.ApplyForce(vec3(150000.f, 0.f, 0.f));
-	}
-	*/
-
-	
 	m_activeScene->Update();
 }
 
@@ -274,9 +287,11 @@ void Game::GamepadTrigger(XInputController* con)
 
 void Game::KeyboardHold()
 {
+	//Make sure that the player is always entity 1
+
 	MovementSystem Klock; //Handles all the movement functions for Klock
 	Klock.SetBothBodies(1);
-	
+
 	Klock.SetIsTouching(); //Klock specific contact updating
 
 	if (Input::GetKey(Key::S))
@@ -285,12 +300,12 @@ void Game::KeyboardHold()
 	}
 	if (Input::GetKey(Key::A))
 	{
-		if (!Klock.GetPhysicsBody().OnWallLeft)
+		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft)
 		Klock.MoveLeft(30.f);
 	}
 	if (Input::GetKey(Key::D))
 	{
-		if (!Klock.GetPhysicsBody().OnWallRight)
+		if (!ECS::GetComponent<PlayerData>(1).OnWallRight)
 			Klock.MoveRight(30.f);	
 	}
 
@@ -298,9 +313,10 @@ void Game::KeyboardHold()
 	{
 		if (UsedUpTime <= 2.f)
 			UsedUpTime = UsedUpTime + deltaTime;
-			
+
 		if (UsedUpTime < 2.f)
 			isSlowed = true;
+
 		else if (UsedUpTime > 2.f)
 			isSlowed = false;
 	}
@@ -312,13 +328,11 @@ void Game::KeyboardHold()
 void Game::KeyboardDown()
 {
 	MovementSystem Klock;
-	Klock.SetBothBodies(1); //Overcomplicated shit
-	
-	Klock.SetIsTouching();//Updates the isTouching
+	Klock.SetBothBodies(1);
 
 	if (Input::GetKeyDown(Key::W))
 	{
-		if (Klock.GetIsTouching())
+		if (ECS::GetComponent<PlayerData>(1).Grounded)
 			Klock.Jump(3000000.f);
 	}
 	if (Input::GetKeyDown(Key::S))
@@ -326,6 +340,10 @@ void Game::KeyboardDown()
 		if (!Klock.GetIsTouching())
 			Klock.DownMove(999999999999.f);
 	}
+	if (Input::GetKeyDown(Key::R))
+		ECS::GetComponent<PlayerData>(1).isAttacking = true;
+	else
+		ECS::GetComponent<PlayerData>(1).isAttacking = false;
 
 	m_activeScene->KeyboardDown();
 }
@@ -334,10 +352,11 @@ void Game::KeyboardUp()
 {
 	if (Input::GetKeyUp(Key::E))
 		isSlowed = 0;
-	m_activeScene->KeyboardUp();
 
 	if (Input::GetKeyUp(Key::I))
-		ECS::GetComponent<Camera>(11).Zoom(-50);
+		ECS::GetComponent<Camera>(9).Zoom(-50);
+
+	m_activeScene->KeyboardUp();
 }
 
 void Game::MouseMotion(SDL_MouseMotionEvent evnt)
