@@ -15,6 +15,11 @@ bool MovementSystem::GetIsTouching()
 	return isTouching;
 }
 
+bool MovementSystem::GetIsAttacking()
+{
+	return PhysicsBod.isAttacking;
+}
+
 
 void MovementSystem::SetBothBodies(int entity)
 {
@@ -43,6 +48,11 @@ void MovementSystem::SetIsTouching()
 void MovementSystem::SetIsTouching(bool touching)
 {
 	isTouching = touching;
+}
+
+void MovementSystem::SetIsAttacking(bool Attacking)
+{
+	PhysicsBod.isAttacking = Attacking;
 }
 
 

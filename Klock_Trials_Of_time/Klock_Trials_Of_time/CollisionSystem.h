@@ -35,6 +35,9 @@ inline void CollisionListener::BeginContact(b2Contact* contact)
 	if ((int)fixtureUserData == 5) //Klock left side of body sensor
 		ECS::GetComponent<PhysicsBody>(1).OnWallLeft = true;
 
+	if ((int)fixtureUserData == 7)
+		std::cout << "combat hit";
+
 	fixtureUserData = contact->GetFixtureB()->GetUserData();
 
 	if ((int)fixtureUserData == 3) //Klock Footsensor	
@@ -45,6 +48,8 @@ inline void CollisionListener::BeginContact(b2Contact* contact)
 	
 	if ((int)fixtureUserData == 5) //Klock left side of body sensor
 		ECS::GetComponent<PhysicsBody>(1).OnWallLeft = true;
+	if ((int)fixtureUserData == 7)
+		std::cout << "combat hit";
 	
 }
 inline void CollisionListener::EndContact(b2Contact* contact)

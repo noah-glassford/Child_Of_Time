@@ -274,6 +274,8 @@ void Game::GamepadTrigger(XInputController* con)
 
 void Game::KeyboardHold()
 {
+	//Make sure that the player is always entity 1
+	
 	MovementSystem Klock; //Handles all the movement functions for Klock
 	Klock.SetBothBodies(1);
 	
@@ -298,9 +300,10 @@ void Game::KeyboardHold()
 	{
 		if (UsedUpTime <= 2.f)
 			UsedUpTime = UsedUpTime + deltaTime;
-			
+		
 		if (UsedUpTime < 2.f)
 			isSlowed = true;
+		
 		else if (UsedUpTime > 2.f)
 			isSlowed = false;
 	}
@@ -311,6 +314,7 @@ void Game::KeyboardHold()
 
 void Game::KeyboardDown()
 {
+
 	MovementSystem Klock;
 	Klock.SetBothBodies(1); //Overcomplicated shit
 	
@@ -323,9 +327,15 @@ void Game::KeyboardDown()
 	}
 	if (Input::GetKeyDown(Key::S))
 	{
+		/*
 		if (!Klock.GetIsTouching())
 			Klock.DownMove(999999999999.f);
+			*/
 	}
+	if (Input::GetKeyDown(Key::R))
+		ECS::GetComponent<PhysicsBody>(1).isAttacking = true;
+	else
+		ECS::GetComponent<PhysicsBody>(1).isAttacking = false;
 
 	m_activeScene->KeyboardDown();
 }
@@ -334,10 +344,12 @@ void Game::KeyboardUp()
 {
 	if (Input::GetKeyUp(Key::E))
 		isSlowed = 0;
-	m_activeScene->KeyboardUp();
+	
 
 	if (Input::GetKeyUp(Key::I))
-		ECS::GetComponent<Camera>(11).Zoom(-50);
+		ECS::GetComponent<Camera>(9).Zoom(-50);
+
+		m_activeScene->KeyboardUp();
 }
 
 void Game::MouseMotion(SDL_MouseMotionEvent evnt)
