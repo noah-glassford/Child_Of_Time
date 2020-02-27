@@ -40,6 +40,9 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 #pragma region game_objects
 	//Setup klock, entity 1
 	{
+		//Some JSON shit
+		auto klockAnimation = File::LoadJSON("klockJSON.json");
+
 		//Create new Entity
 		auto entity = ECS::CreateEntity();
 		ECS::SetIsMainPlayer(entity, true);
@@ -48,8 +51,11 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
+		ECS::AttachComponent<AnimationController>(entity);
 		//Sets up components
-		std::string fileName = "Klock_Png.png";
+		std::string fileName = "spritesheet.png";
+		auto& animController = ECS::GetComponent<AnimationController>(entity);
+		animController.InitUVs(fileName);
 
 		//Sets up components
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 25, 25);
