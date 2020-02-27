@@ -174,22 +174,6 @@ void Game::Update()
 			ECS::GetComponent<PhysicsBody>(6).GetBody()->SetLinearVelocity(b2Vec2(-50.f, 0.f));
 			*/
 
-	//default enemy
-	if (distance1 < 165 && distance1 > -165) {
-		if (distance1 > 40)
-			AIBodDefault.ApplyForce(vec3(-89999.f, 0.f, 0.f));
-		if (distance1 < -40)
-			AIBodDefault.ApplyForce(vec3(89999.f, 0.f, 0.f));
-	}
-	//sprinter enemy
-	if (distance2 < 120 && distance2 > -120) {
-		if (distance2 > 0)
-			AIBodSprinter.ApplyForce(vec3(-150000.f, 0.f, 0.f));
-		if (distance2 < 0)
-			AIBodSprinter.ApplyForce(vec3(150000.f, 0.f, 0.f));
-	}
-	*/
-
 	
 	m_activeScene->Update();
 }
@@ -348,7 +332,7 @@ void Game::KeyboardDown()
 	if (Input::GetKeyDown(Key::W))
 	{
 		if (Klock.GetIsTouching())
-			Klock.Jump(3900000.f);
+			Klock.Jump(3000000.f);
 	}
 	if (Input::GetKeyDown(Key::S))
 	{
