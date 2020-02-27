@@ -2,6 +2,13 @@
 
 #include <random>
 
+//Yo can I just put a bool here for it to be global lmao
+//Fuck it float here too this is probably bad but I don't care
+//Both of these are used for the time slowing stuff because they are used in multiple functions in game.cpp
+//so I just said fuck it and made them global
+bool isSlowed;
+float UsedUpTime{ 0 };
+bool direction{ 0 }; //1 for right, 0 for left
 
 Game::~Game()
 {
@@ -28,19 +35,22 @@ Game::~Game()
 void Game::InitGame()
 {
 	//Initializes the backend with window width and height values
-	BackEnd::InitBackEnd(719.f, 436.f);
+	BackEnd::InitBackEnd(500.f, 500.f);
 
 	//Grabs the initialized window
 	m_window = BackEnd::GetWindow();
 
 	//Creates a new scene.
 	//Replace this with your own scene.
-	
-	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene"));
 
-	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[0];
+	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene")); //0
+	m_scenes.push_back(new Level1Scene("Level 1 Scene")); //1
+	m_scenes.push_back(new Level2Scene("Level 2 Scene")); //2
 
+		//Sets active scene reference to our scene
+	m_activeScene = m_scenes[1];
+
+	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 
 	//Sets m_register to point to the register in the active scene
@@ -95,7 +105,67 @@ void Game::Update()
 	//Update Physics System
 	PhysicsSystem::Update(m_register, m_activeScene->GetPhysicsWorld());
 
-	//Updates the active scene
+	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
+	
+	if (UsedUpTime > 0)
+		UsedUpTime = UsedUpTime - deltaTime / 3;
+
+	
+	
+	//Used to set direction
+
+	if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x > 800)
+		direction = 0;
+	else if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x < 400)
+		direction = 1;
+
+	//std::cout << ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x << std::endl;
+	//Anything that can be affected by the time controls is done in this if statement
+	if (!isSlowed)
+	{
+		if (direction)
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(50.f, 0.f));
+		if (!direction)
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(-50.f, 0.f));
+	}
+	else if (isSlowed)
+	{
+		if (direction)
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(10.f, 0.f));
+		if (!direction)
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(-10.f, 0.f));
+	}
+		
+	
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//     a.i     testing
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/*
+	All this stuff will be changed soon bu tkeeping the code here because it do kinda be working tho
+	auto& AIBodDefault = ECS::GetComponent<PhysicsBody>(2);
+	auto& AIBodSprinter = ECS::GetComponent<PhysicsBody>(3);
+
+	float distance1 = AIBodDefault.GetPosition().x - playerBod.GetPosition().x;
+	float distance2 = AIBodSprinter.GetPosition().x - playerBod.GetPosition().x;
+
+	//default enemy
+	if (distance1 < 165 && distance1 > -165) {
+		if (distance1 > 40)
+			AIBodDefault.ApplyForce(vec3(-89999.f, 0.f, 0.f));
+		if (distance1 < -40)
+			AIBodDefault.ApplyForce(vec3(89999.f, 0.f, 0.f));
+	}
+	//sprinter enemy
+	if (distance2 < 120 && distance2 > -120) {
+		if (distance2 > 0)
+			AIBodSprinter.ApplyForce(vec3(-150000.f, 0.f, 0.f));
+		if (distance2 < 0)
+			AIBodSprinter.ApplyForce(vec3(150000.f, 0.f, 0.f));
+	}
+	*/
+
+	
 	m_activeScene->Update();
 }
 
@@ -134,7 +204,7 @@ void Game::AcceptInput()
 {
 	XInputManager::Update();
 
-	//Just calls all the other input functions 
+	//Just calls all the other input functions
 	GamepadInput();
 
 	KeyboardHold();
@@ -167,35 +237,35 @@ void Game::GamepadInput()
 	}
 }
 
-void Game::GamepadStroke(XInputController * con)
+void Game::GamepadStroke(XInputController* con)
 {
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->GamepadStroke(con);
 }
 
-void Game::GamepadUp(XInputController * con)
+void Game::GamepadUp(XInputController* con)
 {
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->GamepadUp(con);
 }
 
-void Game::GamepadDown(XInputController * con)
+void Game::GamepadDown(XInputController* con)
 {
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->GamepadDown(con);
 }
 
-void Game::GamepadStick(XInputController * con)
+void Game::GamepadStick(XInputController* con)
 {
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->GamepadStick(con);
 }
 
-void Game::GamepadTrigger(XInputController * con)
+void Game::GamepadTrigger(XInputController* con)
 {
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
@@ -204,33 +274,36 @@ void Game::GamepadTrigger(XInputController * con)
 
 void Game::KeyboardHold()
 {
-	auto& tempPhysBod = ECS::GetComponent<PhysicsBody>(1);
-
-	b2Body* body = tempPhysBod.GetBody();
-	b2BodyDef tempDef;
+	MovementSystem Klock; //Handles all the movement functions for Klock
+	Klock.SetBothBodies(1);
 	
+	Klock.SetIsTouching(); //Klock specific contact updating
+
 	if (Input::GetKey(Key::S))
 	{
-		m_register->get<PhysicsBody>(1).ApplyForce(vec3(0.f, -9999.f, 0.f));
+		//Crouching will be done here
 	}
-
 	if (Input::GetKey(Key::A))
 	{
-		m_register->get<PhysicsBody>(1).ApplyForce(vec3(-9999.f, 0.f, 0.f));
+		if (!Klock.GetPhysicsBody().OnWallLeft)
+		Klock.MoveLeft(30.f);
 	}
-
 	if (Input::GetKey(Key::D))
 	{
-		m_register->get<PhysicsBody>(1).ApplyForce(vec3(9999.f, 0.f, 0.f));
+		if (!Klock.GetPhysicsBody().OnWallRight)
+			Klock.MoveRight(30.f);	
 	}
-	if (Input::GetKey(Key::W))
+
+	if (Input::GetKey(Key::E))
 	{
-	
-		if(true)
-			m_register->get<PhysicsBody>(1).ApplyForce(vec3(0.f, 9999.f, 0.f));
-	
+		if (UsedUpTime <= 2.f)
+			UsedUpTime = UsedUpTime + deltaTime;
+			
+		if (UsedUpTime < 2.f)
+			isSlowed = true;
+		else if (UsedUpTime > 2.f)
+			isSlowed = false;
 	}
-	
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->KeyboardHold();
@@ -238,32 +311,33 @@ void Game::KeyboardHold()
 
 void Game::KeyboardDown()
 {
-	//Active scene now captures this input and can use it
-	//Look at base Scene class for more info.
+	MovementSystem Klock;
+	Klock.SetBothBodies(1); //Overcomplicated shit
+	
+	Klock.SetIsTouching();//Updates the isTouching
+
+	if (Input::GetKeyDown(Key::W))
+	{
+		if (Klock.GetIsTouching())
+			Klock.Jump(3000000.f);
+	}
+	if (Input::GetKeyDown(Key::S))
+	{
+		if (!Klock.GetIsTouching())
+			Klock.DownMove(999999999999.f);
+	}
 
 	m_activeScene->KeyboardDown();
 }
 
 void Game::KeyboardUp()
 {
-
-	//Active scene now captures this input and can use it
-	//Look at base Scene class for more info.
+	if (Input::GetKeyUp(Key::E))
+		isSlowed = 0;
 	m_activeScene->KeyboardUp();
 
-	if (Input::GetKeyUp(Key::F1))
-	{
-		if (!UI::m_isInit)
-		{
-			UI::InitImGUI();
-		}
-		m_guiActive = !m_guiActive;
-	}
-	if (Input::GetKeyUp(Key::P))
-	{
-		PhysicsBody::SetDraw(!PhysicsBody::GetDraw());
-	}
-	
+	if (Input::GetKeyUp(Key::I))
+		ECS::GetComponent<Camera>(11).Zoom(-50);
 }
 
 void Game::MouseMotion(SDL_MouseMotionEvent evnt)
@@ -278,7 +352,6 @@ void Game::MouseMotion(SDL_MouseMotionEvent evnt)
 
 		if (!ImGui::GetIO().WantCaptureMouse)
 		{
-
 		}
 	}
 

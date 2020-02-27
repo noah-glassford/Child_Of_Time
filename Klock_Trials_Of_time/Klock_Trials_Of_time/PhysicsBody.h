@@ -39,7 +39,7 @@ public:
 	//Constructs a circle collider
 	PhysicsBody(b2Body* body, float radius, vec2 centerOffset, bool isDynamic);
 	//Constructs a box collider
-	PhysicsBody(b2Body* body, float width, float height, vec2 centerOffset, bool isDynamic);
+	PhysicsBody(b2Body* body, float width, float height, vec2 centerOffset, bool isDynamic, float friction);
 
 	void DeleteBody();
 
@@ -61,6 +61,8 @@ public:
 	void AddCollideID(unsigned int collideID);
 
 	//Getters
+	//b2FixtureDef* GetFixture() const;
+	
 	//Get the Box2D physics body
 	b2Body* GetBody() const;
 	//Get position of body
@@ -171,11 +173,20 @@ public:
 	//Does the object not move?
 	void SetDynamic(bool isDynamic);
 
+	//Could I make this private? (The proper way) Yes. Am I going to? No.
+	bool Grounded;
+
+	bool OnWallRight;
+
+	bool OnWallLeft;
 
 private:
 	//The actual box2D body
 	b2Body* m_body = nullptr;
 	b2Vec2 m_position = b2Vec2(0.f, 0.f);
+
+	//Box2d fixture
+	b2FixtureDef* m_fixture = nullptr;
 
 	bool m_isColliding = 0;
 

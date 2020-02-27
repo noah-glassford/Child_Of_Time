@@ -3,8 +3,13 @@
 
 #include "BackEnd.h"
 #include "PhysicsTestScene.h"
+#include "Level1Scene.h"
+#include "Level2Scene.h"
+#include "CollisionSystem.h"
+#include "MovementSystem.h"
+
 //Our main class for running our game
-class Game
+class Game : public Timer
 {
 public:
 	//Empty constructor
@@ -20,7 +25,8 @@ public:
 	//*Initializes GLEW
 	//*Create Main Camera Entity
 	//*Creates all other entities and adds them to register
-	void InitGame();
+	void InitGame
+	();
 
 	//Runs the game
 	//*While window is open
