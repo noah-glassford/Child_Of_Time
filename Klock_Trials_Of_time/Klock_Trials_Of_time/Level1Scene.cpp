@@ -38,16 +38,16 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
 	}
 #pragma region game_objects
-	//Setup klock, entity 1 
+	//Setup klock, entity 1
 	{
-		//Some JSON shit 
-		//auto klockAnimation = File::LoadJSON("klockmovement.json"); 
+		//Some JSON shit
+		//auto klockAnimation = File::LoadJSON("klockmovement.json");
 
-		//Create new Entity 
+		//Create new Entity
 		auto entity = ECS::CreateEntity();
 		ECS::SetIsMainPlayer(entity, true);
 
-		//Add components 
+		//Add components
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
@@ -55,6 +55,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<PlayerData>(entity);
 
 		//Sets up components 
+		//Sets up components
 		std::string fileName = "spritesheet.png";
 		auto& animController = ECS::GetComponent<AnimationController>(entity);
 		animController.InitUVs(fileName);
@@ -69,11 +70,11 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		anim.SetSecPerFrame(0.1f);
 		//Sets up components
 
-
-		//Sets up components 
+		//Sets up components
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 25, 35, true, &animController);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 97.f));
-		//Grabs reference to various components 
+
+		//Grabs reference to various components
 		//Sets up components
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 25, 25);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 49.f));
@@ -82,7 +83,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
 
-		//Physics body covers the entire sprite 
+		//Physics body covers the entire sprite
 		float shrinkX = tempSpr.GetWidth() / 2.f;
 		float shrinkY = tempSpr.GetHeight() / 2.f;
 
@@ -97,36 +98,35 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
 			vec2(0.f, 0.f), true, 1.5f);
 
-		//fixture definition 
+		//fixture definition
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
 		myFixtureDef.shape = &polygonShape;
 		myFixtureDef.density = 3;
-		//myFixtureDef.friction = 1.f; 
+		//myFixtureDef.friction = 1.f;
 
-		//Adds a foot sensor fixture under the body 
+		//Adds a foot sensor fixture under the body
 		polygonShape.SetAsBox(12.f, 0.0001, b2Vec2(0.f, -25.f), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		footSensorFixture->SetUserData((void*)3);
 
-		//Adds a fixture the right side of the body 
+		//Adds a fixture the right side of the body
 		polygonShape.SetAsBox(0.001f, 12.f, b2Vec2(15.f, 0.f), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* RightSideFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		RightSideFixture->SetUserData((void*)4);
 
-		//Adds a fixture the left side of the body 
+		//Adds a fixture the left side of the body
 		polygonShape.SetAsBox(0.001, 12.f, b2Vec2(-15.f, 0.f), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* LeftSideFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		LeftSideFixture->SetUserData((void*)5);
 
-		//Sets up the identifier 
+		//Sets up the identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit() | EntityIdentifier::AnimationBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Klock");
 	}
-
 
 	//Setup ai test enemy, entity 2
 	{
@@ -472,7 +472,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_kinematicBody;
-		tempDef.position.Set(float32(525.f), float32(110.f));
+		tempDef.position.Set(float32(525.f), float32(130.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -629,7 +629,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_kinematicBody;
-		tempDef.position.Set(float32(2600.f), float32(125.f));
+		tempDef.position.Set(float32(2450.f), float32(175.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -639,6 +639,23 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		//Sets up the Identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 4");
+	}
+	{ //entity 15
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Sets up components
+		std::string fileName = "kocklogo.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 150, 100);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1000.f, 210.f, 49.f));
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 3");
 	}
 #pragma endregion
 
@@ -675,7 +692,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 void Level1Scene::Update()
 {
 	//std::cout << ECS::GetComponent<PhysicsBody>(1).isAttacking;
-	
+
 	//Creating test hitbox entity
 	if (createdint)
 	{
@@ -699,7 +716,6 @@ void Level1Scene::Update()
 
 		//Grabs reference to various components
 		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
-
 
 		b2Body* tempBody;
 		b2BodyDef tempDef;
@@ -732,10 +748,8 @@ void Level1Scene::Update()
 		ECS::SetUpIdentifier(entity, bitHolder, "da hitbox");
 		std::cout << entity << "\n" << tempent << "\n";
 	}
-	
+
 	//Makes the camera focus on the main player
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
-
 }
-
