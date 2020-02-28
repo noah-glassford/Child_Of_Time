@@ -111,7 +111,7 @@ void Game::Update()
 	if (UsedUpTime > 0)
 		UsedUpTime = UsedUpTime - deltaTime / 3;
 
-	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
+	std::cout << UsedUpTime << " " << isSlowed << std::endl;
 
 	
 	//Adding the time slow as a proof of concept
@@ -275,11 +275,15 @@ void Game::KeyboardHold()
 	{
 		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft)
 		Klock.MoveLeft(30.f);
+
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
 	}
 	if (Input::GetKey(Key::D))
 	{
 		if (!ECS::GetComponent<PlayerData>(1).OnWallRight)
 			Klock.MoveRight(30.f);	
+		
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
 	}
 
 	if (Input::GetKey(Key::E))
