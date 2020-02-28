@@ -16,4 +16,6 @@ public:
 	bool OnWallLeft;
 
 	bool isAttacking{ 0 };
+	
+	bool canjump;//This is literally only used to make playing with a controller not feel bad
 };
