@@ -11,6 +11,7 @@
 #include "PhysicsBody.h"
 #include "VerticalScroll.h"
 #include "HorizontalScroll.h"
+#include "PlayerData.h"
 
 
 class ECS abstract

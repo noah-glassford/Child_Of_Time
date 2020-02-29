@@ -1,5 +1,10 @@
 #include "Level1Scene.h"
 
+//moving platforms shit i guess
+float platformBSpeed = 5.f;
+float platDSpeed = 20.f;
+
+
 Level1Scene::Level1Scene(std::string name)
 	: Scene(name)
 {
@@ -32,7 +37,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "Level1_BG.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 6400, 700);
 		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 1.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 100.f, 1.f));
 
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
@@ -52,28 +57,49 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 		ECS::AttachComponent<AnimationController>(entity);
+		ECS::AttachComponent<PlayerData>(entity);
+
+		//Sets up components 
 		//Sets up components
 		std::string fileName = "spritesheet.png";
 		auto& animController = ECS::GetComponent<AnimationController>(entity);
+		
 		animController.InitUVs(fileName);
 		animController.AddAnimation(Animation());
 		animController.SetActiveAnim(0);
 		auto& anim = animController.GetAnimation(0);
+		//Walking right animation
+		
 		anim.AddFrame(vec2(0.f, 544.f), vec2(376.f, 0.f));
 		anim.AddFrame(vec2(376.f, 544.f), vec2(752, 0.f));
 		anim.AddFrame(vec2(752.f, 544.f), vec2(1128.f, 0.f));
 		anim.AddFrame(vec2(376.f, 544.f), vec2(752, 0.f));
 		anim.SetRepeating(true);
 		anim.SetSecPerFrame(0.1f);
+		
+		//Walking left animation
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		//animController.SetActiveAnim(1);
+		auto& animation = animController.GetAnimation(1);
+		
+		animation.AddFrame(vec2(376.f, 544.f), vec2(0.f, 0.f));
+		animation.AddFrame(vec2(752.f, 544.f), vec2(367.f, 0.f));
+		animation.AddFrame(vec2(1128.f, 544.f), vec2(752.f, 0.f));
+		animation.AddFrame(vec2(752.f, 544.f), vec2(376, 0.f));
+		animation.SetRepeating(true);
+		animation.SetSecPerFrame(0.1f);
+		
+		
 		//Sets up components
 
 		//Sets up components
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 25, 35, true, &animController);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 97.f));
 
 		//Grabs reference to various components
 		//Sets up components
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 25, 25);
+		//ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 25, 25);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 49.f));
 		//Grabs reference to various components
 
@@ -109,13 +135,13 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		footSensorFixture->SetUserData((void*)3);
 
 		//Adds a fixture the right side of the body
-		polygonShape.SetAsBox(0.001f, 12.f, b2Vec2(15.f, 0.f), 0);
+		polygonShape.SetAsBox(0.001f, 22.f, b2Vec2(25.f, 0.f), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* RightSideFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		RightSideFixture->SetUserData((void*)4);
 
 		//Adds a fixture the left side of the body
-		polygonShape.SetAsBox(0.001, 12.f, b2Vec2(-15.f, 0.f), 0);
+		polygonShape.SetAsBox(0.001, 22.f, b2Vec2(-25.f, 0.f), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* LeftSideFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		LeftSideFixture->SetUserData((void*)5);
@@ -697,7 +723,7 @@ void Level1Scene::Update()
 		createdint = 0;
 		std::cout << "deleting shit";
 	}
-	if (ECS::GetComponent<PhysicsBody>(1).isAttacking)
+	if (ECS::GetComponent<PlayerData>(1).isAttacking)
 	{
 		createdint = 1;
 		auto entity = ECS::CreateEntity();
@@ -735,7 +761,7 @@ void Level1Scene::Update()
 		//myFixtureDef.friction = 1.f;
 
 		//Combat fixture
-		polygonShape.SetAsBox(12.f, 12.f, b2Vec2(0.f, 25.f), 0);
+		polygonShape.SetAsBox(12.f, 12.f, b2Vec2(0.f, 35.f), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		footSensorFixture->SetUserData((void*)7);
@@ -749,4 +775,30 @@ void Level1Scene::Update()
 	//Makes the camera focus on the main player
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
+
+	//platform B
+	if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y > 120)
+		platformBSpeed = -5.f;
+	else if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y < 100)
+		platformBSpeed = 5.f;
+
+	ECS::GetComponent<PhysicsBody>(6).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed));
+
+
+	if (ECS::GetComponent<PhysicsBody>(10).GetPosition().x > 1350)
+		platDSpeed = 180;
+
+
+	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 450 && ECS::GetComponent<PhysicsBody>(10).GetPosition().x < 1750)
+		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(b2Vec2(platDSpeed, platformBSpeed));
+	else
+		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed));
+
+	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 1850 && ECS::GetComponent<PhysicsBody>(12).GetPosition().x < 2075)
+		ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(platDSpeed, -platformBSpeed));
+	else
+		ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed));
+
+
+	ECS::GetComponent<PhysicsBody>(14).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed * 6));
 }

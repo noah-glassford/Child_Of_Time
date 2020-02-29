@@ -170,6 +170,7 @@
     <ClInclude Include="PhysicsSystem.h" />
     <ClInclude Include="PhysicsTestScene.h" />
     <ClInclude Include="PixelateEffect.h" />
+    <ClInclude Include="PlayerData.h" />
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="RenderingSystem.h" />
     <ClInclude Include="Scene.h" />

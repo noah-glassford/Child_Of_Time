@@ -72,7 +72,7 @@ PhysicsBody::PhysicsBody(b2Body* body, float width, float height, vec2 centerOff
 	//Creates the actual fixture (aka, shape, mass, etc);
 	b2FixtureDef tempFixture;
 	tempFixture.shape = &tempShape;
-	tempFixture.density = 1.f;
+	tempFixture.density = 0.4f;
 	tempFixture.friction = friction;
 	
 
