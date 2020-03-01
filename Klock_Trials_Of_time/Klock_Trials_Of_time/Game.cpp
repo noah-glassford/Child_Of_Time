@@ -10,7 +10,6 @@ bool isSlowed;
 float UsedUpTime{ 0 };
 bool direction{ 0 }; //1 for right, 0 for left
 
-
 Game::~Game()
 {
 	//If window isn't equal to nullptr
@@ -113,9 +112,7 @@ void Game::Update()
 
 	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
 
-	
 	//Adding the time slow as a proof of concept
-
 
 	//Used to set direction
 
@@ -253,20 +250,19 @@ void Game::GamepadDown(XInputController* con)
 	//Look at base Scene class for more info.
 	MovementSystem Klock;
 	Klock.SetBothBodies(1);
-	
 
 	if (con->IsButtonPressed(Buttons::DPAD_RIGHT))
 	{
 		if (!ECS::GetComponent<PlayerData>(1).OnWallRight)
 			Klock.MoveRight(30.f);
-		
+
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
 	}
 	if (con->IsButtonPressed(Buttons::DPAD_LEFT))
 	{
 		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft)
 			Klock.MoveLeft(30.f);
-		
+
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
 	}
 
@@ -290,7 +286,7 @@ void Game::GamepadDown(XInputController* con)
 	{
 		isSlowed = false;
 	}
-	
+
 	m_activeScene->GamepadDown(con);
 }
 
@@ -324,15 +320,15 @@ void Game::KeyboardHold()
 	if (Input::GetKey(Key::A))
 	{
 		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft)
-		Klock.MoveLeft(30.f);
+			Klock.MoveLeft(30.f);
 
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
 	}
 	if (Input::GetKey(Key::D))
 	{
 		if (!ECS::GetComponent<PlayerData>(1).OnWallRight)
-			Klock.MoveRight(30.f);	
-		
+			Klock.MoveRight(30.f);
+
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
 	}
 
