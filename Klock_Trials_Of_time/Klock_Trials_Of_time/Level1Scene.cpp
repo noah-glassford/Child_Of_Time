@@ -15,6 +15,7 @@ Level1Scene::Level1Scene(std::string name)
 
 void Level1Scene::InitScene(float windowWidth, float windowHeight)
 {
+	
 	//Allocates Register
 	m_sceneReg = new entt::registry;
 

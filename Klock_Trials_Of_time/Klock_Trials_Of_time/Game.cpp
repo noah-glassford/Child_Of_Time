@@ -60,6 +60,22 @@ void Game::InitGame()
 	BackEnd::SetWindowName(m_activeScene->GetName());
 
 	PhysicsSystem::Init();
+
+	SoundManager::init("./Assets/Sounds/");
+	Sound2D _test("Sound.wav", "group1");
+	_test.play();
+	std::vector<Sound2D> sounds;
+
+	_test.setLoopCount(5);
+	_test.play();
+
+	while (true) 
+	{
+		if (!_test.isPlaying())
+			_test.play();
+	}
+	
+
 }
 
 bool Game::Run()
@@ -371,6 +387,13 @@ void Game::KeyboardDown()
 		ECS::GetComponent<PlayerData>(1).isAttacking = true;
 	else
 		ECS::GetComponent<PlayerData>(1).isAttacking = false;
+
+	if (Input::GetKeyDown(Key::O))
+	{
+		
+		
+
+	}
 
 	m_activeScene->KeyboardDown();
 }
