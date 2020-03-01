@@ -61,21 +61,6 @@ void Game::InitGame()
 
 	PhysicsSystem::Init();
 
-	SoundManager::init("./Assets/Sounds/");
-	Sound2D _test("Sound.wav", "group1");
-	_test.play();
-	std::vector<Sound2D> sounds;
-
-	_test.setLoopCount(5);
-	_test.play();
-
-	while (true) 
-	{
-		if (!_test.isPlaying())
-			_test.play();
-	}
-	
-
 }
 
 bool Game::Run()
@@ -390,9 +375,9 @@ void Game::KeyboardDown()
 
 	if (Input::GetKeyDown(Key::O))
 	{
-		
-		
-
+		SoundManager::init("./Assets/Sounds/");
+		Sound2D _test("Sound.wav", "group1");
+		_test.play();
 	}
 
 	m_activeScene->KeyboardDown();
