@@ -7,6 +7,7 @@
 #include "Level2Scene.h"
 #include "CollisionSystem.h"
 #include "MovementSystem.h"
+#include "SoundEngine.h"
 
 
 //Our main class for running our game

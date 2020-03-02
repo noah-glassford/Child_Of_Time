@@ -59,6 +59,7 @@ void Game::InitGame()
 	BackEnd::SetWindowName(m_activeScene->GetName());
 
 	PhysicsSystem::Init();
+
 }
 
 bool Game::Run()
@@ -367,6 +368,13 @@ void Game::KeyboardDown()
 		ECS::GetComponent<PlayerData>(1).isAttacking = true;
 	else
 		ECS::GetComponent<PlayerData>(1).isAttacking = false;
+
+	if (Input::GetKeyDown(Key::O))
+	{
+		SoundManager::init("./Assets/Sounds/");
+		Sound2D _test("Sound.wav", "group1");
+		_test.play();
+	}
 
 	m_activeScene->KeyboardDown();
 }

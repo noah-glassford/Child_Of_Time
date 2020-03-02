@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Scene.h"
+#include "SoundEngine.h"
 
 class Level1Scene : public Scene
 {
