@@ -60,6 +60,7 @@ void Game::InitGame()
 	BackEnd::SetWindowName(m_activeScene->GetName());
 
 	PhysicsSystem::Init();
+
 }
 
 bool Game::Run()
@@ -225,8 +226,18 @@ void Game::GamepadInput()
 
 void Game::GamepadStroke(XInputController* con)
 {
+	MovementSystem Klock;;
+	Klock.SetBothBodies(1);
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
+	if (con->IsButtonStroked(Buttons::RB)) //Combat
+	{
+		ECS::GetComponent<PlayerData>(1).isAttacking = true;
+		std::cout << "bruh";
+	}
+	else
+		ECS::GetComponent<PlayerData>(1).isAttacking = false;
+
 	m_activeScene->GamepadStroke(con);
 }
 
@@ -241,6 +252,46 @@ void Game::GamepadDown(XInputController* con)
 {
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
+	MovementSystem Klock;
+	Klock.SetBothBodies(1);
+	
+
+	if (con->IsButtonPressed(Buttons::DPAD_RIGHT))
+	{
+		if (!ECS::GetComponent<PlayerData>(1).OnWallRight)
+			Klock.MoveRight(30.f);
+		
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
+	}
+	if (con->IsButtonPressed(Buttons::DPAD_LEFT))
+	{
+		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft)
+			Klock.MoveLeft(30.f);
+		
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
+	}
+
+	if (con->IsButtonPressed(Buttons::A))
+	{
+		if (ECS::GetComponent<PlayerData>(1).Grounded)
+			Klock.Jump(520000.f);
+	}
+	if (con->IsButtonPressed(Buttons::X))
+	{
+		if (UsedUpTime <= 2.f)
+			UsedUpTime = UsedUpTime + deltaTime;
+
+		if (UsedUpTime < 2.f)
+			isSlowed = true;
+
+		else if (UsedUpTime > 2.f)
+			isSlowed = false;
+	}
+	else
+	{
+		isSlowed = false;
+	}
+	
 	m_activeScene->GamepadDown(con);
 }
 
@@ -275,11 +326,15 @@ void Game::KeyboardHold()
 	{
 		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft)
 		Klock.MoveLeft(30.f);
+
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
 	}
 	if (Input::GetKey(Key::D))
 	{
 		if (!ECS::GetComponent<PlayerData>(1).OnWallRight)
 			Klock.MoveRight(30.f);	
+		
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
 	}
 
 	if (Input::GetKey(Key::E))
@@ -317,6 +372,13 @@ void Game::KeyboardDown()
 		ECS::GetComponent<PlayerData>(1).isAttacking = true;
 	else
 		ECS::GetComponent<PlayerData>(1).isAttacking = false;
+
+	if (Input::GetKeyDown(Key::O))
+	{
+		SoundManager::init("./Assets/Sounds/");
+		Sound2D _test("Sound.wav", "group1");
+		_test.play();
+	}
 
 	m_activeScene->KeyboardDown();
 }

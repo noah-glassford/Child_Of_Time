@@ -15,6 +15,10 @@ Level1Scene::Level1Scene(std::string name)
 
 void Level1Scene::InitScene(float windowWidth, float windowHeight)
 {
+	
+
+
+
 	//Allocates Register
 	m_sceneReg = new entt::registry;
 
@@ -37,7 +41,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "Level1_BG.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 6400, 700);
 		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 1.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 100.f, 1.f));
 
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
@@ -63,16 +67,34 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		//Sets up components
 		std::string fileName = "spritesheet.png";
 		auto& animController = ECS::GetComponent<AnimationController>(entity);
+		
 		animController.InitUVs(fileName);
 		animController.AddAnimation(Animation());
 		animController.SetActiveAnim(0);
 		auto& anim = animController.GetAnimation(0);
+		//Walking right animation
+		
 		anim.AddFrame(vec2(0.f, 544.f), vec2(376.f, 0.f));
 		anim.AddFrame(vec2(376.f, 544.f), vec2(752, 0.f));
 		anim.AddFrame(vec2(752.f, 544.f), vec2(1128.f, 0.f));
 		anim.AddFrame(vec2(376.f, 544.f), vec2(752, 0.f));
 		anim.SetRepeating(true);
 		anim.SetSecPerFrame(0.1f);
+		
+		//Walking left animation
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		//animController.SetActiveAnim(1);
+		auto& animation = animController.GetAnimation(1);
+		
+		animation.AddFrame(vec2(376.f, 544.f), vec2(0.f, 0.f));
+		animation.AddFrame(vec2(752.f, 544.f), vec2(367.f, 0.f));
+		animation.AddFrame(vec2(1128.f, 544.f), vec2(752.f, 0.f));
+		animation.AddFrame(vec2(752.f, 544.f), vec2(376, 0.f));
+		animation.SetRepeating(true);
+		animation.SetSecPerFrame(0.1f);
+		
+		
 		//Sets up components
 
 		//Sets up components
@@ -783,5 +805,4 @@ void Level1Scene::Update()
 
 
 	ECS::GetComponent<PhysicsBody>(14).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed * 6));
-
 }
