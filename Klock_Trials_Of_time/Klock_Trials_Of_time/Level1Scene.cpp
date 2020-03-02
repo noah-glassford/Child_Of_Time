@@ -438,7 +438,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 
 		//Sets up components
 		std::string fileName = "front_grass_3.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 200);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 300);
 		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 51.f));
 
@@ -454,7 +454,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(1600.f), float32(110.f));
+		tempDef.position.Set(float32(1700.f), float32(60.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -889,7 +889,7 @@ void Level1Scene::Update()
 	if (ECS::GetComponent<PhysicsBody>(10).GetPosition().x > 1250)
 		platDSpeed = -20.f;
 
-	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 1850 && ECS::GetComponent<PhysicsBody>(12).GetPosition().x < 2075)
+	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 1850 && ECS::GetComponent<PhysicsBody>(12).GetPosition().x < 2100)
 		ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(30.f, -platformBSpeed));
 	else
 		ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed));
