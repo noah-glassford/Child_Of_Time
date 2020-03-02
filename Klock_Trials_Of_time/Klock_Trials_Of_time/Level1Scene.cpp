@@ -15,6 +15,8 @@ Level1Scene::Level1Scene(std::string name)
 void Level1Scene::InitScene(float windowWidth, float windowHeight)
 {
 
+
+	
 	//Allocates Register
 	m_sceneReg = new entt::registry;
 
@@ -776,9 +778,58 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 	//Makes the camera focus on the main player
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
+
+	//Putting HUD at bottom should prevent some problems gigalul
+	//Time remaining hud
+	{
+
+	}
 }
 
 void Level1Scene::Update()
+{
+
+	KlockAttack();
+	PlatformMovement();
+	
+	//Makes the camera focus on the main player
+	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
+	ECS::GetComponent<VerticalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
+
+
+}
+
+void Level1Scene::PlatformMovement()
+{
+	//platform B
+	if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y > 120)
+		platformBSpeed = -5.f;
+	else if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y < 100)
+		platformBSpeed = 5.f;
+
+	ECS::GetComponent<PhysicsBody>(6).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed));
+
+	if (ECS::GetComponent<PhysicsBody>(10).GetPosition().x > 1350)
+		platDSpeed = 180;
+
+	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 450 && ECS::GetComponent<PhysicsBody>(10).GetPosition().x < 1750)
+		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(b2Vec2(platDSpeed, platformBSpeed));
+	else
+		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed));
+
+	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 1850 && ECS::GetComponent<PhysicsBody>(12).GetPosition().x < 2075)
+		ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(platDSpeed, -platformBSpeed));
+	else
+		ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed));
+
+	ECS::GetComponent<PhysicsBody>(14).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed * 0.8));
+	ECS::GetComponent<PhysicsBody>(15).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed * 1.5));
+	ECS::GetComponent<PhysicsBody>(16).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed * 1.2));
+
+	//15, 16, 17
+}
+
+void Level1Scene::KlockAttack()
 {
 	if (ECS::GetComponent<PlayerData>(1).isAttacking)
 	{
@@ -789,11 +840,11 @@ void Level1Scene::Update()
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
-		
+
 
 		//Sets up components 
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 98.f));
-		
+
 		std::string fileName = "floatplatform.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 20, 20);
 		//Grabs reference to various components 
@@ -823,12 +874,12 @@ void Level1Scene::Update()
 			polygonShape.SetAsBox(20.f, 20.f, b2Vec2(-45.f, 0.f), 0);
 		else
 			polygonShape.SetAsBox(20.f, 20.f, b2Vec2(45.f, 0.f), 0);
-		
+
 		myFixtureDef.shape = &polygonShape;
 		myFixtureDef.density = 0;
 		myFixtureDef.isSensor = 1;
 		//myFixtureDef.friction = 1.f; 
-		
+
 
 		myFixtureDef.isSensor = true;
 		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
@@ -840,8 +891,10 @@ void Level1Scene::Update()
 		std::cout << entity << "\n" << tempent << "\n";
 
 		ECS::GetComponent<PlayerData>(1).framesSinceAtt = 1;
-		
+
 	}
+	
+	
 	if (ECS::GetComponent<PlayerData>(1).framesSinceAtt > 0 && ECS::GetComponent<PlayerData>(1).framesSinceAtt < 20)
 	{
 		ECS::GetComponent<PlayerData>(1).framesSinceAtt++;
@@ -853,45 +906,13 @@ void Level1Scene::Update()
 		//std::cout << "Destroyed ent";
 		ECS::GetComponent<PlayerData>(1).framesSinceAtt = 0;
 	}
-	//kills enemy
 	
+	//kills enemy
 	if (ECS::GetComponent<PlayerData>(2).Health == 0 && tempbool == true)
 	{
 		std::cout << "Killed";
-		ECS::GetComponent<PhysicsBody>(2).GetBody()->SetTransform(b2Vec2(-1000, 0),0);
+		ECS::GetComponent<PhysicsBody>(2).GetBody()->SetTransform(b2Vec2(-1000, 0), 0);
 		tempbool = 0;
 	}
-	
-	
-
-	//Makes the camera focus on the main player
-	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
-	ECS::GetComponent<VerticalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
-
-	//platform B
-	if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y > 120)
-		platformBSpeed = -5.f;
-	else if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y < 100)
-		platformBSpeed = 5.f;
-
-	ECS::GetComponent<PhysicsBody>(6).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed));
-
-	if (ECS::GetComponent<PhysicsBody>(10).GetPosition().x > 1350)
-		platDSpeed = 180;
-
-	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 450 && ECS::GetComponent<PhysicsBody>(10).GetPosition().x < 1750)
-		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(b2Vec2(platDSpeed, platformBSpeed));
-	else
-		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed));
-
-	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 1850 && ECS::GetComponent<PhysicsBody>(12).GetPosition().x < 2075)
-		ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(platDSpeed, -platformBSpeed));
-	else
-		ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed));
-
-	ECS::GetComponent<PhysicsBody>(14).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed * 0.8));
-	ECS::GetComponent<PhysicsBody>(15).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed * 1.5));
-	ECS::GetComponent<PhysicsBody>(16).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed * 1.2));
-
-	//15, 16, 17
+	//Have this if statement for each of the enemies
 }

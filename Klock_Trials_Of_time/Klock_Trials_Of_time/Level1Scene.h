@@ -15,4 +15,9 @@ public:
 	bool createdint{ 0 }; //Counts frames since created a combat hitbox
 	unsigned int tempent;
 	bool tempbool{ 1 };
+
+
+	//functions to make it less messy this is a huge file anyways
+	void PlatformMovement();
+	void KlockAttack();
 };

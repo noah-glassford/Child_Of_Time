@@ -106,10 +106,10 @@ void Game::Update()
 	//Update Physics System
 	PhysicsSystem::Update(m_register, m_activeScene->GetPhysicsWorld());
 
-	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
+	std::cout << UsedUpTime << " " << isSlowed << std::endl;
 
 	if (UsedUpTime > 0)
-		UsedUpTime = UsedUpTime - deltaTime / 3;
+		UsedUpTime = UsedUpTime - deltaTime / 4;
 
 	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
 
@@ -274,13 +274,13 @@ void Game::GamepadDown(XInputController* con)
 	}
 	if (con->IsButtonPressed(Buttons::X))
 	{
-		if (UsedUpTime <= 2.f)
+		if (UsedUpTime <= 16.f)
 			UsedUpTime = UsedUpTime + deltaTime;
 
-		if (UsedUpTime < 2.f)
+		if (UsedUpTime < 16.f)
 			isSlowed = true;
 
-		else if (UsedUpTime > 2.f)
+		else if (UsedUpTime > 16.f)
 			isSlowed = false;
 	}
 	else
@@ -338,13 +338,13 @@ void Game::KeyboardHold()
 
 	if (Input::GetKey(Key::E))
 	{
-		if (UsedUpTime <= 2.f)
+		if (UsedUpTime <= 16.f)
 			UsedUpTime = UsedUpTime + deltaTime;
 
-		if (UsedUpTime < 2.f)
+		if (UsedUpTime < 16.f)
 			isSlowed = true;
 
-		else if (UsedUpTime > 2.f)
+		else if (UsedUpTime > 16.f)
 			isSlowed = false;
 	}
 	//Active scene now captures this input and can use it
