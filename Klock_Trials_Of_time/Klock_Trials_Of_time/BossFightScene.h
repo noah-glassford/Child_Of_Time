@@ -1,18 +1,19 @@
+//da supa secret boss fight that is finna b retextured the day before submission :)
+#pragma once
 #pragma once
 
 #include "Scene.h"
 #include "SoundEngine.h"
 
-class Level1Scene : public Scene
+class BossFightScene : public Scene
 {
 public:
-	Level1Scene(std::string name);
+	BossFightScene(std::string name);
 
 	//Each Scene will need to have a different
 	//init, as each scene's content will be different
 	void InitScene(float windowWidth, float windowHeight) override;
 	void Update() override;
-	bool createdint{ 0 }; //Counts frames since created a combat hitbox
+	bool createdint{ 0 };
 	unsigned int tempent;
-	bool tempbool{ 1 };
 };

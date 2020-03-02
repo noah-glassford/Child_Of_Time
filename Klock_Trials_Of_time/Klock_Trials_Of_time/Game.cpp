@@ -322,6 +322,7 @@ void Game::KeyboardHold()
 	{
 		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft)
 			Klock.MoveLeft(30.f);
+		ECS::GetComponent<PlayerData>(1).facingLeft = 1;
 
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
 	}
@@ -329,6 +330,8 @@ void Game::KeyboardHold()
 	{
 		if (!ECS::GetComponent<PlayerData>(1).OnWallRight)
 			Klock.MoveRight(30.f);
+
+		ECS::GetComponent<PlayerData>(1).facingLeft = 0;
 
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
 	}
