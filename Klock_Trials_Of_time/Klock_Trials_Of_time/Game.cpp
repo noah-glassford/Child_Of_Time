@@ -59,7 +59,6 @@ void Game::InitGame()
 	BackEnd::SetWindowName(m_activeScene->GetName());
 
 	PhysicsSystem::Init();
-
 }
 
 bool Game::Run()
@@ -385,7 +384,7 @@ void Game::KeyboardUp()
 		isSlowed = 0;
 
 	if (Input::GetKeyUp(Key::I))
-		ECS::GetComponent<Camera>(9).Zoom(-50);
+		ECS::GetComponent<Camera>(20).Zoom(-50);
 
 	m_activeScene->KeyboardUp();
 }
