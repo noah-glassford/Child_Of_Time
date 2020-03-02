@@ -111,6 +111,27 @@ void Game::Update()
 	if (UsedUpTime > 0)
 		UsedUpTime = UsedUpTime - deltaTime / 4;
 
+	if (UsedUpTime < 2)
+		ECS::GetComponent<AnimationController>(18).SetActiveAnim(0);
+	if (UsedUpTime > 2)
+		ECS::GetComponent<AnimationController>(18).SetActiveAnim(1);
+	if (UsedUpTime > 4)
+		ECS::GetComponent<AnimationController>(18).SetActiveAnim(2);
+	if (UsedUpTime > 6)
+		ECS::GetComponent<AnimationController>(18).SetActiveAnim(3);
+	if (UsedUpTime > 8)
+		ECS::GetComponent<AnimationController>(18).SetActiveAnim(4);
+	if (UsedUpTime > 10)
+		ECS::GetComponent<AnimationController>(18).SetActiveAnim(5);
+	if (UsedUpTime > 12)
+		ECS::GetComponent<AnimationController>(18).SetActiveAnim(6);
+	if (UsedUpTime > 14)
+		ECS::GetComponent<AnimationController>(18).SetActiveAnim(7);
+	if (UsedUpTime > 16)
+		ECS::GetComponent<AnimationController>(18).SetActiveAnim(8);
+
+
+
 	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
 
 	//Adding the time slow as a proof of concept

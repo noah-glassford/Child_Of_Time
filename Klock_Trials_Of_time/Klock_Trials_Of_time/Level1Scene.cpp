@@ -750,6 +750,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 	}
 #pragma endregion
 
+#pragma region Camera&HUD
 	//Main Camera ent 9
 	{//Creates camera entity
 		auto entity = ECS::CreateEntity();
@@ -759,6 +760,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Camera>(entity);
 		ECS::AttachComponent<HorizontalScroll>(entity);
 		ECS::AttachComponent<VerticalScroll>(entity);
+		ECS::AttachComponent<Transform>(entity);
 
 		vec4 temp = ECS::GetComponent<Camera>(entity).GetOrthoSize();
 		ECS::GetComponent<Camera>(entity).SetWindowSize(vec2(float(windowWidth), float(windowHeight)));
@@ -771,26 +773,114 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<VerticalScroll>(entity).SetOffset(15.f);
 
 		//Sets up identifier
-		unsigned int bitHolder = EntityIdentifier::HoriScrollCameraBit() | EntityIdentifier::VertScrollCameraBit() | EntityIdentifier::CameraBit();
+		unsigned int bitHolder = EntityIdentifier::HoriScrollCameraBit() | EntityIdentifier::VertScrollCameraBit() | EntityIdentifier::CameraBit() | EntityIdentifier::TransformBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Main Scrolling Camera");
 		ECS::SetIsMainCamera(entity, true);
 	}
+	
+	//Putting HUD at bottom should prevent some problems gigalul
+	//Time remaining hud
+	{
+		auto entity = ECS::CreateEntity();
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<AnimationController>(entity);
+
+		std::string fileName = "timemeter.png";
+		
+		auto& animController = ECS::GetComponent<AnimationController>(entity);
+		
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(0);
+		auto& full = animController.GetAnimation(0);
+		full.AddFrame(vec2(0.f, 614.f), vec2(584.f, 0.f));
+		full.SetRepeating(true);
+		full.SetSecPerFrame(0.1f);
+		
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus1 = animController.GetAnimation(1);
+		minus1.AddFrame(vec2(637.f, 614.f), vec2(1221.f, 0.f));
+		minus1.SetRepeating(true);
+		minus1.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus2 = animController.GetAnimation(2);
+		minus2.AddFrame(vec2(1258,614), vec2(1842,0));
+		minus2.SetRepeating(true);
+		minus2.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus3 = animController.GetAnimation(3);
+		minus3.AddFrame(vec2(1883, 614), vec2(2467, 0));
+		minus3.SetRepeating(true);
+		minus3.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus4 = animController.GetAnimation(4);
+		minus4.AddFrame(vec2(0, 1318), vec2(584, 704));
+		minus4.SetRepeating(true);
+		minus4.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus5 = animController.GetAnimation(5);
+		minus5.AddFrame(vec2(656, 1318), vec2(1240, 704));
+		minus5.SetRepeating(true);
+		minus5.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus6 = animController.GetAnimation(6);
+		minus6.AddFrame(vec2(1288, 1318), vec2(1872, 704));
+		minus6.SetRepeating(true);
+		minus6.SetSecPerFrame(0.1f);
+		
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus7 = animController.GetAnimation(7);
+		minus7.AddFrame(vec2(1898, 1318), vec2(2482, 704));
+		minus7.SetRepeating(true);
+		minus7.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus8 = animController.GetAnimation(8);
+		minus8.AddFrame(vec2(2501, 1318), vec2(3085, 700));
+		minus8.SetRepeating(true);
+		minus8.SetSecPerFrame(0.1f);
+
+	
+		
+		ECS::GetComponent<Transform>(entity).SetPosition(ECS::GetComponent<PhysicsBody>(1).GetPosition().x, ECS::GetComponent<PhysicsBody>(1).GetPosition().y, 99);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
+		
+		//Sets up identifier
+		unsigned int bitHolder = EntityIdentifier::TransformBit() | EntityIdentifier::AnimationBit() | EntityIdentifier::SpriteBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Time Left UI");
+
+	}
+#pragma endregion
 	//Makes the camera focus on the main player
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
 
-	//Putting HUD at bottom should prevent some problems gigalul
-	//Time remaining hud
-	{
-
-	}
+	
 }
 
 void Level1Scene::Update()
 {
-
+	
+	ECS::GetComponent<Transform>(18).SetPosition(ECS::GetComponent<HorizontalScroll>(17).GetCam()->GetPosition().x - 150, ECS::GetComponent<VerticalScroll>(17).GetCam()->GetPosition().y + 150, 99);
+	
 	KlockAttack();
 	PlatformMovement();
+
+	
 	
 	//Makes the camera focus on the main player
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
