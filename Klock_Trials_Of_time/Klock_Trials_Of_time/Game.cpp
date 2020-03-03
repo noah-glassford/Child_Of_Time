@@ -8,8 +8,9 @@
 //so I just said fuck it and made them global
 int Frames;
 
-
 bool direction{ 0 }; //1 for right, 0 for left
+
+bool slowSpamBlock = true;
 
 Game::~Game()
 {
@@ -112,6 +113,46 @@ void Game::Update()
 	if (ECS::GetComponent<PlayerData>(mainp).UsedUpTime > 0)
 		ECS::GetComponent<PlayerData>(mainp).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime - deltaTime / 4;
 
+	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed) {
+		std::cout << ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime << '\n';
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime <= 16.f)
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime + deltaTime;
+
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime < 16.f)
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
+
+		else if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime > 16.f)
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
+	}
+
+	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
+
+	//Adding the time slow as a proof of concept
+
+	//Used to set direction
+	/*
+	if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x > 800)
+		direction = 0;
+	else if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x < 400)
+		direction = 1;
+
+	//std::cout << ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x << std::endl;
+	//Anything that can be affected by the time controls is done in this if statement
+	if (!isSlowed)
+	{
+		if (direction)
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(50.f, 0.f));
+		if (!direction)
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(-50.f, 0.f));
+	}
+	else if (isSlowed)
+	{
+		if (direction)
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(10.f, 0.f));
+		if (!direction)
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(-10.f, 0.f));
+	}
+	*/
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//     a.i     testing
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -308,18 +349,6 @@ void Game::KeyboardHold()
 
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
 	}
-
-	if (Input::GetKey(Key::E))
-	{
-		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime <= 16.f)
-			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime + deltaTime;
-
-		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime < 16.f)
-			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
-
-		else if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime > 16.f)
-			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
-	}
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->KeyboardHold();
@@ -352,13 +381,23 @@ void Game::KeyboardDown()
 		_test.play();
 	}
 
+	if (Input::GetKeyDown(Key::E) && slowSpamBlock)
+	{
+		slowSpamBlock = false;
+
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed == false)
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
+		else
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
+	}
+
 	m_activeScene->KeyboardDown();
 }
 
 void Game::KeyboardUp()
 {
 	if (Input::GetKeyUp(Key::E))
-		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = 0;
+		slowSpamBlock = true;
 
 	if (Input::GetKeyUp(Key::I))
 		ECS::GetComponent<Camera>(26).Zoom(-50);
