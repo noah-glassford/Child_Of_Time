@@ -59,7 +59,6 @@ void Game::InitGame()
 	BackEnd::SetWindowName(m_activeScene->GetName());
 
 	PhysicsSystem::Init();
-
 }
 
 bool Game::Run()
