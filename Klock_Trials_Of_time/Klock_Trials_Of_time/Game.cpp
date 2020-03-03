@@ -394,14 +394,21 @@ void Game::KeyboardDown()
 	if (Input::GetKeyDown(Key::E) && slowSpamBlock)
 	{
 		slowSpamBlock = false;
-
-		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed == false)
-			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
-		else
-			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
-
 		Sound2D _TimeStop("timestop.wav", "group1");
-		_TimeStop.play();
+		Sound2D _TimeRestart("timeresume.wav", "group1");
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed == false)
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
+			_TimeStop.play();
+		}
+		else
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
+			_TimeRestart.play();
+		}
+
+	
+		
 
 	}
 
