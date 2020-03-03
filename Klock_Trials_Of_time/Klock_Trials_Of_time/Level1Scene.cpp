@@ -37,7 +37,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "Level1_BG.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 6400, 700);
 		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1000.f, 100.f, 1.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1000.f, 250.f, 1.f));
 
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
@@ -45,7 +45,6 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 #pragma region game_objects
 	//Setup klock, entity 1
 	{
-
 		//Create new Entity
 		auto entity = ECS::CreateEntity();
 		ECS::SetIsMainPlayer(entity, true);
@@ -124,13 +123,10 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		myFixtureDef.density = 3;
 		//myFixtureDef.friction = 1.f;
 
-		
-		
-		
 		//Adds a foot sensor fixture under the body
 		polygonShape.SetAsBox(12.f, 0.0001, b2Vec2(0.f, -25.f), 0);
 		myFixtureDef.isSensor = true;
-		b2Fixture*footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
+		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		footSensorFixture->SetUserData((void*)3);
 
 		//Adds a fixture the right side of the body
