@@ -1105,7 +1105,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 #pragma endregion
 
 #pragma region Camera&HUD
-	//Main Camera ent 9
+	//Main Camera
 	{//Creates camera entity
 		auto entity = ECS::CreateEntity();
 		EntityIdentifier::MainCamera(entity);
@@ -1218,6 +1218,77 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::SetUpIdentifier(entity, bitHolder, "Time Left UI");
 
 	}
+
+	//Hp HUD
+	{
+		auto entity = ECS::CreateEntity();
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<AnimationController>(entity);
+
+		std::string fileName = "health.png";
+
+		auto& animController = ECS::GetComponent<AnimationController>(entity);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(0);
+		auto& full = animController.GetAnimation(0);
+		full.AddFrame(vec2(0.f, 207.f), vec2(818.f, 0.f));
+		full.SetRepeating(true);
+		full.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus1 = animController.GetAnimation(1);
+		minus1.AddFrame(vec2(0.f, 440.f), vec2(818.f, 233.f));
+		minus1.SetRepeating(true);
+		minus1.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus2 = animController.GetAnimation(2);
+		minus2.AddFrame(vec2(0, 680), vec2(818, 473));
+		minus2.SetRepeating(true);
+		minus2.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus3 = animController.GetAnimation(3);
+		minus3.AddFrame(vec2(0, 920), vec2(818, 713));
+		minus3.SetRepeating(true);
+		minus3.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus4 = animController.GetAnimation(4);
+		minus4.AddFrame(vec2(970, 270), vec2(1788, 0));
+		minus4.SetRepeating(true);
+		minus4.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus5 = animController.GetAnimation(5);
+		minus5.AddFrame(vec2(970, 484), vec2(1788, 227));
+		minus5.SetRepeating(true);
+		minus5.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus6 = animController.GetAnimation(6);
+		minus6.AddFrame(vec2(970, 682), vec2(1788, 475));
+		minus6.SetRepeating(true);
+		minus6.SetSecPerFrame(0.1f);
+
+
+		ECS::GetComponent<Transform>(entity).SetPosition(ECS::GetComponent<PhysicsBody>(1).GetPosition().x, ECS::GetComponent<PhysicsBody>(1).GetPosition().y, 99);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 200, 40, true, &animController);
+
+		//Sets up identifier
+		unsigned int bitHolder = EntityIdentifier::TransformBit() | EntityIdentifier::AnimationBit() | EntityIdentifier::SpriteBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "HP UI");
+
+	}
 #pragma endregion
 	//Makes the camera focus on the main player
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
@@ -1229,14 +1300,15 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 void Level1Scene::Update()
 {
 	
-	ECS::GetComponent<Transform>(27).SetPosition(ECS::GetComponent<HorizontalScroll>(26).GetCam()->GetPosition().x - 150, ECS::GetComponent<VerticalScroll>(26).GetCam()->GetPosition().y + 150, 99);
+	ECS::GetComponent<Transform>(27).SetPosition(ECS::GetComponent<HorizontalScroll>(26).GetCam()->GetPosition().x - 140, ECS::GetComponent<VerticalScroll>(26).GetCam()->GetPosition().y + 100, 99);
+	ECS::GetComponent<Transform>(28).SetPosition(ECS::GetComponent<HorizontalScroll>(26).GetCam()->GetPosition().x - 100, ECS::GetComponent<VerticalScroll>(26).GetCam()->GetPosition().y + 150, 99);
 	
 	KlockAttack();
 	PlatformMovement();
 
 	
 
-	//Time slow resource ui shit for scene 1
+	//Time slow resource ui for scene 1
 	if (ECS::GetComponent<PlayerData>(1).UsedUpTime < 2)
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(0);
 	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 2)
@@ -1256,7 +1328,23 @@ void Level1Scene::Update()
 	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 16)
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(8);
 	
+	//Updates the HP bar ui
+	if (ECS::GetComponent<PlayerData>(1).Health == 6)
+		ECS::GetComponent<AnimationController>(28).SetActiveAnim(0);
+	if (ECS::GetComponent<PlayerData>(1).Health == 5)
+		ECS::GetComponent<AnimationController>(28).SetActiveAnim(1);
+	if (ECS::GetComponent<PlayerData>(1).Health == 4)
+		ECS::GetComponent<AnimationController>(28).SetActiveAnim(2);
+	if (ECS::GetComponent<PlayerData>(1).Health == 3)
+		ECS::GetComponent<AnimationController>(28).SetActiveAnim(3);
+	if (ECS::GetComponent<PlayerData>(1).Health == 2)
+		ECS::GetComponent<AnimationController>(28).SetActiveAnim(4);
+	if (ECS::GetComponent<PlayerData>(1).Health == 1)
+		ECS::GetComponent<AnimationController>(28).SetActiveAnim(5);
+	if (ECS::GetComponent<PlayerData>(1).Health == 0)
+		ECS::GetComponent<AnimationController>(28).SetActiveAnim(6);
 	
+
 	//Makes the camera focus on the main player
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
