@@ -1027,3 +1027,4 @@ void Level1Scene::KlockAttack()
 	}
 	//Have this if statement for each of the enemies
 }
+
