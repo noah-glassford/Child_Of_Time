@@ -6,8 +6,8 @@
 //Fuck it float here too this is probably bad but I don't care
 //Both of these are used for the time slowing stuff because they are used in multiple functions in game.cpp
 //so I just said fuck it and made them global
-bool isSlowed;
-float UsedUpTime{ 0 };
+
+
 bool direction{ 0 }; //1 for right, 0 for left
 
 Game::~Game()
@@ -106,16 +106,18 @@ void Game::Update()
 	PhysicsSystem::Update(m_register, m_activeScene->GetPhysicsWorld());
 
 	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
+	unsigned int mainp = EntityIdentifier::MainPlayer();
 
-	if (UsedUpTime > 0)
-		UsedUpTime = UsedUpTime - deltaTime / 3;
+	if (ECS::GetComponent<PlayerData>(mainp).UsedUpTime > 0)
+		ECS::GetComponent<PlayerData>(mainp).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime - deltaTime / 4;
+
 
 	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
 
 	//Adding the time slow as a proof of concept
 
 	//Used to set direction
-
+	/*
 	if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x > 800)
 		direction = 0;
 	else if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x < 400)
@@ -137,7 +139,7 @@ void Game::Update()
 		if (!direction)
 			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(-10.f, 0.f));
 	}
-
+	*/
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//     a.i     testing
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -228,11 +230,11 @@ void Game::GamepadStroke(XInputController* con)
 	//Look at base Scene class for more info.
 	if (con->IsButtonStroked(Buttons::RB)) //Combat
 	{
-		ECS::GetComponent<PlayerData>(1).isAttacking = true;
+		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = true;
 		std::cout << "bruh";
 	}
 	else
-		ECS::GetComponent<PlayerData>(1).isAttacking = false;
+		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = false;
 
 	m_activeScene->GamepadStroke(con);
 }
@@ -253,38 +255,38 @@ void Game::GamepadDown(XInputController* con)
 
 	if (con->IsButtonPressed(Buttons::DPAD_RIGHT))
 	{
-		if (!ECS::GetComponent<PlayerData>(1).OnWallRight)
+		if (!ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).OnWallRight)
 			Klock.MoveRight(30.f);
 
-		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
+		ECS::GetComponent<AnimationController>(EntityIdentifier::MainPlayer()).SetActiveAnim(0);
 	}
 	if (con->IsButtonPressed(Buttons::DPAD_LEFT))
 	{
-		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft)
+		if (!ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).OnWallLeft)
 			Klock.MoveLeft(30.f);
 
-		ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
+		ECS::GetComponent<AnimationController>(EntityIdentifier::MainPlayer()).SetActiveAnim(1);
 	}
 
 	if (con->IsButtonPressed(Buttons::A))
 	{
-		if (ECS::GetComponent<PlayerData>(1).Grounded)
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Grounded)
 			Klock.Jump(520000.f);
 	}
 	if (con->IsButtonPressed(Buttons::X))
 	{
-		if (UsedUpTime <= 2.f)
-			UsedUpTime = UsedUpTime + deltaTime;
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime <= 16.f)
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime + deltaTime;
 
-		if (UsedUpTime < 2.f)
-			isSlowed = true;
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime < 16.f)
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
 
-		else if (UsedUpTime > 2.f)
-			isSlowed = false;
+		else if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime > 16.f)
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
 	}
 	else
 	{
-		isSlowed = false;
+		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
 	}
 
 	m_activeScene->GamepadDown(con);
@@ -309,7 +311,7 @@ void Game::KeyboardHold()
 	//Make sure that the player is always entity 1
 
 	MovementSystem Klock; //Handles all the movement functions for Klock
-	Klock.SetBothBodies(1);
+	Klock.SetBothBodies(EntityIdentifier::MainPlayer());
 
 	Klock.SetIsTouching(); //Klock specific contact updating
 
@@ -321,6 +323,7 @@ void Game::KeyboardHold()
 	{
 		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft)
 			Klock.MoveLeft(30.f);
+		ECS::GetComponent<PlayerData>(1).facingLeft = 1;
 
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
 	}
@@ -329,19 +332,21 @@ void Game::KeyboardHold()
 		if (!ECS::GetComponent<PlayerData>(1).OnWallRight)
 			Klock.MoveRight(30.f);
 
+		ECS::GetComponent<PlayerData>(1).facingLeft = 0;
+
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
 	}
 
 	if (Input::GetKey(Key::E))
 	{
-		if (UsedUpTime <= 2.f)
-			UsedUpTime = UsedUpTime + deltaTime;
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime <= 16.f)
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime + deltaTime;
 
-		if (UsedUpTime < 2.f)
-			isSlowed = true;
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime < 16.f)
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
 
-		else if (UsedUpTime > 2.f)
-			isSlowed = false;
+		else if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime > 16.f)
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
 	}
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
@@ -351,7 +356,7 @@ void Game::KeyboardHold()
 void Game::KeyboardDown()
 {
 	MovementSystem Klock;
-	Klock.SetBothBodies(1);
+	Klock.SetBothBodies(EntityIdentifier::MainPlayer());
 
 	if (Input::GetKeyDown(Key::W))
 	{
@@ -364,9 +369,9 @@ void Game::KeyboardDown()
 			Klock.DownMove(999999999999.f);
 	}
 	if (Input::GetKeyDown(Key::R))
-		ECS::GetComponent<PlayerData>(1).isAttacking = true;
+		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = true;
 	else
-		ECS::GetComponent<PlayerData>(1).isAttacking = false;
+		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = false;
 
 	if (Input::GetKeyDown(Key::O))
 	{
@@ -381,10 +386,10 @@ void Game::KeyboardDown()
 void Game::KeyboardUp()
 {
 	if (Input::GetKeyUp(Key::E))
-		isSlowed = 0;
+		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = 0;
 
 	if (Input::GetKeyUp(Key::I))
-		ECS::GetComponent<Camera>(20).Zoom(-50);
+		ECS::GetComponent<Camera>(26).Zoom(-50);
 
 	m_activeScene->KeyboardUp();
 }
