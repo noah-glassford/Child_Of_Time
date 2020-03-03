@@ -838,7 +838,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<PhysicsBody>(entity);
 
 		//Sets up components
-		std::string fileName = "front_grass_3.png";
+		std::string fileName = "front_grass_1.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 500, 300);
 		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 51.f));
@@ -859,7 +859,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
-		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 40), float(tempSpr.GetHeight() - 24),
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 40), float(tempSpr.GetHeight() - 40),
 			vec2(0.f, 0.f), false, 1.5f);
 
 		//Sets up the Identifier
@@ -1036,7 +1036,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 
 		//Sets up components
 		std::string fileName = "front_grass_3.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 150, 700);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 450, 700);
 		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 52.f));
 
@@ -1051,8 +1051,8 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 
-		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(3650.f), float32(0.f));
+		tempDef.type = b2_kinematicBody;
+		tempDef.position.Set(float32(3800.f), float32(0.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -1373,10 +1373,15 @@ void Level1Scene::PlatformMovement()
 	if (ECS::GetComponent<PhysicsBody>(20).GetPosition().x > 3340)
 		platXSpeed = -20.f;
 
-	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 3550 && ECS::GetComponent<PhysicsBody>(25).GetPosition().y < -50)
-		ECS::GetComponent<PhysicsBody>(25).GetBody()->SetLinearVelocity(b2Vec2(0.f, 80.f));
+	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 3535 && ECS::GetComponent<PhysicsBody>(25).GetPosition().y < 300)
+		ECS::GetComponent<PhysicsBody>(25).GetBody()->SetLinearVelocity(b2Vec2(0.f, 150.f));
 	else
 		ECS::GetComponent<PhysicsBody>(25).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
+
+	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 3535 && ECS::GetComponent<PhysicsBody>(24).GetPosition().x > 3730)
+		ECS::GetComponent<PhysicsBody>(24).GetBody()->SetLinearVelocity(b2Vec2(-6.f, 0.f));
+	else
+		ECS::GetComponent<PhysicsBody>(24).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
 
 	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 1850 && ECS::GetComponent<PhysicsBody>(12).GetPosition().x < 2100)
 		ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(30.f, -platformBSpeed));
