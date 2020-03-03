@@ -15,9 +15,6 @@ Level1Scene::Level1Scene(std::string name)
 
 void Level1Scene::InitScene(float windowWidth, float windowHeight)
 {
-
-
-	
 	//Allocates Register
 	m_sceneReg = new entt::registry;
 
@@ -181,16 +178,14 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		tempDef.type = b2_dynamicBody;
 		tempDef.position.Set(float32(550.f), float32(80.f));
 		tempDef.fixedRotation = true;
-		
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
-		
 
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
 			vec2(0.f, 0.f), true, 0.2f);
 
 		tempBody->GetFixtureList()->SetUserData((void*)8);
-		
+
 		//Sets up the identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "ai enemy 2");
@@ -1131,7 +1126,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::SetUpIdentifier(entity, bitHolder, "Main Scrolling Camera");
 		ECS::SetIsMainCamera(entity, true);
 	}
-	
+
 	//Putting HUD at bottom should prevent some problems gigalul
 	//Time remaining hud
 	{
@@ -1141,9 +1136,9 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<AnimationController>(entity);
 
 		std::string fileName = "timemeter.png";
-		
+
 		auto& animController = ECS::GetComponent<AnimationController>(entity);
-		
+
 		animController.InitUVs(fileName);
 		animController.AddAnimation(Animation());
 		animController.SetActiveAnim(0);
@@ -1151,7 +1146,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		full.AddFrame(vec2(0.f, 614.f), vec2(584.f, 0.f));
 		full.SetRepeating(true);
 		full.SetSecPerFrame(0.1f);
-		
+
 		animController.InitUVs(fileName);
 		animController.AddAnimation(Animation());
 		auto& minus1 = animController.GetAnimation(1);
@@ -1162,7 +1157,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		animController.InitUVs(fileName);
 		animController.AddAnimation(Animation());
 		auto& minus2 = animController.GetAnimation(2);
-		minus2.AddFrame(vec2(1258,614), vec2(1842,0));
+		minus2.AddFrame(vec2(1258, 614), vec2(1842, 0));
 		minus2.SetRepeating(true);
 		minus2.SetSecPerFrame(0.1f);
 
@@ -1193,7 +1188,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		minus6.AddFrame(vec2(1288, 1318), vec2(1872, 704));
 		minus6.SetRepeating(true);
 		minus6.SetSecPerFrame(0.1f);
-		
+
 		animController.InitUVs(fileName);
 		animController.AddAnimation(Animation());
 		auto& minus7 = animController.GetAnimation(7);
@@ -1208,15 +1203,12 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		minus8.SetRepeating(true);
 		minus8.SetSecPerFrame(0.1f);
 
-	
-		
 		ECS::GetComponent<Transform>(entity).SetPosition(ECS::GetComponent<PhysicsBody>(1).GetPosition().x, ECS::GetComponent<PhysicsBody>(1).GetPosition().y, 99);
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
-		
+
 		//Sets up identifier
 		unsigned int bitHolder = EntityIdentifier::TransformBit() | EntityIdentifier::AnimationBit() | EntityIdentifier::SpriteBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Time Left UI");
-
 	}
 
 	//Hp HUD
@@ -1280,33 +1272,26 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		minus6.SetRepeating(true);
 		minus6.SetSecPerFrame(0.1f);
 
-
 		ECS::GetComponent<Transform>(entity).SetPosition(ECS::GetComponent<PhysicsBody>(1).GetPosition().x, ECS::GetComponent<PhysicsBody>(1).GetPosition().y, 99);
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 200, 40, true, &animController);
 
 		//Sets up identifier
 		unsigned int bitHolder = EntityIdentifier::TransformBit() | EntityIdentifier::AnimationBit() | EntityIdentifier::SpriteBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "HP UI");
-
 	}
 #pragma endregion
 	//Makes the camera focus on the main player
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
-
-	
 }
 
 void Level1Scene::Update()
 {
-	
 	ECS::GetComponent<Transform>(27).SetPosition(ECS::GetComponent<HorizontalScroll>(26).GetCam()->GetPosition().x - 140, ECS::GetComponent<VerticalScroll>(26).GetCam()->GetPosition().y + 100, 99);
 	ECS::GetComponent<Transform>(28).SetPosition(ECS::GetComponent<HorizontalScroll>(26).GetCam()->GetPosition().x - 100, ECS::GetComponent<VerticalScroll>(26).GetCam()->GetPosition().y + 150, 99);
-	
+
 	KlockAttack();
 	PlatformMovement();
-
-	
 
 	//Time slow resource ui for scene 1
 	if (ECS::GetComponent<PlayerData>(1).UsedUpTime < 2)
@@ -1327,7 +1312,7 @@ void Level1Scene::Update()
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(7);
 	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 16)
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(8);
-	
+
 	//Updates the HP bar ui
 	if (ECS::GetComponent<PlayerData>(1).Health == 6)
 		ECS::GetComponent<AnimationController>(28).SetActiveAnim(0);
@@ -1343,59 +1328,100 @@ void Level1Scene::Update()
 		ECS::GetComponent<AnimationController>(28).SetActiveAnim(5);
 	if (ECS::GetComponent<PlayerData>(1).Health == 0)
 		ECS::GetComponent<AnimationController>(28).SetActiveAnim(6);
-	
 
 	//Makes the camera focus on the main player
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
-
-
 }
 
 void Level1Scene::PlatformMovement()
 {
-	//platform B
-	if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y > 120)
-		platformBSpeed = -5.f;
-	else if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y < 100)
-		platformBSpeed = 5.f;
+	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed) {
+		if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y > 120)
+			platformBSpeed = -2.5f;
+		else if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y < 100)
+			platformBSpeed = 2.5f;
 
-	ECS::GetComponent<PhysicsBody>(6).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed));
+		ECS::GetComponent<PhysicsBody>(6).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed / 2));
 
-	ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(b2Vec2(platDSpeed, platformBSpeed));
-	if (ECS::GetComponent<PhysicsBody>(10).GetPosition().x < 700)
-		platDSpeed = 20.f;
-	if (ECS::GetComponent<PhysicsBody>(10).GetPosition().x > 1250)
-		platDSpeed = -20.f;
+		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(b2Vec2(platDSpeed / 2, platformBSpeed / 2));
+		if (ECS::GetComponent<PhysicsBody>(10).GetPosition().x < 700)
+			platDSpeed = 10.f;
+		if (ECS::GetComponent<PhysicsBody>(10).GetPosition().x > 1250)
+			platDSpeed = -10.f;
 
-	if (ECS::GetComponent<PhysicsBody>(20).GetPosition().x < 3260)
-		platXSpeed = 20.f;
-	if (ECS::GetComponent<PhysicsBody>(20).GetPosition().x > 3340)
-		platXSpeed = -20.f;
+		if (ECS::GetComponent<PhysicsBody>(20).GetPosition().x < 3260)
+			platXSpeed = 10.f;
+		if (ECS::GetComponent<PhysicsBody>(20).GetPosition().x > 3340)
+			platXSpeed = -10.f;
 
-	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 3535 && ECS::GetComponent<PhysicsBody>(25).GetPosition().y < 300)
-		ECS::GetComponent<PhysicsBody>(25).GetBody()->SetLinearVelocity(b2Vec2(0.f, 150.f));
-	else
-		ECS::GetComponent<PhysicsBody>(25).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
+		if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 3535 && ECS::GetComponent<PhysicsBody>(25).GetPosition().y < 300)
+			ECS::GetComponent<PhysicsBody>(25).GetBody()->SetLinearVelocity(b2Vec2(0.f, 9000.f));
+		else
+			ECS::GetComponent<PhysicsBody>(25).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
 
-	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 3535 && ECS::GetComponent<PhysicsBody>(24).GetPosition().x > 3730)
-		ECS::GetComponent<PhysicsBody>(24).GetBody()->SetLinearVelocity(b2Vec2(-6.f, 0.f));
-	else
-		ECS::GetComponent<PhysicsBody>(24).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
+		if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 3535 && ECS::GetComponent<PhysicsBody>(24).GetPosition().x > 3730)
+			ECS::GetComponent<PhysicsBody>(24).GetBody()->SetLinearVelocity(b2Vec2(-6.f, 0.f));
+		else
+			ECS::GetComponent<PhysicsBody>(24).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
 
-	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 1850 && ECS::GetComponent<PhysicsBody>(12).GetPosition().x < 2100)
-		ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(30.f, -platformBSpeed));
-	else
-		ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed));
+		if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 1850 && ECS::GetComponent<PhysicsBody>(12).GetPosition().x < 2100)
+			ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(15.f, -platformBSpeed / 2));
+		else
+			ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed / 2));
 
-	ECS::GetComponent<PhysicsBody>(14).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed * 0.8));
-	ECS::GetComponent<PhysicsBody>(15).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed * 1.5));
-	ECS::GetComponent<PhysicsBody>(16).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed * 1.2));
-	ECS::GetComponent<PhysicsBody>(17).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed * 2));
+		ECS::GetComponent<PhysicsBody>(14).GetBody()->SetLinearVelocity(b2Vec2(0.f, (platformBSpeed * 0.8) / 2));
+		ECS::GetComponent<PhysicsBody>(15).GetBody()->SetLinearVelocity(b2Vec2(0.f, (-platformBSpeed * 1.5) / 2));
+		ECS::GetComponent<PhysicsBody>(16).GetBody()->SetLinearVelocity(b2Vec2(0.f, (platformBSpeed * 1.2) / 2));
+		ECS::GetComponent<PhysicsBody>(17).GetBody()->SetLinearVelocity(b2Vec2(0.f, (-platformBSpeed * 2) / 2));
 
-	ECS::GetComponent<PhysicsBody>(20).GetBody()->SetLinearVelocity(b2Vec2(platXSpeed, 0.f));
-	ECS::GetComponent<PhysicsBody>(21).GetBody()->SetLinearVelocity(b2Vec2(-platXSpeed, 0.f));
-	ECS::GetComponent<PhysicsBody>(22).GetBody()->SetLinearVelocity(b2Vec2(platXSpeed, 0.f));
+		ECS::GetComponent<PhysicsBody>(20).GetBody()->SetLinearVelocity(b2Vec2(platXSpeed / 2, 0.f));
+		ECS::GetComponent<PhysicsBody>(21).GetBody()->SetLinearVelocity(b2Vec2(-platXSpeed / 2, 0.f));
+		ECS::GetComponent<PhysicsBody>(22).GetBody()->SetLinearVelocity(b2Vec2(platXSpeed / 2, 0.f));
+	}
+	else {
+		if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y > 120)
+			platformBSpeed = -5.f;
+		else if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y < 100)
+			platformBSpeed = 5.f;
+
+		ECS::GetComponent<PhysicsBody>(6).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed));
+
+		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(b2Vec2(platDSpeed, platformBSpeed));
+		if (ECS::GetComponent<PhysicsBody>(10).GetPosition().x < 700)
+			platDSpeed = 20.f;
+		if (ECS::GetComponent<PhysicsBody>(10).GetPosition().x > 1250)
+			platDSpeed = -20.f;
+
+		if (ECS::GetComponent<PhysicsBody>(20).GetPosition().x < 3260)
+			platXSpeed = 20.f;
+		if (ECS::GetComponent<PhysicsBody>(20).GetPosition().x > 3340)
+			platXSpeed = -20.f;
+
+		if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 3535 && ECS::GetComponent<PhysicsBody>(25).GetPosition().y < 300)
+			ECS::GetComponent<PhysicsBody>(25).GetBody()->SetLinearVelocity(b2Vec2(0.f, 9000.f));
+		else
+			ECS::GetComponent<PhysicsBody>(25).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
+
+		if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 3535 && ECS::GetComponent<PhysicsBody>(24).GetPosition().x > 3730)
+			ECS::GetComponent<PhysicsBody>(24).GetBody()->SetLinearVelocity(b2Vec2(-6.f, 0.f));
+		else
+			ECS::GetComponent<PhysicsBody>(24).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
+
+		if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 1850 && ECS::GetComponent<PhysicsBody>(12).GetPosition().x < 2100)
+			ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(30.f, -platformBSpeed));
+		else
+			ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed));
+
+		ECS::GetComponent<PhysicsBody>(14).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed * 0.8));
+		ECS::GetComponent<PhysicsBody>(15).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed * 1.5));
+		ECS::GetComponent<PhysicsBody>(16).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed * 1.2));
+		ECS::GetComponent<PhysicsBody>(17).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed * 2));
+
+		ECS::GetComponent<PhysicsBody>(20).GetBody()->SetLinearVelocity(b2Vec2(platXSpeed, 0.f));
+		ECS::GetComponent<PhysicsBody>(21).GetBody()->SetLinearVelocity(b2Vec2(-platXSpeed, 0.f));
+		ECS::GetComponent<PhysicsBody>(22).GetBody()->SetLinearVelocity(b2Vec2(platXSpeed, 0.f));
+	}
 }
 
 void Level1Scene::KlockAttack()
@@ -1404,21 +1430,19 @@ void Level1Scene::KlockAttack()
 	{
 		auto entity = ECS::CreateEntity();
 		tempent = entity;
-		//std::cout << entity << " " << tempent; 
-		//Add components 
+		//std::cout << entity << " " << tempent;
+		//Add components
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 
-
-		//Sets up components 
+		//Sets up components
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 98.f));
 
 		std::string fileName = "floatplatform.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 20, 20);
-		//Grabs reference to various components 
+		//Grabs reference to various components
 		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
-
 
 		b2Body* tempBody;
 		b2BodyDef tempDef;
@@ -1436,7 +1460,7 @@ void Level1Scene::KlockAttack()
 		tempPhysBody = PhysicsBody(tempBody, float(1), float(1),
 			vec2(0.f, 0.f), true, true);
 
-		//fixture definition 
+		//fixture definition
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
 		if (ECS::GetComponent<PlayerData>(1).facingLeft)
@@ -1447,23 +1471,20 @@ void Level1Scene::KlockAttack()
 		myFixtureDef.shape = &polygonShape;
 		myFixtureDef.density = 0;
 		myFixtureDef.isSensor = 1;
-		//myFixtureDef.friction = 1.f; 
-
+		//myFixtureDef.friction = 1.f;
 
 		myFixtureDef.isSensor = true;
 		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		footSensorFixture->SetUserData((void*)7);
 
-		//Sets up the identifier 
+		//Sets up the identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "da hitbox");
 		std::cout << entity << "\n" << tempent << "\n";
 
 		ECS::GetComponent<PlayerData>(1).framesSinceAtt = 1;
-
 	}
-	
-	
+
 	if (ECS::GetComponent<PlayerData>(1).framesSinceAtt > 0 && ECS::GetComponent<PlayerData>(1).framesSinceAtt < 20)
 	{
 		ECS::GetComponent<PlayerData>(1).framesSinceAtt++;
@@ -1475,7 +1496,7 @@ void Level1Scene::KlockAttack()
 		//std::cout << "Destroyed ent";
 		ECS::GetComponent<PlayerData>(1).framesSinceAtt = 0;
 	}
-	
+
 	//kills enemy
 	if (ECS::GetComponent<PlayerData>(2).Health == 0 && tempbool == true)
 	{
@@ -1485,4 +1506,3 @@ void Level1Scene::KlockAttack()
 	}
 	//Have this if statement for each of the enemies
 }
-
