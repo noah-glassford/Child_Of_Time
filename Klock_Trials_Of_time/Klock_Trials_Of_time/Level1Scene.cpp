@@ -45,7 +45,6 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 #pragma region game_objects
 	//Setup klock, entity 1
 	{
-
 		//Create new Entity
 		auto entity = ECS::CreateEntity();
 		ECS::SetIsMainPlayer(entity, true);
@@ -125,16 +124,9 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		//myFixtureDef.friction = 1.f;
 
 		//Adds a foot sensor fixture under the body
-		polygonShape.SetAsBox(35.f, 45.f, b2Vec2(0.f,0.f), 0);
-		myFixtureDef.isSensor = true;
-		b2Fixture* combatFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
-		combatFixture->SetUserData((void*)1);
-		
-		
-		//Adds a foot sensor fixture under the body
 		polygonShape.SetAsBox(12.f, 0.0001, b2Vec2(0.f, -25.f), 0);
 		myFixtureDef.isSensor = true;
-		b2Fixture*footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
+		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		footSensorFixture->SetUserData((void*)3);
 
 		//Adds a fixture the right side of the body
@@ -1351,10 +1343,7 @@ void Level1Scene::Update()
 		ECS::GetComponent<AnimationController>(28).SetActiveAnim(5);
 	else if (ECS::GetComponent<PlayerData>(1).Health == 0)
 		ECS::GetComponent<AnimationController>(28).SetActiveAnim(6);
-<<<<<<< HEAD
-=======
 	*/
->>>>>>> Noah_Branch
 
 	//Makes the camera focus on the main player
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));

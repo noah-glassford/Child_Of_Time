@@ -61,6 +61,11 @@ void Game::InitGame()
 	BackEnd::SetWindowName(m_activeScene->GetName());
 
 	PhysicsSystem::Init();
+
+	//initialise all the sound
+	SoundManager::init("./Assets/Sounds/");
+	
+
 }
 
 bool Game::Run()
@@ -358,7 +363,12 @@ void Game::KeyboardDown()
 	if (Input::GetKeyDown(Key::W))
 	{
 		if (ECS::GetComponent<PlayerData>(1).Grounded)
+		{
 			Klock.Jump(3000000.f);
+			Sound2D _jump("jump.wav", "group1");
+			_jump.play();
+		}
+
 	}
 	if (Input::GetKeyDown(Key::S))
 	{
@@ -372,7 +382,7 @@ void Game::KeyboardDown()
 
 	if (Input::GetKeyDown(Key::O))
 	{
-		SoundManager::init("./Assets/Sounds/");
+		
 		Sound2D _test("Sound.wav", "group1");
 		_test.play();
 	}
@@ -385,6 +395,10 @@ void Game::KeyboardDown()
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
 		else
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
+
+		Sound2D _TimeStop("timestop.wav", "group1");
+		_TimeStop.play();
+
 	}
 
 	m_activeScene->KeyboardDown();
