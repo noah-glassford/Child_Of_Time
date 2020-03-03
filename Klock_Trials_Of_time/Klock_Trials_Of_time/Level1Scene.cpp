@@ -1329,21 +1329,40 @@ void Level1Scene::Update()
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(8);
 	
 	//Updates the HP bar ui
+	int i = ECS::GetComponent<PlayerData>(1).Health;
+	switch (i)
+	{
+	case 0:	ECS::GetComponent<AnimationController>(28).SetActiveAnim(6);
+		break;
+	case 1: ECS::GetComponent<AnimationController>(28).SetActiveAnim(5);
+		break;
+	case 2: ECS::GetComponent<AnimationController>(28).SetActiveAnim(4);
+		break;
+	case 3: ECS::GetComponent<AnimationController>(28).SetActiveAnim(3);
+		break;
+	case 4: ECS::GetComponent<AnimationController>(28).SetActiveAnim(2);
+		break;
+	case 5: ECS::GetComponent<AnimationController>(28).SetActiveAnim(1);
+		break;
+	case 6: ECS::GetComponent<AnimationController>(28).SetActiveAnim(0);
+		break;
+	}
+	/*
 	if (ECS::GetComponent<PlayerData>(1).Health == 6)
 		ECS::GetComponent<AnimationController>(28).SetActiveAnim(0);
-	if (ECS::GetComponent<PlayerData>(1).Health == 5)
+	else if (ECS::GetComponent<PlayerData>(1).Health == 5)
 		ECS::GetComponent<AnimationController>(28).SetActiveAnim(1);
-	if (ECS::GetComponent<PlayerData>(1).Health == 4)
+	else if (ECS::GetComponent<PlayerData>(1).Health == 4)
 		ECS::GetComponent<AnimationController>(28).SetActiveAnim(2);
-	if (ECS::GetComponent<PlayerData>(1).Health == 3)
+	else if (ECS::GetComponent<PlayerData>(1).Health == 3)
 		ECS::GetComponent<AnimationController>(28).SetActiveAnim(3);
-	if (ECS::GetComponent<PlayerData>(1).Health == 2)
+	else if (ECS::GetComponent<PlayerData>(1).Health == 2)
 		ECS::GetComponent<AnimationController>(28).SetActiveAnim(4);
-	if (ECS::GetComponent<PlayerData>(1).Health == 1)
+	else if (ECS::GetComponent<PlayerData>(1).Health == 1)
 		ECS::GetComponent<AnimationController>(28).SetActiveAnim(5);
-	if (ECS::GetComponent<PlayerData>(1).Health == 0)
+	else if (ECS::GetComponent<PlayerData>(1).Health == 0)
 		ECS::GetComponent<AnimationController>(28).SetActiveAnim(6);
-	
+	*/
 
 	//Makes the camera focus on the main player
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
