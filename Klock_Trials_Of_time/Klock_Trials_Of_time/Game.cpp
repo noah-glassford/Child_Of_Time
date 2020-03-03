@@ -372,8 +372,8 @@ void Game::KeyboardDown()
 	}
 	if (Input::GetKeyDown(Key::S))
 	{
-		if (!Klock.GetIsTouching())
-			Klock.DownMove(999999999999.f);
+		//if (!Klock.GetIsTouching())
+			//Klock.DownMove(999999999999.f);
 	}
 	if (Input::GetKeyDown(Key::R))
 		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = true;
