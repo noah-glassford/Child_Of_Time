@@ -124,11 +124,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		myFixtureDef.density = 3;
 		//myFixtureDef.friction = 1.f;
 
-		//Adds a foot sensor fixture under the body
-		polygonShape.SetAsBox(35.f, 45.f, b2Vec2(0.f,0.f), 0);
-		myFixtureDef.isSensor = true;
-		b2Fixture* combatFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
-		combatFixture->SetUserData((void*)1);
+		
 		
 		
 		//Adds a foot sensor fixture under the body
