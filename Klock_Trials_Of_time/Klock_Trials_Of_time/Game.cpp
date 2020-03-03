@@ -256,6 +256,8 @@ void Game::GamepadUp(XInputController* con)
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->GamepadUp(con);
+	if (con->IsButtonReleased(Buttons::X))
+		slowSpamBlock = true;
 }
 
 void Game::GamepadDown(XInputController* con)
@@ -285,23 +287,17 @@ void Game::GamepadDown(XInputController* con)
 		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Grounded)
 			Klock.Jump(520000.f);
 	}
-	if (con->IsButtonPressed(Buttons::X))
+	m_activeScene->GamepadDown(con);
+
+	if (con->IsButtonPressed(Buttons::X) && slowSpamBlock)
 	{
-		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime <= 16.f)
-			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime + deltaTime;
+		slowSpamBlock = false;
 
-		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime < 16.f)
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed == false)
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
-
-		else if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime > 16.f)
+		else
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
 	}
-	else
-	{
-		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
-	}
-
-	m_activeScene->GamepadDown(con);
 }
 
 void Game::GamepadStick(XInputController* con)
