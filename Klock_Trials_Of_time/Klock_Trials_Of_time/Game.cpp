@@ -6,6 +6,7 @@
 //Fuck it float here too this is probably bad but I don't care
 //Both of these are used for the time slowing stuff because they are used in multiple functions in game.cpp
 //so I just said fuck it and made them global
+int Frames;
 
 bool direction{ 0 }; //1 for right, 0 for left
 
