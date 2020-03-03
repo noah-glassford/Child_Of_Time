@@ -15,9 +15,6 @@ Level1Scene::Level1Scene(std::string name)
 
 void Level1Scene::InitScene(float windowWidth, float windowHeight)
 {
-
-
-	
 	//Allocates Register
 	m_sceneReg = new entt::registry;
 
@@ -48,8 +45,6 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 #pragma region game_objects
 	//Setup klock, entity 1
 	{
-		//Some JSON shit
-		//auto klockAnimation = File::LoadJSON("klockmovement.json");
 
 		//Create new Entity
 		auto entity = ECS::CreateEntity();
@@ -62,7 +57,6 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<AnimationController>(entity);
 		ECS::AttachComponent<PlayerData>(entity);
 
-		//Sets up components
 		//Sets up components
 		std::string fileName = "spritesheet.png";
 		auto& animController = ECS::GetComponent<AnimationController>(entity);
@@ -101,8 +95,8 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 
 		//Grabs reference to various components
 		//Sets up components
-		//ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 25, 25);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 49.f));
+		ECS::GetComponent<PlayerData>(entity).Health = 6;
 		//Grabs reference to various components
 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -131,9 +125,16 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		//myFixtureDef.friction = 1.f;
 
 		//Adds a foot sensor fixture under the body
+		polygonShape.SetAsBox(35.f, 45.f, b2Vec2(0.f,0.f), 0);
+		myFixtureDef.isSensor = true;
+		b2Fixture* combatFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
+		combatFixture->SetUserData((void*)1);
+		
+		
+		//Adds a foot sensor fixture under the body
 		polygonShape.SetAsBox(12.f, 0.0001, b2Vec2(0.f, -25.f), 0);
 		myFixtureDef.isSensor = true;
-		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
+		b2Fixture*footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		footSensorFixture->SetUserData((void*)3);
 
 		//Adds a fixture the right side of the body
