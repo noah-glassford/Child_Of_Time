@@ -24,4 +24,8 @@ public:
 	int framesSinceAtt{ 0 };
 
 	bool facingLeft{ 0 };
+
+	bool isSlowed;
+	
+	float UsedUpTime{ 0 };
 };
