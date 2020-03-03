@@ -37,7 +37,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "Level1_BG.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 6400, 700);
 		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1000.f, 100.f, 1.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1000.f, 250.f, 1.f));
 
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
@@ -45,9 +45,6 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 #pragma region game_objects
 	//Setup klock, entity 1
 	{
-		//Some JSON shit
-		//auto klockAnimation = File::LoadJSON("klockmovement.json");
-
 		//Create new Entity
 		auto entity = ECS::CreateEntity();
 		ECS::SetIsMainPlayer(entity, true);
@@ -59,7 +56,6 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<AnimationController>(entity);
 		ECS::AttachComponent<PlayerData>(entity);
 
-		//Sets up components
 		//Sets up components
 		std::string fileName = "spritesheet.png";
 		auto& animController = ECS::GetComponent<AnimationController>(entity);
@@ -98,8 +94,8 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 
 		//Grabs reference to various components
 		//Sets up components
-		//ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 25, 25);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 49.f));
+		ECS::GetComponent<PlayerData>(entity).Health = 6;
 		//Grabs reference to various components
 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -1314,20 +1310,40 @@ void Level1Scene::Update()
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(8);
 
 	//Updates the HP bar ui
+	int i = ECS::GetComponent<PlayerData>(1).Health;
+	switch (i)
+	{
+	case 0:	ECS::GetComponent<AnimationController>(28).SetActiveAnim(6);
+		break;
+	case 1: ECS::GetComponent<AnimationController>(28).SetActiveAnim(5);
+		break;
+	case 2: ECS::GetComponent<AnimationController>(28).SetActiveAnim(4);
+		break;
+	case 3: ECS::GetComponent<AnimationController>(28).SetActiveAnim(3);
+		break;
+	case 4: ECS::GetComponent<AnimationController>(28).SetActiveAnim(2);
+		break;
+	case 5: ECS::GetComponent<AnimationController>(28).SetActiveAnim(1);
+		break;
+	case 6: ECS::GetComponent<AnimationController>(28).SetActiveAnim(0);
+		break;
+	}
+	/*
 	if (ECS::GetComponent<PlayerData>(1).Health == 6)
 		ECS::GetComponent<AnimationController>(28).SetActiveAnim(0);
-	if (ECS::GetComponent<PlayerData>(1).Health == 5)
+	else if (ECS::GetComponent<PlayerData>(1).Health == 5)
 		ECS::GetComponent<AnimationController>(28).SetActiveAnim(1);
-	if (ECS::GetComponent<PlayerData>(1).Health == 4)
+	else if (ECS::GetComponent<PlayerData>(1).Health == 4)
 		ECS::GetComponent<AnimationController>(28).SetActiveAnim(2);
-	if (ECS::GetComponent<PlayerData>(1).Health == 3)
+	else if (ECS::GetComponent<PlayerData>(1).Health == 3)
 		ECS::GetComponent<AnimationController>(28).SetActiveAnim(3);
-	if (ECS::GetComponent<PlayerData>(1).Health == 2)
+	else if (ECS::GetComponent<PlayerData>(1).Health == 2)
 		ECS::GetComponent<AnimationController>(28).SetActiveAnim(4);
-	if (ECS::GetComponent<PlayerData>(1).Health == 1)
+	else if (ECS::GetComponent<PlayerData>(1).Health == 1)
 		ECS::GetComponent<AnimationController>(28).SetActiveAnim(5);
-	if (ECS::GetComponent<PlayerData>(1).Health == 0)
+	else if (ECS::GetComponent<PlayerData>(1).Health == 0)
 		ECS::GetComponent<AnimationController>(28).SetActiveAnim(6);
+	*/
 
 	//Makes the camera focus on the main player
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));

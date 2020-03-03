@@ -28,6 +28,8 @@ inline void CollisionListener::BeginContact(b2Contact* contact)
 	void* fixtureBUserData = contact->GetFixtureB()->GetUserData();
 
 
+	
+	
 	if ((int)fixtureAUserData == 3) //Klock Footsensor
 	{
 		ECS::GetComponent<PlayerData>(1).Grounded = true;

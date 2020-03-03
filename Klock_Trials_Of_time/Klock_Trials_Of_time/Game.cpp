@@ -6,6 +6,7 @@
 //Fuck it float here too this is probably bad but I don't care
 //Both of these are used for the time slowing stuff because they are used in multiple functions in game.cpp
 //so I just said fuck it and made them global
+int Frames;
 
 bool direction{ 0 }; //1 for right, 0 for left
 
@@ -60,6 +61,11 @@ void Game::InitGame()
 	BackEnd::SetWindowName(m_activeScene->GetName());
 
 	PhysicsSystem::Init();
+
+	//initialise all the sound
+	SoundManager::init("./Assets/Sounds/");
+	
+
 }
 
 bool Game::Run()
@@ -256,6 +262,8 @@ void Game::GamepadUp(XInputController* con)
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->GamepadUp(con);
+	if (con->IsButtonReleased(Buttons::X))
+		slowSpamBlock = true;
 }
 
 void Game::GamepadDown(XInputController* con)
@@ -285,23 +293,17 @@ void Game::GamepadDown(XInputController* con)
 		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Grounded)
 			Klock.Jump(520000.f);
 	}
-	if (con->IsButtonPressed(Buttons::X))
+	m_activeScene->GamepadDown(con);
+
+	if (con->IsButtonPressed(Buttons::X) && slowSpamBlock)
 	{
-		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime <= 16.f)
-			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime + deltaTime;
+		slowSpamBlock = false;
 
-		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime < 16.f)
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed == false)
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
-
-		else if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime > 16.f)
+		else
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
 	}
-	else
-	{
-		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
-	}
-
-	m_activeScene->GamepadDown(con);
 }
 
 void Game::GamepadStick(XInputController* con)
@@ -361,7 +363,12 @@ void Game::KeyboardDown()
 	if (Input::GetKeyDown(Key::W))
 	{
 		if (ECS::GetComponent<PlayerData>(1).Grounded)
+		{
 			Klock.Jump(3000000.f);
+			Sound2D _jump("jump.wav", "group1");
+			_jump.play();
+		}
+
 	}
 	if (Input::GetKeyDown(Key::S))
 	{
@@ -375,7 +382,7 @@ void Game::KeyboardDown()
 
 	if (Input::GetKeyDown(Key::O))
 	{
-		SoundManager::init("./Assets/Sounds/");
+		
 		Sound2D _test("Sound.wav", "group1");
 		_test.play();
 	}
@@ -388,6 +395,10 @@ void Game::KeyboardDown()
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
 		else
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
+
+		Sound2D _TimeStop("timestop.wav", "group1");
+		_TimeStop.play();
+
 	}
 
 	m_activeScene->KeyboardDown();
