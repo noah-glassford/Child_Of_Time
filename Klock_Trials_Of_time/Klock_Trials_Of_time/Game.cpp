@@ -388,8 +388,8 @@ void Game::KeyboardUp()
 	if (Input::GetKeyUp(Key::E))
 		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = 0;
 
-	//if (Input::GetKeyUp(Key::I))
-	//	ECS::GetComponent<Camera>(9).Zoom(-50);
+	if (Input::GetKeyUp(Key::I))
+		ECS::GetComponent<Camera>(26).Zoom(-50);
 
 	m_activeScene->KeyboardUp();
 }
