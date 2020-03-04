@@ -1306,10 +1306,10 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Transform>(entity);
 
 		//Sets up components
-		std::string fileName = "Level1_BG.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 30, 30);
+		std::string fileName = "signtime.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 80, 80);
 		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1000.f, 250.f, 1.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 220.f, 2.f));
 
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
@@ -1324,10 +1324,10 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Transform>(entity);
 
 		//Sets up components
-		std::string fileName = "Level1_BG.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 30, 30);
+		std::string fileName = "timecombat.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 80, 80);
 		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1000.f, 250.f, 1.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1380.f, 190.f, 2.f));
 
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
