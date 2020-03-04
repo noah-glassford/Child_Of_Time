@@ -172,7 +172,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(0.f), float32(80.f));
+		tempDef.position.Set(float32(450.f), float32(300.f));
 		tempDef.fixedRotation = true;
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -1200,7 +1200,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		minus8.SetSecPerFrame(0.1f);
 
 		ECS::GetComponent<Transform>(entity).SetPosition(ECS::GetComponent<PhysicsBody>(1).GetPosition().x, ECS::GetComponent<PhysicsBody>(1).GetPosition().y, 99);
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 45, 45, true, &animController);
 
 		//Sets up identifier
 		unsigned int bitHolder = EntityIdentifier::TransformBit() | EntityIdentifier::AnimationBit() | EntityIdentifier::SpriteBit();
