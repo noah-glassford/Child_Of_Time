@@ -11,6 +11,7 @@ int Frames;
 bool direction{ 0 }; //1 for right, 0 for left
 
 bool slowSpamBlock = true;
+bool ignoreThis = true;
 
 Game::~Game()
 {
@@ -387,12 +388,6 @@ void Game::KeyboardDown()
 	else
 		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = false;
 
-	if (Input::GetKeyDown(Key::O))
-	{
-		Sound2D _test("Sound.wav", "group1");
-		_test.play();
-	}
-
 	if (Input::GetKeyDown(Key::E) && slowSpamBlock)
 	{
 		slowSpamBlock = false;
@@ -408,6 +403,15 @@ void Game::KeyboardDown()
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
 			_TimeRestart.play();
 		}
+
+		if (ignoreThis) {
+			EffectManager::CreateEffect(Vignette, BackEnd::GetWindowWidth(), BackEnd::GetWindowHeight());
+			ignoreThis = false;
+		}
+		else {
+			ignoreThis = true;
+			EffectManager::RemoveEffect(0);
+		}
 	}
 
 	m_activeScene->KeyboardDown();
@@ -415,8 +419,9 @@ void Game::KeyboardDown()
 
 void Game::KeyboardUp()
 {
-	if (Input::GetKeyUp(Key::E))
+	if (Input::GetKeyUp(Key::E)) {
 		slowSpamBlock = true;
+	}
 
 	if (Input::GetKeyUp(Key::I))
 		ECS::GetComponent<Camera>(26).Zoom(-50);
