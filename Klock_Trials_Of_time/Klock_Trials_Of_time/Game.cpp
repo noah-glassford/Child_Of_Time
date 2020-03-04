@@ -11,6 +11,7 @@ int Frames;
 bool direction{ 0 }; //1 for right, 0 for left
 
 bool slowSpamBlock = true;
+bool ignoreThis = true;
 
 Game::~Game()
 {
@@ -64,8 +65,6 @@ void Game::InitGame()
 
 	//initialise all the sound
 	SoundManager::init("./Assets/Sounds/");
-	
-
 }
 
 bool Game::Run()
@@ -290,19 +289,29 @@ void Game::GamepadDown(XInputController* con)
 
 	if (con->IsButtonPressed(Buttons::A))
 	{
-		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Grounded)
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Grounded) {
 			Klock.Jump(520000.f);
+			Sound2D _jump("jump.wav", "group1");
+			_jump.play();
+		}
 	}
 	m_activeScene->GamepadDown(con);
 
 	if (con->IsButtonPressed(Buttons::X) && slowSpamBlock)
 	{
 		slowSpamBlock = false;
+		Sound2D _TimeStop("timestop.wav", "group1");
+		Sound2D _TimeRestart("timeresume.wav", "group1");
 
 		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed == false)
+		{
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
-		else
+			_TimeStop.play();
+		}
+		else {
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
+			_TimeRestart.play();
+		}
 	}
 }
 
@@ -368,7 +377,6 @@ void Game::KeyboardDown()
 			Sound2D _jump("jump.wav", "group1");
 			_jump.play();
 		}
-
 	}
 	if (Input::GetKeyDown(Key::S))
 	{
@@ -380,25 +388,30 @@ void Game::KeyboardDown()
 	else
 		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = false;
 
-	if (Input::GetKeyDown(Key::O))
-	{
-		
-		Sound2D _test("Sound.wav", "group1");
-		_test.play();
-	}
-
 	if (Input::GetKeyDown(Key::E) && slowSpamBlock)
 	{
 		slowSpamBlock = false;
-
-		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed == false)
-			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
-		else
-			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
-
 		Sound2D _TimeStop("timestop.wav", "group1");
-		_TimeStop.play();
+		Sound2D _TimeRestart("timeresume.wav", "group1");
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed == false)
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
+			_TimeStop.play();
+		}
+		else
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
+			_TimeRestart.play();
+		}
 
+		if (ignoreThis) {
+			EffectManager::CreateEffect(Vignette, BackEnd::GetWindowWidth(), BackEnd::GetWindowHeight());
+			ignoreThis = false;
+		}
+		else {
+			ignoreThis = true;
+			EffectManager::RemoveEffect(0);
+		}
 	}
 
 	m_activeScene->KeyboardDown();
@@ -406,8 +419,9 @@ void Game::KeyboardDown()
 
 void Game::KeyboardUp()
 {
-	if (Input::GetKeyUp(Key::E))
+	if (Input::GetKeyUp(Key::E)) {
 		slowSpamBlock = true;
+	}
 
 	if (Input::GetKeyUp(Key::I))
 		ECS::GetComponent<Camera>(26).Zoom(-50);

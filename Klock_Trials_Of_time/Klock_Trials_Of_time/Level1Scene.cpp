@@ -8,7 +8,7 @@ float platXSpeed;
 Level1Scene::Level1Scene(std::string name)
 	: Scene(name)
 {
-	m_gravity = b2Vec2(float32(0.f), float32(-35.f));
+	m_gravity = b2Vec2(float32(0.f), float32(-44.f));
 	m_physicsWorld->SetGravity(m_gravity);
 	m_physicsWorld->SetContactListener(&listener);
 }
@@ -498,7 +498,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight() - 12),
-			vec2(0.f, 0.f), false, 1.5f);
+			vec2(0.f, 0.f), false, 50.f);
 
 		//Sets up the Identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
@@ -1358,6 +1358,13 @@ void Level1Scene::PlatformMovement()
 		else if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y < 100)
 			platformBSpeed = 2.5f;
 
+		if (platformBSpeed != -2.5f || platformBSpeed != 2.5f) {
+			if (platformBSpeed < 0)
+				platformBSpeed = -2.5f;
+			else
+				platformBSpeed = 2.5f;
+		}
+
 		ECS::GetComponent<PhysicsBody>(6).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed / 2));
 
 		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(b2Vec2(platDSpeed / 2, platformBSpeed / 2));
@@ -1366,10 +1373,24 @@ void Level1Scene::PlatformMovement()
 		if (ECS::GetComponent<PhysicsBody>(10).GetPosition().x > 1250)
 			platDSpeed = -10.f;
 
+		if (platDSpeed != -10 || platDSpeed != 10) {
+			if (platDSpeed < 0)
+				platDSpeed = -10;
+			else
+				platDSpeed = 10;
+		}
+
 		if (ECS::GetComponent<PhysicsBody>(20).GetPosition().x < 3260)
 			platXSpeed = 10.f;
 		if (ECS::GetComponent<PhysicsBody>(20).GetPosition().x > 3340)
 			platXSpeed = -10.f;
+
+		if (platXSpeed != -10 || platXSpeed != 10) {
+			if (platXSpeed < 0)
+				platXSpeed = -10;
+			else
+				platXSpeed = 10;
+		}
 
 		if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 3535 && ECS::GetComponent<PhysicsBody>(25).GetPosition().y < 300)
 			ECS::GetComponent<PhysicsBody>(25).GetBody()->SetLinearVelocity(b2Vec2(0.f, 9000.f));
@@ -1397,22 +1418,43 @@ void Level1Scene::PlatformMovement()
 	}
 	else {
 		if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y > 120)
-			platformBSpeed = -5.f;
+			platformBSpeed = -8.f;
 		else if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y < 100)
-			platformBSpeed = 5.f;
+			platformBSpeed = 8.f;
 
-		ECS::GetComponent<PhysicsBody>(6).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed));
+		if (platformBSpeed != -8 || platformBSpeed != 8) {
+			if (platformBSpeed < 0)
+				platformBSpeed = -8;
+			else
+				platformBSpeed = 8;
+		}
+
+		ECS::GetComponent<PhysicsBody>(6).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed * 1.5));
 
 		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(b2Vec2(platDSpeed, platformBSpeed));
 		if (ECS::GetComponent<PhysicsBody>(10).GetPosition().x < 700)
-			platDSpeed = 20.f;
+			platDSpeed = 50.f;
 		if (ECS::GetComponent<PhysicsBody>(10).GetPosition().x > 1250)
-			platDSpeed = -20.f;
+			platDSpeed = -50.f;
+
+		if (platDSpeed != -110 || platDSpeed != 110) {
+			if (platDSpeed < 0)
+				platDSpeed = -50;
+			else
+				platDSpeed = 50;
+		}
 
 		if (ECS::GetComponent<PhysicsBody>(20).GetPosition().x < 3260)
-			platXSpeed = 20.f;
+			platXSpeed = 35.f;
 		if (ECS::GetComponent<PhysicsBody>(20).GetPosition().x > 3340)
-			platXSpeed = -20.f;
+			platXSpeed = -35.f;
+
+		if (platXSpeed != -35 || platXSpeed != 35) {
+			if (platXSpeed < 0)
+				platXSpeed = -35;
+			else
+				platXSpeed = 35;
+		}
 
 		if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 3535 && ECS::GetComponent<PhysicsBody>(25).GetPosition().y < 300)
 			ECS::GetComponent<PhysicsBody>(25).GetBody()->SetLinearVelocity(b2Vec2(0.f, 9000.f));
@@ -1425,18 +1467,18 @@ void Level1Scene::PlatformMovement()
 			ECS::GetComponent<PhysicsBody>(24).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
 
 		if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 1850 && ECS::GetComponent<PhysicsBody>(12).GetPosition().x < 2100)
-			ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(30.f, -platformBSpeed));
+			ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(45.f, -platformBSpeed * 1.5));
 		else
-			ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed));
+			ECS::GetComponent<PhysicsBody>(12).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed * 1.5));
 
-		ECS::GetComponent<PhysicsBody>(14).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed * 0.8));
-		ECS::GetComponent<PhysicsBody>(15).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed * 1.5));
-		ECS::GetComponent<PhysicsBody>(16).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed * 1.2));
-		ECS::GetComponent<PhysicsBody>(17).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed * 2));
+		ECS::GetComponent<PhysicsBody>(14).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed * 1.3));
+		ECS::GetComponent<PhysicsBody>(15).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed * 3));
+		ECS::GetComponent<PhysicsBody>(16).GetBody()->SetLinearVelocity(b2Vec2(0.f, platformBSpeed * 2.7));
+		ECS::GetComponent<PhysicsBody>(17).GetBody()->SetLinearVelocity(b2Vec2(0.f, -platformBSpeed * 3.5));
 
-		ECS::GetComponent<PhysicsBody>(20).GetBody()->SetLinearVelocity(b2Vec2(platXSpeed, 0.f));
-		ECS::GetComponent<PhysicsBody>(21).GetBody()->SetLinearVelocity(b2Vec2(-platXSpeed, 0.f));
-		ECS::GetComponent<PhysicsBody>(22).GetBody()->SetLinearVelocity(b2Vec2(platXSpeed, 0.f));
+		ECS::GetComponent<PhysicsBody>(20).GetBody()->SetLinearVelocity(b2Vec2(platXSpeed * 1.5, 0.f));
+		ECS::GetComponent<PhysicsBody>(21).GetBody()->SetLinearVelocity(b2Vec2(-platXSpeed * 1.5, 0.f));
+		ECS::GetComponent<PhysicsBody>(22).GetBody()->SetLinearVelocity(b2Vec2(platXSpeed * 1.5, 0.f));
 	}
 }
 
