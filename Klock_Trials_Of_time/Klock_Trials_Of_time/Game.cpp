@@ -129,6 +129,15 @@ void Game::Update()
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
 	}
 
+	//combat hitbox cooldown stuff
+	if (!ECS::GetComponent<PlayerData>(1).CanBeHit)
+	{
+		ECS::GetComponent<PlayerData>(1).TimeSinceHit + deltaTime;
+	}
+	if (ECS::GetComponent<PlayerData>(1).TimeSinceHit > 1.5f)
+		ECS::GetComponent<PlayerData>(1).CanBeHit = 1;
+
+
 	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
 
 	//Adding the time slow as a proof of concept
