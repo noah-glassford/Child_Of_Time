@@ -129,14 +129,16 @@ void Game::Update()
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
 	}
 
-	//combat hitbox cooldown stuff
-	if (!ECS::GetComponent<PlayerData>(1).CanBeHit)
+	if (ECS::GetComponent<PlayerData>(1).TimeSinceHit > 0)
 	{
-		ECS::GetComponent<PlayerData>(1).TimeSinceHit + deltaTime;
+		ECS::GetComponent <PlayerData>(1).TimeSinceHit -= deltaTime;
 	}
-	if (ECS::GetComponent<PlayerData>(1).TimeSinceHit > 1.5f)
-		ECS::GetComponent<PlayerData>(1).CanBeHit = 1;
+	else
+	{
+		ECS::GetComponent<PlayerData>(1).Hit = 1;
+	}
 
+	std::cout << ECS::GetComponent<PlayerData>(1).TimeSinceHit << " " << ECS::GetComponent<PlayerData>(1).Hit << std::endl;
 
 	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
 
@@ -353,7 +355,7 @@ void Game::KeyboardHold()
 	}
 	if (Input::GetKey(Key::A))
 	{
-		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft)
+		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft && ECS::GetComponent<PlayerData>(1).Hit)
 			Klock.MoveLeft(30.f);
 		ECS::GetComponent<PlayerData>(1).facingLeft = 1;
 
@@ -361,7 +363,7 @@ void Game::KeyboardHold()
 	}
 	if (Input::GetKey(Key::D))
 	{
-		if (!ECS::GetComponent<PlayerData>(1).OnWallRight)
+		if (!ECS::GetComponent<PlayerData>(1).OnWallRight && ECS::GetComponent<PlayerData>(1).Hit)
 			Klock.MoveRight(30.f);
 
 		ECS::GetComponent<PlayerData>(1).facingLeft = 0;

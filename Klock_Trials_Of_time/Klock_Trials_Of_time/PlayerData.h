@@ -29,7 +29,7 @@ public:
 	
 	float UsedUpTime{ 0 };
 
-	float TimeSinceHit;
+	float TimeSinceHit = 0.f;
 
-	bool CanBeHit{ 0 };
+	bool Hit{ 0 };
 };

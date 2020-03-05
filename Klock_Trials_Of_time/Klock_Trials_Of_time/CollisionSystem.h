@@ -57,33 +57,59 @@ inline void CollisionListener::BeginContact(b2Contact* contact)
 	//all the klock getting hit by stuff
 	if ((int)fixtureAUserData == 8 && (int)fixtureBUserData == 4)
 	{
-		std::cout << "Klock got hit by enemy on his right";
-		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Health--;
-		ECS::GetComponent<PlayerData>(1).CanBeHit = 0;
-		ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.f;
+		if (ECS::GetComponent<PlayerData>(1).Hit)
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Health--;
+			ECS::GetComponent<PlayerData>(1).Hit = 0;
+			ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.7f;
+			//ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(-20000000, 1000000000, 0));
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(-30, 30));
+
+		}
 	}
 
 	if ((int)fixtureBUserData == 8 && (int)fixtureAUserData == 4)
 	{
-		std::cout << "Klock got hit by enemy on his right";
-		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Health--;
-		ECS::GetComponent<PlayerData>(1).CanBeHit = 0;
-		ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.f;
+		//std::cout << "Klock got hit by enemy on his right";
+		if (ECS::GetComponent<PlayerData>(1).Hit)
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Health--;
+			ECS::GetComponent<PlayerData>(1).Hit = 0;
+			ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.7f;
+			//ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(-20000000, 100000000, 0));
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(-30, 30));
+		}
+	
 	}
 
 	if ((int)fixtureAUserData == 8 && (int)fixtureBUserData == 5)
 	{
-		std::cout << "Klock got hit by an enemy on his left";
-		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Health--;
-		ECS::GetComponent<PlayerData>(1).CanBeHit = 0;
-		ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.f;
+		//std::cout << "Klock got hit by an enemy on his left";
+		if (ECS::GetComponent<PlayerData>(1).Hit)
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Health--;
+			ECS::GetComponent<PlayerData>(1).Hit = 0;
+			ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.7f;
+			//ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(20000000, 100000000, 0));
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(30, 30));
+
+		}
 	}
 	if ((int)fixtureBUserData == 8 && (int)fixtureAUserData == 5)
 	{
-		std::cout << "Klock got hit by an enemy on his left";
-		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Health--;
-		ECS::GetComponent<PlayerData>(1).CanBeHit = 0;
-		ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.f;
+	//	std::cout << "Klock got hit by an enemy on his left";
+		if (ECS::GetComponent<PlayerData>(1).Hit)
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Health--;
+			ECS::GetComponent<PlayerData>(1).Hit = 0;
+			ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.7f;
+			//ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(200000000,100000000, 0));
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(30, 30));
+
+		}
+		
+		//ECS::GetComponent<PlayerData>(1).Hit = 1;
+		
 	}
 }
 inline void CollisionListener::EndContact(b2Contact* contact)
@@ -114,6 +140,30 @@ inline void CollisionListener::EndContact(b2Contact* contact)
 	if ((int)fixtureUserData == 5) //Klock left side of body sensor
 
 		ECS::GetComponent<PlayerData>(1).OnWallLeft = false;
+
+
+	void* fixtureAUserData = contact->GetFixtureA()->GetUserData();
+	void* fixtureBUserData = contact->GetFixtureB()->GetUserData();
+	
+	//all the klock getting hit by stuff
+	if ((int)fixtureAUserData == 8 && (int)fixtureBUserData == 4)
+	{
+
+	}
+
+	if ((int)fixtureBUserData == 8 && (int)fixtureAUserData == 4)
+	{
+	
+	}
+
+	if ((int)fixtureAUserData == 8 && (int)fixtureBUserData == 5)
+	{
+	
+	}
+	if ((int)fixtureBUserData == 8 && (int)fixtureAUserData == 5)
+	{
+		
+	}
 
 }
 
