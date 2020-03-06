@@ -1348,23 +1348,23 @@ void Level1Scene::Update()
 	PlatformMovement();
 
 	//Time slow resource ui for scene 1
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime < 2)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime < 0)
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(0);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 2)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 1)
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(1);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 4)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 2)
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(2);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 6)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 3)
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(3);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 8)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 4)
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(4);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 10)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 5)
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(5);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 12)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 6)
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(6);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 14)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 7)
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(7);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 16)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 8)
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(8);
 
 	//Updates the HP bar ui

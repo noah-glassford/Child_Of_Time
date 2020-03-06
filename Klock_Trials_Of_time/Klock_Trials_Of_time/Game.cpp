@@ -114,19 +114,23 @@ void Game::Update()
 	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
 	unsigned int mainp = EntityIdentifier::MainPlayer();
 
-	if (ECS::GetComponent<PlayerData>(mainp).UsedUpTime > 0)
-		ECS::GetComponent<PlayerData>(mainp).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime - deltaTime / 4;
+	if (ECS::GetComponent<PlayerData>(mainp).UsedUpTime > 0 && !ECS::GetComponent<PlayerData>(1).isSlowed)
+		ECS::GetComponent<PlayerData>(mainp).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime - deltaTime * 2;
 
 	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed) {
 		std::cout << ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime << '\n';
-		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime <= 16.f)
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime <= 8.f)
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime + deltaTime;
 
-		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime < 16.f)
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime < 8.f)
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
 
-		else if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime > 16.f)
+		else if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime > 8.f)
+		{
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
+			EffectManager::RemoveEffect(0);
+		}
+
 	}
 
 	if (ECS::GetComponent<PlayerData>(1).TimeSinceHit > 0)
@@ -139,7 +143,10 @@ void Game::Update()
 	}
 
 	std::cout << ECS::GetComponent<PlayerData>(1).TimeSinceHit << " " << ECS::GetComponent<PlayerData>(1).Hit << std::endl;
-
+		
+	
+	//if (!ECS::GetComponent<PlayerData>(1).isSlowed)
+	//	EffectManager::RemoveEffect(0);
 	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
 
 	//Adding the time slow as a proof of concept
@@ -414,15 +421,13 @@ void Game::KeyboardDown()
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
 			_TimeRestart.play();
 		}
+	if (ECS::GetComponent<PlayerData>(1).isSlowed)
+		EffectManager::CreateEffect(Vignette, BackEnd::GetWindowWidth(), BackEnd::GetWindowHeight());
+	else
+		EffectManager::RemoveEffect(0);
+		
 
-		if (ignoreThis) {
-			EffectManager::CreateEffect(Vignette, BackEnd::GetWindowWidth(), BackEnd::GetWindowHeight());
-			ignoreThis = false;
-		}
-		else {
-			ignoreThis = true;
-			EffectManager::RemoveEffect(0);
-		}
+	
 	}
 
 	m_activeScene->KeyboardDown();
