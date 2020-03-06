@@ -51,7 +51,7 @@ void Game::InitGame()
 	m_scenes.push_back(new Level2Scene("Level 2 Scene")); //2
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[1];
+	m_activeScene = m_scenes[2]; //bincht
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -114,21 +114,39 @@ void Game::Update()
 	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
 	unsigned int mainp = EntityIdentifier::MainPlayer();
 
-	if (ECS::GetComponent<PlayerData>(mainp).UsedUpTime > 0)
-		ECS::GetComponent<PlayerData>(mainp).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime - deltaTime / 4;
+	if (ECS::GetComponent<PlayerData>(mainp).UsedUpTime > 0 && !ECS::GetComponent<PlayerData>(1).isSlowed)
+		ECS::GetComponent<PlayerData>(mainp).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime - deltaTime * 2;
 
 	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed) {
 		std::cout << ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime << '\n';
-		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime <= 16.f)
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime <= 8.f)
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime + deltaTime;
 
-		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime < 16.f)
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime < 8.f)
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
 
-		else if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime > 16.f)
+		else if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime > 8.f)
+		{
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
+			EffectManager::RemoveEffect(0);
+		}
+
 	}
 
+	if (ECS::GetComponent<PlayerData>(1).TimeSinceHit > 0)
+	{
+		ECS::GetComponent <PlayerData>(1).TimeSinceHit -= deltaTime;
+	}
+	else
+	{
+		ECS::GetComponent<PlayerData>(1).Hit = 1;
+	}
+
+	std::cout << ECS::GetComponent<PlayerData>(1).TimeSinceHit << " " << ECS::GetComponent<PlayerData>(1).Hit << std::endl;
+		
+	
+	//if (!ECS::GetComponent<PlayerData>(1).isSlowed)
+	//	EffectManager::RemoveEffect(0);
 	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
 
 	//Adding the time slow as a proof of concept
@@ -344,7 +362,7 @@ void Game::KeyboardHold()
 	}
 	if (Input::GetKey(Key::A))
 	{
-		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft)
+		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft && ECS::GetComponent<PlayerData>(1).Hit)
 			Klock.MoveLeft(30.f);
 		ECS::GetComponent<PlayerData>(1).facingLeft = 1;
 
@@ -352,7 +370,7 @@ void Game::KeyboardHold()
 	}
 	if (Input::GetKey(Key::D))
 	{
-		if (!ECS::GetComponent<PlayerData>(1).OnWallRight)
+		if (!ECS::GetComponent<PlayerData>(1).OnWallRight && ECS::GetComponent<PlayerData>(1).Hit)
 			Klock.MoveRight(30.f);
 
 		ECS::GetComponent<PlayerData>(1).facingLeft = 0;
@@ -380,8 +398,8 @@ void Game::KeyboardDown()
 	}
 	if (Input::GetKeyDown(Key::S))
 	{
-		if (!Klock.GetIsTouching())
-			Klock.DownMove(999999999999.f);
+		//if (!Klock.GetIsTouching())
+			//Klock.DownMove(999999999999.f);
 	}
 	if (Input::GetKeyDown(Key::R))
 		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = true;
@@ -403,15 +421,13 @@ void Game::KeyboardDown()
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
 			_TimeRestart.play();
 		}
+	if (ECS::GetComponent<PlayerData>(1).isSlowed)
+		EffectManager::CreateEffect(Vignette, BackEnd::GetWindowWidth(), BackEnd::GetWindowHeight());
+	else
+		EffectManager::RemoveEffect(0);
+		
 
-		if (ignoreThis) {
-			EffectManager::CreateEffect(Vignette, BackEnd::GetWindowWidth(), BackEnd::GetWindowHeight());
-			ignoreThis = false;
-		}
-		else {
-			ignoreThis = true;
-			EffectManager::RemoveEffect(0);
-		}
+	
 	}
 
 	m_activeScene->KeyboardDown();

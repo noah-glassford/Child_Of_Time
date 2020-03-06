@@ -5,6 +5,7 @@
 #include "PhysicsTestScene.h"
 #include "Level1Scene.h"
 #include "Level2Scene.h"
+#include "BossFightScene.h"
 #include "CollisionSystem.h"
 #include "MovementSystem.h"
 #include "SoundEngine.h"

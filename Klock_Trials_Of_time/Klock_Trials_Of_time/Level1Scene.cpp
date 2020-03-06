@@ -35,7 +35,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 
 		//Sets up components
 		std::string fileName = "Level1_BG.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 6400, 700);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 6400, 1500);
 		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1000.f, 250.f, 1.f));
 
@@ -130,13 +130,13 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		footSensorFixture->SetUserData((void*)3);
 
 		//Adds a fixture the right side of the body
-		polygonShape.SetAsBox(0.001f, 22.f, b2Vec2(25.f, 0.f), 0);
+		polygonShape.SetAsBox(0.001f, 22.f, b2Vec2(17.6f, 0.f), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* RightSideFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		RightSideFixture->SetUserData((void*)4);
 
 		//Adds a fixture the left side of the body
-		polygonShape.SetAsBox(0.001, 22.f, b2Vec2(-25.f, 0.f), 0);
+		polygonShape.SetAsBox(0.001, 22.f, b2Vec2(-17.6f, 0.f), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* LeftSideFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		LeftSideFixture->SetUserData((void*)5);
@@ -172,7 +172,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(550.f), float32(80.f));
+		tempDef.position.Set(float32(450.f), float32(300.f));
 		tempDef.fixedRotation = true;
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -1200,7 +1200,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		minus8.SetSecPerFrame(0.1f);
 
 		ECS::GetComponent<Transform>(entity).SetPosition(ECS::GetComponent<PhysicsBody>(1).GetPosition().x, ECS::GetComponent<PhysicsBody>(1).GetPosition().y, 99);
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 45, 45, true, &animController);
 
 		//Sets up identifier
 		unsigned int bitHolder = EntityIdentifier::TransformBit() | EntityIdentifier::AnimationBit() | EntityIdentifier::SpriteBit();
@@ -1276,6 +1276,64 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::SetUpIdentifier(entity, bitHolder, "HP UI");
 	}
 #pragma endregion
+	
+#pragma region TutorialSigns
+
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Sets up components
+		std::string fileName = "signmove.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 80, 80);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(200.f, 70.f, 2.f));
+
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
+	}
+	
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Sets up components
+		std::string fileName = "signtime.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 80, 80);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 220.f, 2.f));
+
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
+	}
+
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Sets up components
+		std::string fileName = "timecombat.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 80, 80);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1380.f, 190.f, 2.f));
+
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
+	}
+
+#pragma endregion
 	//Makes the camera focus on the main player
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
@@ -1290,23 +1348,23 @@ void Level1Scene::Update()
 	PlatformMovement();
 
 	//Time slow resource ui for scene 1
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime < 2)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime < 0)
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(0);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 2)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 1)
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(1);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 4)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 2)
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(2);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 6)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 3)
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(3);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 8)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 4)
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(4);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 10)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 5)
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(5);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 12)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 6)
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(6);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 14)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 7)
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(7);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 16)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 8)
 		ECS::GetComponent<AnimationController>(27).SetActiveAnim(8);
 
 	//Updates the HP bar ui

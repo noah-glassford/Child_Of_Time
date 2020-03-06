@@ -28,4 +28,8 @@ public:
 	bool isSlowed;
 	
 	float UsedUpTime{ 0 };
+
+	float TimeSinceHit = 0.f;
+
+	bool Hit{ 0 };
 };
