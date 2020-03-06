@@ -52,7 +52,7 @@ void Game::InitGame()
 	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[3]; //bincht
+	m_activeScene = m_scenes[1]; //bincht
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -435,8 +435,6 @@ void Game::KeyboardUp()
 	if (Input::GetKeyUp(Key::E)) {
 		slowSpamBlock = true;
 	}
-
-	
 
 	m_activeScene->KeyboardUp();
 }
