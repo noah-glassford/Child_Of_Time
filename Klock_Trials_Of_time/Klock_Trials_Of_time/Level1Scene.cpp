@@ -159,7 +159,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		//Sets up components
 		std::string fileName = "Box.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 40, 40);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 98.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 30.f));
 		//ECS::GetComponent<PlayerData>(entity).Health = 3;
 		//Grabs reference to various components
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -172,7 +172,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(450.f), float32(300.f));
+		tempDef.position.Set(float32(600.f), float32(300.f));
 		tempDef.fixedRotation = true;
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -1110,7 +1110,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		vec4 temp = ECS::GetComponent<Camera>(entity).GetOrthoSize();
 		ECS::GetComponent<Camera>(entity).SetWindowSize(vec2(float(windowWidth), float(windowHeight)));
 		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
-		ECS::GetComponent<Camera>(entity).Zoom(-100);
+		ECS::GetComponent<Camera>(entity).Zoom(-60);
 
 		ECS::GetComponent<HorizontalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
 		ECS::GetComponent<HorizontalScroll>(entity).SetOffset(15.f);
@@ -1268,7 +1268,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		minus6.SetRepeating(true);
 		minus6.SetSecPerFrame(0.1f);
 
-		ECS::GetComponent<Transform>(entity).SetPosition(ECS::GetComponent<PhysicsBody>(1).GetPosition().x, ECS::GetComponent<PhysicsBody>(1).GetPosition().y, 99);
+		ECS::GetComponent<Transform>(entity).SetPosition(((ECS::GetComponent<PhysicsBody>(1).GetPosition().x)-1000.f), ((ECS::GetComponent<PhysicsBody>(1).GetPosition().y)-3000.f), 99.f);
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 200, 40, true, &animController);
 
 		//Sets up identifier
@@ -1341,8 +1341,8 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 
 void Level1Scene::Update()
 {
-	ECS::GetComponent<Transform>(27).SetPosition(ECS::GetComponent<HorizontalScroll>(26).GetCam()->GetPosition().x - 140, ECS::GetComponent<VerticalScroll>(26).GetCam()->GetPosition().y + 100, 99);
-	ECS::GetComponent<Transform>(28).SetPosition(ECS::GetComponent<HorizontalScroll>(26).GetCam()->GetPosition().x - 100, ECS::GetComponent<VerticalScroll>(26).GetCam()->GetPosition().y + 150, 99);
+	ECS::GetComponent<Transform>(27).SetPosition(ECS::GetComponent<HorizontalScroll>(26).GetCam()->GetPosition().x + 190, ECS::GetComponent<VerticalScroll>(26).GetCam()->GetPosition().y + 90, 99);
+	ECS::GetComponent<Transform>(28).SetPosition(ECS::GetComponent<HorizontalScroll>(26).GetCam()->GetPosition().x - 120, ECS::GetComponent<VerticalScroll>(26).GetCam()->GetPosition().y + 100, 99);
 
 	KlockAttack();
 	PlatformMovement();

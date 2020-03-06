@@ -38,7 +38,7 @@ Game::~Game()
 void Game::InitGame()
 {
 	//Initializes the backend with window width and height values
-	BackEnd::InitBackEnd(500.f, 500.f);
+	BackEnd::InitBackEnd(1920.f, 1080.f);
 
 	//Grabs the initialized window
 	m_window = BackEnd::GetWindow();
@@ -49,9 +49,10 @@ void Game::InitGame()
 	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene")); //0
 	m_scenes.push_back(new Level1Scene("Level 1 Scene")); //1
 	m_scenes.push_back(new Level2Scene("Level 2 Scene")); //2
+	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[2]; //bincht
+	m_activeScene = m_scenes[3]; //bincht
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -372,6 +373,10 @@ void Game::KeyboardHold()
 
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
 	}
+	if (Input::GetKey(Key::O))
+		ECS::GetComponent<Camera>(26).Zoom(-5);
+	if (Input::GetKey(Key::I))
+		ECS::GetComponent<Camera>(26).Zoom(5);
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->KeyboardHold();
@@ -431,8 +436,7 @@ void Game::KeyboardUp()
 		slowSpamBlock = true;
 	}
 
-	if (Input::GetKeyUp(Key::I))
-		ECS::GetComponent<Camera>(26).Zoom(-50);
+	
 
 	m_activeScene->KeyboardUp();
 }
