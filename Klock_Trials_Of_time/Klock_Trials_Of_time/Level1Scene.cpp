@@ -159,7 +159,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		//Sets up components
 		std::string fileName = "Box.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 40, 40);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 98.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 30.f));
 		//ECS::GetComponent<PlayerData>(entity).Health = 3;
 		//Grabs reference to various components
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -172,7 +172,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(450.f), float32(300.f));
+		tempDef.position.Set(float32(600.f), float32(300.f));
 		tempDef.fixedRotation = true;
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
