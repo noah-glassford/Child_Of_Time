@@ -49,9 +49,10 @@ void Game::InitGame()
 	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene")); //0
 	m_scenes.push_back(new Level1Scene("Level 1 Scene")); //1
 	m_scenes.push_back(new Level2Scene("Level 2 Scene")); //2
+	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[1]; //bincht
+	m_activeScene = m_scenes[3]; //bincht
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
