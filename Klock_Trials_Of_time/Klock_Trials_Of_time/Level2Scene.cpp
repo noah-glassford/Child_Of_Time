@@ -32,7 +32,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "LV2BACK.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 6400, 700);
 		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 1.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 200.f, 1.f));
 
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
@@ -255,5 +255,11 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 
 void Level2Scene::Update()
 {
-	ECS::GetComponent<Transform>(0).SetPositionX(ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x / 8);
+	//background scrolls with the camera
+	ECS::GetComponent<Transform>(0).SetPositionX((ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x / 8) + 2800);
+
+	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().y < -50) {
+		ECS::GetComponent<Transform>(1).SetPositionX(550.f);
+		ECS::GetComponent<Transform>(1).SetPositionY(200.f);
+	}
 }

@@ -1540,6 +1540,10 @@ void Level1Scene::PlatformMovement()
 		ECS::GetComponent<PhysicsBody>(21).GetBody()->SetLinearVelocity(b2Vec2(-platXSpeed * 1.5, 0.f));
 		ECS::GetComponent<PhysicsBody>(22).GetBody()->SetLinearVelocity(b2Vec2(platXSpeed * 1.5, 0.f));
 	}
+	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().y < -50) {
+		ECS::GetComponent<Transform>(1).SetPositionX(550.f);
+		ECS::GetComponent<Transform>(1).SetPositionY(200.f);
+	}
 }
 
 void Level1Scene::KlockAttack()
