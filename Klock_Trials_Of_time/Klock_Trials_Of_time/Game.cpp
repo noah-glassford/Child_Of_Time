@@ -52,7 +52,7 @@ void Game::InitGame()
 	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[1]; //bincht
+	m_activeScene = m_scenes[2]; //bincht
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -395,11 +395,6 @@ void Game::KeyboardDown()
 			Sound2D _jump("jump.wav", "group1");
 			_jump.play();
 		}
-	}
-	if (Input::GetKeyDown(Key::S))
-	{
-		//if (!Klock.GetIsTouching())
-			//Klock.DownMove(999999999999.f);
 	}
 	if (Input::GetKeyDown(Key::R))
 		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = true;
