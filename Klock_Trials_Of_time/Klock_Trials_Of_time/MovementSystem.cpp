@@ -15,15 +15,21 @@ bool MovementSystem::GetIsTouching()
 	return isTouching;
 }
 
-bool MovementSystem::GetOnPlatform()
+bool MovementSystem::GetIsAttacking()
 {
-	return PhysicsBod.onPlatform;
+	return PlData.isAttacking;
 }
+
 
 void MovementSystem::SetBothBodies(int entity)
 {
 	PhysicsBod = ECS::GetComponent<PhysicsBody>(entity);
 	B2Body = PhysicsBod.GetBody();
+}
+
+void MovementSystem::SetPlayerData(int entity)
+{
+	PlData = ECS::GetComponent<PlayerData>(1);
 }
 
 void MovementSystem::SetPhysicsBody(PhysicsBody PhysBod)
@@ -38,7 +44,7 @@ void MovementSystem::SetB2Body(b2Body* body)
 
 void MovementSystem::SetIsTouching()
 {
-	if (PhysicsBod.Grounded == true)
+	if (PlData.Grounded == true)
 		isTouching = true;
 	else
 		isTouching = false;
@@ -49,21 +55,28 @@ void MovementSystem::SetIsTouching(bool touching)
 	isTouching = touching;
 }
 
-void MovementSystem::SetOnPlatform(bool onPlat)
+void MovementSystem::SetIsAttacking(bool Attacking)
 {
-	PhysicsBod.onPlatform = onPlat;
+	PlData.isAttacking = Attacking;
 }
+
 
 
 
 void MovementSystem::MoveLeft(float Force)
-{
-	PhysicsBod.ApplyForce(vec3(-Force, 0, 0));
+{	
+	//PhysicsBod.ApplyForce(vec3(-Force * deltaTime, 0, 0));
+	b2Vec2 velo = B2Body->GetLinearVelocity();
+	velo.x = -Force;
+	B2Body->SetLinearVelocity(velo);
 }
 
 void MovementSystem::MoveRight(float Force)
 {
-	PhysicsBod.ApplyForce(vec3(Force, 0, 0));
+	//PhysicsBod.ApplyForce(vec3(Force * deltaTime, 0, 0));
+	b2Vec2 velo = B2Body->GetLinearVelocity();
+	velo.x = Force;
+	B2Body->SetLinearVelocity(velo);
 }
 
 void MovementSystem::Jump(float Force)

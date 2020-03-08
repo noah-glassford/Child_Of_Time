@@ -168,6 +168,18 @@
     <ClInclude Include="MovementSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Level2Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BossFightScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationController.cpp">
@@ -321,6 +333,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MovementSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Level2Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BossFightScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

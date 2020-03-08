@@ -2,6 +2,17 @@
 
 #include <random>
 
+//Yo can I just put a bool here for it to be global lmao
+//Fuck it float here too this is probably bad but I don't care
+//Both of these are used for the time slowing stuff because they are used in multiple functions in game.cpp
+//so I just said fuck it and made them global
+int Frames;
+
+bool direction{ 0 }; //1 for right, 0 for left
+
+bool slowSpamBlock = true;
+bool ignoreThis = true;
+
 Game::~Game()
 {
 	//If window isn't equal to nullptr
@@ -27,7 +38,7 @@ Game::~Game()
 void Game::InitGame()
 {
 	//Initializes the backend with window width and height values
-	BackEnd::InitBackEnd(1280.f, 720.f);
+	BackEnd::InitBackEnd(1920.f, 1080.f);
 
 	//Grabs the initialized window
 	m_window = BackEnd::GetWindow();
@@ -35,13 +46,13 @@ void Game::InitGame()
 	//Creates a new scene.
 	//Replace this with your own scene.
 
-	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene"));
-	m_scenes.push_back(new Level1Scene("Level 1 Scene"));
-	m_scenes.push_back(new Level1Scene("Chad poggers"));
-	//m_scenes.push_back(new Level1Scene("Level 1 Scene"));
+	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene")); //0
+	m_scenes.push_back(new Level1Scene("Level 1 Scene")); //1
+	m_scenes.push_back(new Level2Scene("Level 2 Scene")); //2
+	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
-		//Sets active scene reference to our scene
-	m_activeScene = m_scenes[1];
+	//Sets active scene reference to our scene
+	m_activeScene = m_scenes[1]; //bincht
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -52,6 +63,9 @@ void Game::InitGame()
 	BackEnd::SetWindowName(m_activeScene->GetName());
 
 	PhysicsSystem::Init();
+
+	//initialise all the sound
+	SoundManager::init("./Assets/Sounds/");
 }
 
 bool Game::Run()
@@ -98,49 +112,80 @@ void Game::Update()
 	//Update Physics System
 	PhysicsSystem::Update(m_register, m_activeScene->GetPhysicsWorld());
 
-	//Updates the active scene
-	m_activeScene->Update();
+	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
+	unsigned int mainp = EntityIdentifier::MainPlayer();
 
-	
+	if (ECS::GetComponent<PlayerData>(mainp).UsedUpTime > 0 && !ECS::GetComponent<PlayerData>(1).isSlowed)
+		ECS::GetComponent<PlayerData>(mainp).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime - deltaTime * 2;
 
+	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed) {
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime <= 8.f)
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime + deltaTime;
 
-	
-	
-	
-	ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(100.f,0.f));
-	
-	if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x > 100.f)
-	{
-		ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(0, 0));
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime < 8.f)
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
 
+		else if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime > 8.f)
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
+			EffectManager::RemoveEffect(0);
+		}
 	}
+
+	if (ECS::GetComponent<PlayerData>(1).TimeSinceHit > 0)
+	{
+		ECS::GetComponent <PlayerData>(1).TimeSinceHit -= deltaTime;
+	}
+	else
+	{
+		ECS::GetComponent<PlayerData>(1).Hit = 1;
+	}
+
+	std::cout << 1 / deltaTime << std::endl;
 	
+	
+	//if (!ECS::GetComponent<PlayerData>(1).isSlowed)
+	//	EffectManager::RemoveEffect(0);
+	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
+
+	//Adding the time slow as a proof of concept
+
+	//Used to set direction
+	/*
+	if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x > 800)
+		direction = 0;
+	else if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x < 400)
+		direction = 1;
+
+	//std::cout << ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x << std::endl;
+	//Anything that can be affected by the time controls is done in this if statement
+	if (!isSlowed)
+	{
+		if (direction)
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(50.f, 0.f));
+		if (!direction)
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(-50.f, 0.f));
+	}
+	else if (isSlowed)
+	{
+		if (direction)
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(10.f, 0.f));
+		if (!direction)
+			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(-10.f, 0.f));
+	}
+	*/
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//     a.i     testing
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*
-	All this stuff will be changed soon
-	auto& AIBodDefault = ECS::GetComponent<PhysicsBody>(2);
-	auto& AIBodSprinter = ECS::GetComponent<PhysicsBody>(3);
+		if (ECS::GetComponent<PhysicsBody>(6).GetBody()->GetPosition().y < 50)
+			ECS::GetComponent<PhysicsBody>(6).GetBody()->SetLinearVelocity(b2Vec2(0.f, 5.f));
 
-	float distance1 = AIBodDefault.GetPosition().x - playerBod.GetPosition().x;
-	float distance2 = AIBodSprinter.GetPosition().x - playerBod.GetPosition().x;
+		else if (ECS::GetComponent<PhysicsBody>(6).GetBody()->GetPosition().y > 400)
+			ECS::GetComponent<PhysicsBody>(6).GetBody()->SetLinearVelocity(b2Vec2(-50.f, 0.f));
+			*/
 
-	//default enemy
-	if (distance1 < 165 && distance1 > -165) {
-		if (distance1 > 40)
-			AIBodDefault.ApplyForce(vec3(-89999.f, 0.f, 0.f));
-		if (distance1 < -40)
-			AIBodDefault.ApplyForce(vec3(89999.f, 0.f, 0.f));
-	}
-	//sprinter enemy
-	if (distance2 < 120 && distance2 > -120) {
-		if (distance2 > 0)
-			AIBodSprinter.ApplyForce(vec3(-150000.f, 0.f, 0.f));
-		if (distance2 < 0)
-			AIBodSprinter.ApplyForce(vec3(150000.f, 0.f, 0.f));
-	}
-	*/
+	m_activeScene->Update();
 }
 
 void Game::GUI()
@@ -213,8 +258,18 @@ void Game::GamepadInput()
 
 void Game::GamepadStroke(XInputController* con)
 {
+	MovementSystem Klock;;
+	Klock.SetBothBodies(1);
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
+	if (con->IsButtonStroked(Buttons::RB)) //Combat
+	{
+		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = true;
+		std::cout << "bruh";
+	}
+	else
+		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = false;
+
 	m_activeScene->GamepadStroke(con);
 }
 
@@ -223,13 +278,58 @@ void Game::GamepadUp(XInputController* con)
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->GamepadUp(con);
+	if (con->IsButtonReleased(Buttons::X))
+		slowSpamBlock = true;
 }
 
 void Game::GamepadDown(XInputController* con)
 {
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
+	MovementSystem Klock;
+	Klock.SetBothBodies(1);
+
+	if (con->IsButtonPressed(Buttons::DPAD_RIGHT))
+	{
+		if (!ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).OnWallRight)
+			Klock.MoveRight(30.f);
+
+		ECS::GetComponent<AnimationController>(EntityIdentifier::MainPlayer()).SetActiveAnim(0);
+	}
+	if (con->IsButtonPressed(Buttons::DPAD_LEFT))
+	{
+		if (!ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).OnWallLeft)
+			Klock.MoveLeft(30.f);
+
+		ECS::GetComponent<AnimationController>(EntityIdentifier::MainPlayer()).SetActiveAnim(1);
+	}
+
+	if (con->IsButtonPressed(Buttons::A))
+	{
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Grounded) {
+			Klock.Jump(520000.f);
+			Sound2D _jump("jump.wav", "group1");
+			_jump.play();
+		}
+	}
 	m_activeScene->GamepadDown(con);
+
+	if (con->IsButtonPressed(Buttons::X) && slowSpamBlock)
+	{
+		slowSpamBlock = false;
+		Sound2D _TimeStop("timestop.wav", "group1");
+		Sound2D _TimeRestart("timeresume.wav", "group1");
+
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed == false)
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
+			_TimeStop.play();
+		}
+		else {
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
+			_TimeRestart.play();
+		}
+	}
 }
 
 void Game::GamepadStick(XInputController* con)
@@ -248,9 +348,11 @@ void Game::GamepadTrigger(XInputController* con)
 
 void Game::KeyboardHold()
 {
+	//Make sure that the player is always entity 1
+
 	MovementSystem Klock; //Handles all the movement functions for Klock
-	Klock.SetBothBodies(1);
-	
+	Klock.SetBothBodies(EntityIdentifier::MainPlayer());
+
 	Klock.SetIsTouching(); //Klock specific contact updating
 
 	if (Input::GetKey(Key::S))
@@ -259,24 +361,25 @@ void Game::KeyboardHold()
 	}
 	if (Input::GetKey(Key::A))
 	{
-		if (Klock.GetIsTouching())
-		{
-			Klock.MoveLeft(98000.f);
-		}
-		else
-		{
-			Klock.MoveLeft(16000.f);
-		}
+		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft&& ECS::GetComponent<PlayerData>(1).Hit)
+			Klock.MoveLeft(30.f);
+		ECS::GetComponent<PlayerData>(1).facingLeft = 1;
 
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
 	}
 	if (Input::GetKey(Key::D))
 	{
-		if (Klock.GetIsTouching())
-			Klock.MoveRight(98000.f);
-		else
-			Klock.MoveRight(16000.f);
-	}
+		if (!ECS::GetComponent<PlayerData>(1).OnWallRight&& ECS::GetComponent<PlayerData>(1).Hit)
+			Klock.MoveRight(30.f);
 
+		ECS::GetComponent<PlayerData>(1).facingLeft = 0;
+
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
+	}
+	if (Input::GetKey(Key::O))
+		ECS::GetComponent<Camera>(26).Zoom(-5);
+	if (Input::GetKey(Key::I))
+		ECS::GetComponent<Camera>(26).Zoom(5);
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->KeyboardHold();
@@ -285,19 +388,41 @@ void Game::KeyboardHold()
 void Game::KeyboardDown()
 {
 	MovementSystem Klock;
-	Klock.SetBothBodies(1);
-	
-	Klock.SetIsTouching();//Updates the isTouching
+	Klock.SetBothBodies(EntityIdentifier::MainPlayer());
 
 	if (Input::GetKeyDown(Key::W))
 	{
-		if (Klock.GetIsTouching())
-			Klock.Jump(4300000.f);
+		if (ECS::GetComponent<PlayerData>(1).Grounded)
+		{
+			Klock.Jump(3000000.f);
+			Sound2D _jump("jump.wav", "group1");
+			_jump.play();
+		}
 	}
-	if (Input::GetKeyDown(Key::S))
+	if (Input::GetKeyDown(Key::R))
+		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = true;
+	else
+		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = false;
+
+	if (Input::GetKeyDown(Key::E) && slowSpamBlock)
 	{
-		if (!Klock.GetIsTouching())
-			Klock.DownMove(999999999999.f);
+		slowSpamBlock = false;
+		Sound2D _TimeStop("timestop.wav", "group1");
+		Sound2D _TimeRestart("timeresume.wav", "group1");
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed == false)
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
+			_TimeStop.play();
+		}
+		else
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
+			_TimeRestart.play();
+		}
+		if (ECS::GetComponent<PlayerData>(1).isSlowed)
+			EffectManager::CreateEffect(Vignette, BackEnd::GetWindowWidth(), BackEnd::GetWindowHeight());
+		else
+			EffectManager::RemoveEffect(0);
 	}
 
 	m_activeScene->KeyboardDown();
@@ -305,6 +430,10 @@ void Game::KeyboardDown()
 
 void Game::KeyboardUp()
 {
+	if (Input::GetKeyUp(Key::E)) {
+		slowSpamBlock = true;
+	}
+
 	m_activeScene->KeyboardUp();
 }
 

@@ -4,11 +4,16 @@
 #include "BackEnd.h"
 #include "PhysicsTestScene.h"
 #include "Level1Scene.h"
+#include "Level2Scene.h"
+#include "BossFightScene.h"
 #include "CollisionSystem.h"
 #include "MovementSystem.h"
+#include "SoundEngine.h"
+
+
 
 //Our main class for running our game
-class Game
+class Game : public Timer
 {
 public:
 	//Empty constructor
@@ -24,7 +29,8 @@ public:
 	//*Initializes GLEW
 	//*Create Main Camera Entity
 	//*Creates all other entities and adds them to register
-	void InitGame();
+	void InitGame
+	();
 
 	//Runs the game
 	//*While window is open
@@ -67,6 +73,7 @@ public:
 	void MouseMotion(SDL_MouseMotionEvent evnt);
 	void MouseClick(SDL_MouseButtonEvent evnt);
 	void MouseWheel(SDL_MouseWheelEvent evnt);
+
 private:
 	//The window
 	Window *m_window = nullptr;
