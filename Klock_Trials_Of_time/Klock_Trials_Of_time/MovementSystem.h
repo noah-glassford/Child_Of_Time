@@ -1,25 +1,27 @@
 #pragma once
-#include "PhysicsBody.h"
+
 #include "ECS.h"
+#include "Timer.h"
 /*
 This class is likely useless, if it is I'll just get rid of it later, but I want to try to see if I can clean everything up a bit
 Im sorta just creating one class that handles all the data required for movement to simplify moving stuff
 */
-class MovementSystem //Create an object of this class in game.cpp for every object that will be moving, EX: MovementSystem Klock; for klock movement
+class MovementSystem : public Timer //Create an object of this class in game.cpp for every object that will be moving, EX: MovementSystem Klock; for klock movement
 {
 public:
 	//Getters and Setters
 	PhysicsBody GetPhysicsBody();
 	b2Body* GetB2Body();
 	bool GetIsTouching();
-	bool GetOnPlatform();//Returns the bool for if klock is on the platform
+	bool GetIsAttacking();
 	
 	void SetBothBodies(int entity);//Sets the ECS physicsbody, and then also automatically sets the b2body to be the same
+	void SetPlayerData(int entity);//Sets the ECS playerdata for other stuff
 	void SetPhysicsBody(PhysicsBody PhysBod);
 	void SetB2Body(b2Body* body);
 	void SetIsTouching();//Specifically made for klock foot sensor
 	void SetIsTouching(bool touching);//Overloaded function for other things
-	void SetOnPlatform(bool onPlat); //Sets the ECS physicsbody onPlatform variable to make life easier
+	void SetIsAttacking(bool attacking);
 
 	//Member Function aka actual movement
 	void MoveLeft(float Force);//Uses apply force to move the object left
@@ -31,10 +33,14 @@ public:
 	void TeleportMovementUp(float velocity);
 	void TeleportMovementDown(float velocity);
 
+	
 
 private:
 	PhysicsBody PhysicsBod; //The framework physicsbody
 	b2Body* B2Body; //Box2D body
+	PlayerData PlData;
 	bool isTouching;
+	bool isAttacking;
+
 
 };

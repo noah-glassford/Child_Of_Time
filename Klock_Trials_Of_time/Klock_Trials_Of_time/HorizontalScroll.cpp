@@ -24,6 +24,8 @@ void HorizontalScroll::Update()
 
 		//Adjust the camera
 		m_cam->SetPosition(vec3(m_cam->GetPosition().x + difference, m_cam->GetPosition().y, m_cam->GetPosition().z));
+
+
 	}
 }
 
