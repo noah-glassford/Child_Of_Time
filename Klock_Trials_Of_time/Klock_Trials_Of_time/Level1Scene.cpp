@@ -1386,6 +1386,10 @@ void Level1Scene::Update()
 	case 6: ECS::GetComponent<AnimationController>(28).SetActiveAnim(0);
 		break;
 	}
+
+	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().y < -50 && ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x < 3150)
+		ECS::GetComponent<PhysicsBody>(1).GetBody()->SetTransform(b2Vec2(550, 200), 0);
+
 	/*
 	if (ECS::GetComponent<PlayerData>(1).Health == 6)
 		ECS::GetComponent<AnimationController>(28).SetActiveAnim(0);
@@ -1539,10 +1543,6 @@ void Level1Scene::PlatformMovement()
 		ECS::GetComponent<PhysicsBody>(20).GetBody()->SetLinearVelocity(b2Vec2(platXSpeed * 1.5, 0.f));
 		ECS::GetComponent<PhysicsBody>(21).GetBody()->SetLinearVelocity(b2Vec2(-platXSpeed * 1.5, 0.f));
 		ECS::GetComponent<PhysicsBody>(22).GetBody()->SetLinearVelocity(b2Vec2(platXSpeed * 1.5, 0.f));
-	}
-	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().y < -50) {
-		ECS::GetComponent<PhysicsBody>(1).GetBody()->SetTransform(b2Vec2(550, 200),0);
-		//ECS::GetComponent<Transform>(1).SetPositionY(200.f);
 	}
 }
 
