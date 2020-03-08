@@ -1,5 +1,8 @@
 #include "Level2Scene.h"
-#include <random>
+
+float platAcc;
+
+float plat4MoveSpeed = 10;
 
 Level2Scene::Level2Scene(std::string name)
 {
@@ -104,7 +107,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(-75.f), float32(150.f));
+		tempDef.position.Set(float32(0.f), float32(150.f));
 		tempDef.fixedRotation = true;
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -155,7 +158,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		vec4 temp = ECS::GetComponent<Camera>(entity).GetOrthoSize();
 		ECS::GetComponent<Camera>(entity).SetWindowSize(vec2(float(windowWidth), float(windowHeight)));
 		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
-		ECS::GetComponent<Camera>(entity).Zoom(-100);
+		ECS::GetComponent<Camera>(entity).Zoom(-125);
 
 		ECS::GetComponent<HorizontalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
 		ECS::GetComponent<HorizontalScroll>(entity).SetOffset(15.f);
@@ -179,8 +182,8 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<PhysicsBody>(entity);
 
 		//Sets up components
-		std::string fileName = "Level1_Platform.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 200, 100);
+		std::string fileName = "2_plat1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 50);
 		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(20.f, 0.f, 50.f));
 
@@ -200,7 +203,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
-		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 28), float(tempSpr.GetHeight() - 12),
 			vec2(0.f, 0.f), false, 1.5f);
 
 		//Sets up the Identifier
@@ -219,8 +222,8 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<PhysicsBody>(entity);
 
 		//Sets up components
-		std::string fileName = "Level1_Platform.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 50);
+		std::string fileName = "2_plat1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 50, 20);
 		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 50.f));
 
@@ -236,7 +239,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_kinematicBody;
-		tempDef.position.Set(float32(200.f), float32(0.f));
+		tempDef.position.Set(float32(125.f), float32(100.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -258,8 +261,18 @@ void Level2Scene::Update()
 	//background scrolls with the camera
 	ECS::GetComponent<Transform>(0).SetPositionX((ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x / 8) + 2800);
 
+	//respawn mechanic
 	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().y < -50) {
-		ECS::GetComponent<Transform>(1).SetPositionX(550.f);
-		ECS::GetComponent<Transform>(1).SetPositionY(200.f);
+		ECS::GetComponent<PhysicsBody>(1).GetBody()->SetTransform(b2Vec2(0, 150), 0);
+		ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
 	}
+	//slowed down time check
+	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed&& platAcc > 0.f)
+		platAcc -= 0.0035f;
+	else if (!ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed&& platAcc < 1.f) platAcc += 0.02f;
+
+	//platform 4 movements
+	if (ECS::GetComponent<PhysicsBody>(4).GetBody()->GetPosition().y < 0 || ECS::GetComponent<PhysicsBody>(4).GetBody()->GetPosition().y > 150)
+		plat4MoveSpeed = -plat4MoveSpeed;
+	ECS::GetComponent<PhysicsBody>(4).GetBody()->SetLinearVelocity(b2Vec2(0.f, plat4MoveSpeed * platAcc));
 }
