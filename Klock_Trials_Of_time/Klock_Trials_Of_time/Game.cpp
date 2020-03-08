@@ -52,7 +52,7 @@ void Game::InitGame()
 	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[2]; //bincht
+	m_activeScene = m_scenes[1]; //bincht
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -141,7 +141,15 @@ void Game::Update()
 		ECS::GetComponent<PlayerData>(1).Hit = 1;
 	}
 
-	std::cout << 1 / deltaTime << std::endl;
+	if (ECS::GetComponent<PlayerData>(mainp).TimeSinceAtt > 0)
+	{
+		ECS::GetComponent<PlayerData>(mainp).TimeSinceAtt -= deltaTime;
+		ECS::GetComponent<PlayerData>(mainp).CanAttack = 0;
+	}
+	else
+		ECS::GetComponent<PlayerData>(mainp).CanAttack = 1;
+	
+	//std::cout << 1 / deltaTime << std::endl;
 	
 	
 	//if (!ECS::GetComponent<PlayerData>(1).isSlowed)
@@ -399,7 +407,7 @@ void Game::KeyboardDown()
 			_jump.play();
 		}
 	}
-	if (Input::GetKeyDown(Key::R))
+	if (Input::GetKeyDown(Key::R) && ECS::GetComponent<PlayerData>(1).CanAttack)
 		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = true;
 	else
 		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = false;
