@@ -141,6 +141,9 @@ void Game::Update()
 		ECS::GetComponent<PlayerData>(1).Hit = 1;
 	}
 
+	std::cout << 1 / deltaTime << std::endl;
+	
+	
 	//if (!ECS::GetComponent<PlayerData>(1).isSlowed)
 	//	EffectManager::RemoveEffect(0);
 	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
