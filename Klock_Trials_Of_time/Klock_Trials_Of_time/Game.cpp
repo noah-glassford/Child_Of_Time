@@ -49,9 +49,10 @@ void Game::InitGame()
 	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene")); //0
 	m_scenes.push_back(new Level1Scene("Level 1 Scene")); //1
 	m_scenes.push_back(new Level2Scene("Level 2 Scene")); //2
+	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[1]; //bincht
+	m_activeScene = m_scenes[2]; //bincht
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -118,7 +119,6 @@ void Game::Update()
 		ECS::GetComponent<PlayerData>(mainp).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime - deltaTime * 2;
 
 	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed) {
-		std::cout << ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime << '\n';
 		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime <= 8.f)
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime + deltaTime;
 
@@ -130,7 +130,6 @@ void Game::Update()
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
 			EffectManager::RemoveEffect(0);
 		}
-
 	}
 
 	if (ECS::GetComponent<PlayerData>(1).TimeSinceHit > 0)
@@ -142,8 +141,8 @@ void Game::Update()
 		ECS::GetComponent<PlayerData>(1).Hit = 1;
 	}
 
-	std::cout << ECS::GetComponent<PlayerData>(1).TimeSinceHit << " " << ECS::GetComponent<PlayerData>(1).Hit << std::endl;
-		
+	std::cout << 1 / deltaTime << std::endl;
+	
 	
 	//if (!ECS::GetComponent<PlayerData>(1).isSlowed)
 	//	EffectManager::RemoveEffect(0);
@@ -362,7 +361,7 @@ void Game::KeyboardHold()
 	}
 	if (Input::GetKey(Key::A))
 	{
-		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft && ECS::GetComponent<PlayerData>(1).Hit)
+		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft&& ECS::GetComponent<PlayerData>(1).Hit)
 			Klock.MoveLeft(30.f);
 		ECS::GetComponent<PlayerData>(1).facingLeft = 1;
 
@@ -370,7 +369,7 @@ void Game::KeyboardHold()
 	}
 	if (Input::GetKey(Key::D))
 	{
-		if (!ECS::GetComponent<PlayerData>(1).OnWallRight && ECS::GetComponent<PlayerData>(1).Hit)
+		if (!ECS::GetComponent<PlayerData>(1).OnWallRight&& ECS::GetComponent<PlayerData>(1).Hit)
 			Klock.MoveRight(30.f);
 
 		ECS::GetComponent<PlayerData>(1).facingLeft = 0;
@@ -400,11 +399,6 @@ void Game::KeyboardDown()
 			_jump.play();
 		}
 	}
-	if (Input::GetKeyDown(Key::S))
-	{
-		//if (!Klock.GetIsTouching())
-			//Klock.DownMove(999999999999.f);
-	}
 	if (Input::GetKeyDown(Key::R))
 		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = true;
 	else
@@ -425,13 +419,10 @@ void Game::KeyboardDown()
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
 			_TimeRestart.play();
 		}
-	if (ECS::GetComponent<PlayerData>(1).isSlowed)
-		EffectManager::CreateEffect(Vignette, BackEnd::GetWindowWidth(), BackEnd::GetWindowHeight());
-	else
-		EffectManager::RemoveEffect(0);
-		
-
-	
+		if (ECS::GetComponent<PlayerData>(1).isSlowed)
+			EffectManager::CreateEffect(Vignette, BackEnd::GetWindowWidth(), BackEnd::GetWindowHeight());
+		else
+			EffectManager::RemoveEffect(0);
 	}
 
 	m_activeScene->KeyboardDown();
@@ -442,8 +433,6 @@ void Game::KeyboardUp()
 	if (Input::GetKeyUp(Key::E)) {
 		slowSpamBlock = true;
 	}
-
-	
 
 	m_activeScene->KeyboardUp();
 }

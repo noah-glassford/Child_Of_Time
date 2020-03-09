@@ -1268,7 +1268,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		minus6.SetRepeating(true);
 		minus6.SetSecPerFrame(0.1f);
 
-		ECS::GetComponent<Transform>(entity).SetPosition(((ECS::GetComponent<PhysicsBody>(1).GetPosition().x)-1000.f), ((ECS::GetComponent<PhysicsBody>(1).GetPosition().y)-3000.f), 99.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(((ECS::GetComponent<PhysicsBody>(1).GetPosition().x) - 1000.f), ((ECS::GetComponent<PhysicsBody>(1).GetPosition().y) - 3000.f), 99.f);
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 200, 40, true, &animController);
 
 		//Sets up identifier
@@ -1276,7 +1276,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::SetUpIdentifier(entity, bitHolder, "HP UI");
 	}
 #pragma endregion
-	
+
 #pragma region TutorialSigns
 
 	{
@@ -1296,7 +1296,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
 	}
-	
+
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -1386,6 +1386,10 @@ void Level1Scene::Update()
 	case 6: ECS::GetComponent<AnimationController>(28).SetActiveAnim(0);
 		break;
 	}
+
+	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().y < -50 && ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x < 3150)
+		ECS::GetComponent<PhysicsBody>(1).GetBody()->SetTransform(b2Vec2(550, 200), 0);
+
 	/*
 	if (ECS::GetComponent<PlayerData>(1).Health == 6)
 		ECS::GetComponent<AnimationController>(28).SetActiveAnim(0);
@@ -1410,6 +1414,8 @@ void Level1Scene::Update()
 
 void Level1Scene::PlatformMovement()
 {
+	ECS::GetComponent<Transform>(0).SetPositionX(ECS::GetComponent<HorizontalScroll>(26).GetCam()->GetPosition().x / 5);
+
 	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed) {
 		if (ECS::GetComponent<PhysicsBody>(6).GetPosition().y > 120)
 			platformBSpeed = -2.5f;
