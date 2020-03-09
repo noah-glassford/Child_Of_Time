@@ -21,7 +21,9 @@ public:
 
 	int Health{ 3 };
 
-	int framesSinceAtt{ 0 };
+	float TimeSinceAtt{ 0 };
+
+	bool CanAttack = 1;
 
 	bool facingLeft{ 0 };
 

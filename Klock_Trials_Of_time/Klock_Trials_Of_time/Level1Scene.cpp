@@ -1550,6 +1550,10 @@ void Level1Scene::KlockAttack()
 {
 	if (ECS::GetComponent<PlayerData>(1).isAttacking)
 	{
+		std::cout << "BRUH";
+		
+		createdint = 1;
+		
 		auto entity = ECS::CreateEntity();
 		tempent = entity;
 		//std::cout << entity << " " << tempent;
@@ -1603,21 +1607,15 @@ void Level1Scene::KlockAttack()
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "da hitbox");
 		std::cout << entity << "\n" << tempent << "\n";
-
-		ECS::GetComponent<PlayerData>(1).framesSinceAtt = 1;
 	}
-
-	if (ECS::GetComponent<PlayerData>(1).framesSinceAtt > 0 && ECS::GetComponent<PlayerData>(1).framesSinceAtt < 20)
-	{
-		ECS::GetComponent<PlayerData>(1).framesSinceAtt++;
-		//std::cout << ECS::GetComponent<PlayerData>(1).framesSinceAtt;
-	}
-	else if (ECS::GetComponent<PlayerData>(1).framesSinceAtt == 20)
+	else if (ECS::GetComponent<PlayerData>(1).TimeSinceAtt <= 0 && createdint == 1)
 	{
 		ECS::DestroyEntity(tempent);
-		//std::cout << "Destroyed ent";
-		ECS::GetComponent<PlayerData>(1).framesSinceAtt = 0;
+		std::cout << "Destroyed ent";
+		ECS::GetComponent<PlayerData>(1).TimeSinceAtt = 0.2f;
+		createdint = 0;
 	}
+	
 
 	//kills enemy
 	if (ECS::GetComponent<PlayerData>(2).Health == 0 && tempbool == true)
