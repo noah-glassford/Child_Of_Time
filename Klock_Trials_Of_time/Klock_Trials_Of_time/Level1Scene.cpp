@@ -18,6 +18,9 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 	//Allocates Register
 	m_sceneReg = new entt::registry;
 
+	Sound2D _Song("NeverMeant.wav", "group1");
+	_Song.play();
+
 	//Attach the Register
 	ECS::AttachRegister(m_sceneReg);
 
