@@ -111,7 +111,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(550.f), float32(220.f));
+		tempDef.position.Set(float32(220.f), float32(120.f));
 		tempDef.fixedRotation = true;
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -175,7 +175,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(600.f), float32(300.f));
+		tempDef.position.Set(float32(1380.f), float32(200.f));
 		tempDef.fixedRotation = true;
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
