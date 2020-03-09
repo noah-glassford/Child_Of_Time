@@ -303,7 +303,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 
 		//Sets up components
 		std::string fileName = "2_plat3.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 50, 200);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 50, 160);
 		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 50.f));
 
@@ -319,7 +319,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_kinematicBody;
-		tempDef.position.Set(float32(350.f), float32(475.f));
+		tempDef.position.Set(float32(350.f), float32(400.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -776,7 +776,7 @@ void Level2Scene::Update()
 	}
 	//slowed down time check
 	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed&& platAcc > 0.1f)
-		platAcc -= 0.008f;
+		platAcc -= 0.015f;
 	else if (!ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed&& platAcc < 1.f) platAcc += 0.02f;
 
 	//platform 4 movements
@@ -786,8 +786,8 @@ void Level2Scene::Update()
 
 	//entity 6 door close
 	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x > 235 && ECS::GetComponent<PhysicsBody>(6).GetBody()->GetPosition().y > 250)
-		plat6MoveSpeed = -120.f;
-	else if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x < 235 && ECS::GetComponent<PhysicsBody>(6).GetBody()->GetPosition().y < 475)
+		plat6MoveSpeed = -60.f;
+	else if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x < 235 && ECS::GetComponent<PhysicsBody>(6).GetBody()->GetPosition().y < 400)
 		plat6MoveSpeed = 30.f;
 	else
 		plat6MoveSpeed = 0.f;
