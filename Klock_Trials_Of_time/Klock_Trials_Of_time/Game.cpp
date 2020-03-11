@@ -43,6 +43,11 @@ void Game::InitGame()
 	//Grabs the initialized window
 	m_window = BackEnd::GetWindow();
 
+	//initialise all the sound
+	SoundManager::init("./Assets/Sounds/");
+
+
+
 	//Creates a new scene.
 	//Replace this with your own scene.
 
@@ -64,8 +69,8 @@ void Game::InitGame()
 
 	PhysicsSystem::Init();
 
-	//initialise all the sound
-	SoundManager::init("./Assets/Sounds/");
+
+
 }
 
 bool Game::Run()
@@ -405,6 +410,7 @@ void Game::KeyboardDown()
 			Klock.Jump(3000000.f);
 			Sound2D _jump("jump.wav", "group1");
 			_jump.play();
+
 		}
 	}
 	if (Input::GetKeyDown(Key::R) && ECS::GetComponent<PlayerData>(1).CanAttack)
