@@ -1593,9 +1593,9 @@ void Level1Scene::KlockAttack()
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
 		if (ECS::GetComponent<PlayerData>(1).facingLeft)
-			polygonShape.SetAsBox(20.f, 20.f, b2Vec2(-45.f, 0.f), 0);
+			polygonShape.SetAsBox(20.f, 20.f, b2Vec2(-25.f, 0.f), 0);
 		else
-			polygonShape.SetAsBox(20.f, 20.f, b2Vec2(45.f, 0.f), 0);
+			polygonShape.SetAsBox(20.f, 20.f, b2Vec2(25.f, 0.f), 0);
 
 		myFixtureDef.shape = &polygonShape;
 		myFixtureDef.density = 0;
