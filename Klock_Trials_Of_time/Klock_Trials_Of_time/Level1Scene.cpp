@@ -146,41 +146,44 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::SetUpIdentifier(entity, bitHolder, "Klock");
 	}
 	//main camera entity, follows the player, core entity #2
-	{//Creates camera entity
-		auto entity = ECS::CreateEntity();
-		EntityIdentifier::MainCamera(entity);
+	{
+	//Creates camera entity, entity 2
+	auto entity = ECS::CreateEntity();
+	EntityIdentifier::MainCamera(entity);
 
-		//Creates new orthographic camera
-		ECS::AttachComponent<Camera>(entity);
-		ECS::AttachComponent<HorizontalScroll>(entity);
-		ECS::AttachComponent<VerticalScroll>(entity);
-		ECS::AttachComponent<Transform>(entity);
+	//Creates new orthographic camera
+	ECS::AttachComponent<Camera>(entity);
+	ECS::AttachComponent<HorizontalScroll>(entity);
+	ECS::AttachComponent<VerticalScroll>(entity);
+	ECS::AttachComponent<Transform>(entity);
 
-		vec4 temp = ECS::GetComponent<Camera>(entity).GetOrthoSize();
-		ECS::GetComponent<Camera>(entity).SetWindowSize(vec2(float(windowWidth), float(windowHeight)));
-		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
-		ECS::GetComponent<Camera>(entity).Zoom(-60);
+	vec4 temp = ECS::GetComponent<Camera>(entity).GetOrthoSize();
+	ECS::GetComponent<Camera>(entity).SetWindowSize(vec2(float(windowWidth), float(windowHeight)));
+	ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
+	ECS::GetComponent<Camera>(entity).Zoom(-125);
 
-		ECS::GetComponent<HorizontalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
-		ECS::GetComponent<HorizontalScroll>(entity).SetOffset(15.f);
-		ECS::GetComponent<VerticalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
-		ECS::GetComponent<VerticalScroll>(entity).SetOffset(15.f);
+	ECS::GetComponent<HorizontalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
+	ECS::GetComponent<HorizontalScroll>(entity).SetOffset(15.f);
+	ECS::GetComponent<VerticalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
+	ECS::GetComponent<VerticalScroll>(entity).SetOffset(15.f);
 
-		//Sets up identifier
-		unsigned int bitHolder = EntityIdentifier::HoriScrollCameraBit() | EntityIdentifier::VertScrollCameraBit() | EntityIdentifier::CameraBit() | EntityIdentifier::TransformBit();
-		ECS::SetUpIdentifier(entity, bitHolder, "Main Scrolling Camera");
-		ECS::SetIsMainCamera(entity, true);
+	//Sets up identifier
+	unsigned int bitHolder = EntityIdentifier::HoriScrollCameraBit() | EntityIdentifier::VertScrollCameraBit() | EntityIdentifier::CameraBit() | EntityIdentifier::TransformBit();
+	ECS::SetUpIdentifier(entity, bitHolder, "Main Scrolling Camera");
+	ECS::SetIsMainCamera(entity, true);
 	}
 #pragma endregion
+	//Makes the camera focus on the main player
+	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
+	ECS::GetComponent<VerticalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
+
 }
 
 void Level1Scene::Update()
 {
 	PlatformMovement();
 
-	//Makes the camera focus on the main player
-	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
-	ECS::GetComponent<VerticalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
+
 }
 
 void Level1Scene::PlatformMovement()
