@@ -156,7 +156,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		ECS::SetUpIdentifier(entity, bitHolder, "Klock");
 	}
 
-	//Shadow Klock Entity
+	//Shadow Klock Entity 2
 	{
 		//Create new Entity
 		auto entity = ECS::CreateEntity();
@@ -225,7 +225,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 
 		//Sets up components
 		std::string fileName = "2_plat1.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 50);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 600, 50);
 		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(20.f, 0.f, 50.f));
 
@@ -319,4 +319,8 @@ void BossFightScene::Update()
 		ECS::SetUpIdentifier(entity, bitHolder, "da hitbox");
 		std::cout << entity << "\n" << tempent << "\n";
 	}
+	
+	ECS::GetComponent<PhysicsBody>(2).GetBody()->SetLinearVelocity(b2Vec2(50.f,0.f));
+
+
 }
