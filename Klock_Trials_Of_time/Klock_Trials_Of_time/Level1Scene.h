@@ -16,8 +16,8 @@ public:
 	unsigned int tempent;
 	bool tempbool{ 1 };
 
-
 	//functions to make it less messy this is a huge file anyways
 	void PlatformMovement();
+	void GeneralUpdates();
 	void KlockAttack();
 };
