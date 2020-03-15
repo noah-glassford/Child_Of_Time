@@ -1,10 +1,28 @@
 #pragma once
 #include "PlayerData.h"
+#include "Timer.h"
 #include <iostream>
+#include <cstdlib>
 
 class BossObject : public PlayerData
 {
+public:
+
 	BossObject() {};
 
-	void TestFunction();
+
+	void PickAction(); //Picks which action the boss will do randomly
+
+	void RunAI(); //Function called every frame to run the AI
+
+	void IncrementTimer(); //function that increments the timer, and changes member bool if action should happen
+	
+	void TestAttack();
+	
+	int EntityNumber;
+
+	float BossActionTimer;
+
+	bool doAction;
+
 };

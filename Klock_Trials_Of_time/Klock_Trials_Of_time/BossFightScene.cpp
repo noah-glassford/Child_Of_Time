@@ -23,7 +23,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 	
 #pragma region CORE_OBJECTS
 //This region contains all the main gameplay objects
-	//Main Camera, entity 0
+//Main Camera, entity 0
 	{
 
 		auto entity = ECS::CreateEntity();
@@ -165,7 +165,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
-		ECS::AttachComponent<PlayerData>(entity);
+		ECS::AttachComponent<BossObject>(entity);
 
 		//Sets up components
 		std::string fileName = "Missing_Texture.jpg";
@@ -177,7 +177,6 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		//Grabs reference to various components
 		//Sets up components
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 49.f));
-		ECS::GetComponent<PlayerData>(entity).Health = 6;
 		//Grabs reference to various components
 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -214,6 +213,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 #pragma region Platforms
 //This region contains all the platforms
 
+	//ent 3
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -253,6 +253,45 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
 	}
 
+	//ent 4
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName,50,600);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(20.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(300.f), float32(-20.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 28), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
+	}
 
 #pragma endregion
 
@@ -264,7 +303,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 
 void BossFightScene::Update()
 {
-
+	//Attacking stuff
 	if (createdint)
 	{
 		ECS::DestroyEntity(tempent);
@@ -319,8 +358,10 @@ void BossFightScene::Update()
 		ECS::SetUpIdentifier(entity, bitHolder, "da hitbox");
 		std::cout << entity << "\n" << tempent << "\n";
 	}
-	
-	ECS::GetComponent<PhysicsBody>(2).GetBody()->SetLinearVelocity(b2Vec2(50.f,0.f));
 
+	ECS::GetComponent<BossObject>(2).RunAI();
+	
+
+	
 
 }
