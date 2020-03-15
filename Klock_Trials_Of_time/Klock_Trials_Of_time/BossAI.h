@@ -1,6 +1,7 @@
 #pragma once
 #include "PlayerData.h"
 #include "Timer.h"
+#include "ECS.h"
 #include <iostream>
 #include <cstdlib>
 
@@ -19,6 +20,14 @@ public:
 	
 	void TestAttack();
 	
+	void MoveHorizontal(float velo);
+
+	void MoveVertical(float velo);
+
+	void RunAction();
+
+	int movementNumber;
+
 	int EntityNumber;
 
 	float BossActionTimer;

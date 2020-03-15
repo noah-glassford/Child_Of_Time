@@ -177,6 +177,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		//Grabs reference to various components
 		//Sets up components
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 49.f));
+		ECS::GetComponent<BossObject>(entity).EntityNumber = entity;
 		//Grabs reference to various components
 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);

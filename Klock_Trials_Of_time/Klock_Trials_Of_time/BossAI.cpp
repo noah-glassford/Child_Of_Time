@@ -3,20 +3,7 @@
 void BossObject::PickAction()
 {
 	
-	int i =  rand() % 5; //Picks some action
-	switch (i)
-	{
-	case 0: std::cout << "Case 0\n";
-		break;
-	case 1: std::cout << "Case 1\n";
-		break;
-	case 2: std::cout << "Case 2\n";
-		break;
-	case 3: std::cout << "Case 3\n";
-		break;
-	case 4: std::cout << "Case 4\n";
-		break;
-	}
+	movementNumber =  rand() % 4; //Picks some action
 	
 }
 
@@ -24,8 +11,8 @@ void BossObject::RunAI()
 {
 	IncrementTimer();
 	
-	std::cout << BossActionTimer << std::endl;
-	
+	RunAction();
+
 	if (doAction)
 	{
 		PickAction();
@@ -53,4 +40,33 @@ void BossObject::IncrementTimer()
 void BossObject::TestAttack()
 {
 	std::cout << "Test Attack";
+}
+
+void BossObject::MoveHorizontal(float velo)
+{
+	ECS::GetComponent<PhysicsBody>(EntityNumber).GetBody()->SetLinearVelocity(b2Vec2(velo,0));
+}
+
+void BossObject::MoveVertical(float velo)
+{
+	ECS::GetComponent<PhysicsBody>(EntityNumber).GetBody()->SetLinearVelocity(b2Vec2(0,velo));
+}
+
+void BossObject::RunAction()
+{
+	switch (movementNumber)
+	{
+	case 0:
+		MoveHorizontal(30.f);
+		break;
+	case 1:
+		MoveVertical(30.f);
+		break;
+	case 2:
+		MoveVertical(-30.f);
+		break;
+	case 3:
+		MoveHorizontal(-30.f);
+		break;
+	}
 }
