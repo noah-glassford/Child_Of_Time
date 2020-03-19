@@ -16,7 +16,7 @@ public:
 	bool OnWallLeft;
 
 	bool isAttacking{ 0 };
-	
+
 	bool canjump;//This is literally only used to make playing with a controller not feel bad
 
 	int Health{ 3 };
@@ -28,10 +28,12 @@ public:
 	bool facingLeft{ 0 };
 
 	bool isSlowed;
-	
+
 	float UsedUpTime{ 0 };
 
 	float TimeSinceHit = 0.f;
 
 	bool Hit{ 0 };
+
+	bool canUseTimeSlow = false;
 };

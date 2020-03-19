@@ -10,7 +10,7 @@ float plat27MoveSpeed = 20;
 
 Level2Scene::Level2Scene(std::string name)
 {
-	m_gravity = b2Vec2(float32(0.f), float32(-35.f));
+	m_gravity = b2Vec2(float32(0.f), float32(-56.f));
 	m_physicsWorld->SetGravity(m_gravity);
 	m_physicsWorld->SetContactListener(&listener);
 }
@@ -148,6 +148,8 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit() | EntityIdentifier::AnimationBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Klock");
 	}
+
+	ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).canUseTimeSlow = true; // make sure this is called after the player is built
 
 	{//Creates camera entity, entity 2
 		auto entity = ECS::CreateEntity();
@@ -1329,8 +1331,8 @@ void Level2Scene::Update()
 	}
 	//slowed down time check
 	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed&& platAcc > 0.1f)
-		platAcc -= 0.015f;
-	else if (!ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed&& platAcc < 1.f) platAcc += 0.02f;
+		platAcc -= 0.025f;
+	else if (!ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed&& platAcc < 1.f) platAcc += 0.035f;
 
 	//platform 4 movements
 	if (ECS::GetComponent<PhysicsBody>(4).GetBody()->GetPosition().y < 0 || ECS::GetComponent<PhysicsBody>(4).GetBody()->GetPosition().y > 150)
