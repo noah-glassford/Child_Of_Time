@@ -149,6 +149,8 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::SetUpIdentifier(entity, bitHolder, "Klock");
 	}
 
+	ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).canUseTimeSlow = true; // make sure this is called after the player is built
+
 	{//Creates camera entity, entity 2
 		auto entity = ECS::CreateEntity();
 		EntityIdentifier::MainCamera(entity);
@@ -1329,8 +1331,8 @@ void Level2Scene::Update()
 	}
 	//slowed down time check
 	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed&& platAcc > 0.1f)
-		platAcc -= 0.015f;
-	else if (!ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed&& platAcc < 1.f) platAcc += 0.02f;
+		platAcc -= 0.025f;
+	else if (!ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed&& platAcc < 1.f) platAcc += 0.035f;
 
 	//platform 4 movements
 	if (ECS::GetComponent<PhysicsBody>(4).GetBody()->GetPosition().y < 0 || ECS::GetComponent<PhysicsBody>(4).GetBody()->GetPosition().y > 150)

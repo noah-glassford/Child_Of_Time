@@ -368,7 +368,7 @@ void Game::KeyboardDown()
 	else
 		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = false;
 
-	if (Input::GetKeyDown(Key::E) && slowSpamBlock)
+	if (Input::GetKeyDown(Key::E) && slowSpamBlock && ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).canUseTimeSlow)
 	{
 		slowSpamBlock = false;
 		Sound2D _TimeStop("timestop.wav", "group1");
