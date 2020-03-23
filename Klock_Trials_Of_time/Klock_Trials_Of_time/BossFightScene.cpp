@@ -89,6 +89,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		//animController.SetActiveAnim(1);
 		auto& animation = animController.GetAnimation(1);
 
+
 		animation.AddFrame(vec2(376.f, 544.f), vec2(0.f, 0.f));
 		animation.AddFrame(vec2(752.f, 544.f), vec2(367.f, 0.f));
 		animation.AddFrame(vec2(1128.f, 544.f), vec2(752.f, 0.f));
@@ -97,6 +98,8 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		animation.SetSecPerFrame(0.1f);
 
 		//Jumping while facing right
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
 		auto& jumpRight = animController.GetAnimation(2);
 
 		jumpRight.AddFrame(vec2(46,1789), vec2(768,922));
@@ -107,7 +110,10 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		jumpRight.SetSecPerFrame(0.1f);
 
 		//idle animation facing right
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
 		auto& idleRight = animController.GetAnimation(3);
+
 
 		idleRight.AddFrame(vec2(97,2703), vec2(689,1839));
 		idleRight.AddFrame(vec2(897,2703), vec2(1489,1848));
