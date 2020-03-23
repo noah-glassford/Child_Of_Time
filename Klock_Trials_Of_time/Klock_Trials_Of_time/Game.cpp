@@ -55,7 +55,7 @@ void Game::InitGame()
 	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[1]; //bincht
+	m_activeScene = m_scenes[3];
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -132,13 +132,13 @@ void Game::Update()
 		}
 	}
 
-	if (ECS::GetComponent<PlayerData>(1).TimeSinceHit > 0)
+	if (ECS::GetComponent<PlayerData>(mainp).TimeSinceHit > 0)
 	{
-		ECS::GetComponent <PlayerData>(1).TimeSinceHit -= deltaTime;
+		ECS::GetComponent <PlayerData>(mainp).TimeSinceHit -= deltaTime;
 	}
 	else
 	{
-		ECS::GetComponent<PlayerData>(1).Hit = 1;
+		ECS::GetComponent<PlayerData>(mainp).Hit = 1;
 	}
 
 	if (ECS::GetComponent<PlayerData>(mainp).TimeSinceAtt > 0)
@@ -340,6 +340,10 @@ void Game::KeyboardHold()
 
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
 	}
+	if (Input::GetKey(Key::O))
+		ECS::GetComponent<Camera>(EntityIdentifier::MainCamera()).Zoom(-5);
+	if (Input::GetKey(Key::I))
+		ECS::GetComponent<Camera>(EntityIdentifier::MainCamera()).Zoom(5);
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->KeyboardHold();

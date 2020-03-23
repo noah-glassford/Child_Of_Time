@@ -4,6 +4,7 @@
 
 #include "Scene.h"
 #include "SoundEngine.h"
+#include "BossAI.h"
 
 class BossFightScene : public Scene
 {

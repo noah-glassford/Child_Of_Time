@@ -10,7 +10,7 @@ float plat27MoveSpeed = 20;
 
 Level2Scene::Level2Scene(std::string name)
 {
-	m_gravity = b2Vec2(float32(0.f), float32(-56.f));
+	m_gravity = b2Vec2(float32(0.f), float32(-60.f));
 	m_physicsWorld->SetGravity(m_gravity);
 	m_physicsWorld->SetContactListener(&listener);
 }

@@ -96,7 +96,7 @@ void PhysicsSystem::Run(b2World & world)
 	int32 positionIterations = 3;
 
 	//steps through the world
-	for (size_t i = 0; i < static_cast<size_t>(300 * Timer::deltaTime); i++)
+	for (size_t i = 0; i < static_cast<size_t>(250 * Timer::deltaTime); i++)
 		world.Step(timeStep, velocityIterations, positionIterations);
 }
 
