@@ -24,7 +24,7 @@ public:
 
 	void MoveVertical(float velo);
 
-	void RunAction();
+	void RunMovement();
 
 	int movementNumber;
 
@@ -32,6 +32,6 @@ public:
 
 	float BossActionTimer;
 
-	bool doAction;
+	bool doMovement;
 
 };

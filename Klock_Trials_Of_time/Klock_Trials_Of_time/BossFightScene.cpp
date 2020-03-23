@@ -189,21 +189,19 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 
 		b2Body* tempBody;
 		b2BodyDef tempDef;
-		tempDef.type = b2_kinematicBody;
+		tempDef.type = b2_dynamicBody;
 		tempDef.position.Set(float32(0.f), float32(70.f));
 		tempDef.fixedRotation = true;
+		tempDef.gravityScale = 0;
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
 			vec2(0.f, 0.f), true, 1.5f);
 
-		//fixture definition
-		b2PolygonShape polygonShape;
-		b2FixtureDef myFixtureDef;
-		myFixtureDef.shape = &polygonShape;
-		myFixtureDef.density = 3;
-		//myFixtureDef.friction = 1.f;
+		//Sets the body to hit klock if he touches it
+		ECS::GetComponent<PhysicsBody>(1).GetBody()->GetFixtureList()->SetUserData((void*)8);
+		
 
 		//Sets up the identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();

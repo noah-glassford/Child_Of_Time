@@ -11,12 +11,12 @@ void BossObject::RunAI()
 {
 	IncrementTimer();
 	
-	RunAction();
+	RunMovement();
 
-	if (doAction)
+	if (doMovement)
 	{
 		PickAction();
-		BossActionTimer = 3;
+		BossActionTimer = 1.5;
 	}
 }
 
@@ -26,12 +26,12 @@ void BossObject::IncrementTimer()
 	if (BossActionTimer > 0.f)
 	{
 		BossActionTimer -= Timer::deltaTime;
-		doAction = false;
+		doMovement = false;
 	}
 	else if (BossActionTimer <= 0.f)
 	{
 		BossActionTimer = 0.f;
-		doAction = true;
+		doMovement = true;
 		//std::cout << "bruh\n";
 		
 	}
@@ -52,7 +52,7 @@ void BossObject::MoveVertical(float velo)
 	ECS::GetComponent<PhysicsBody>(EntityNumber).GetBody()->SetLinearVelocity(b2Vec2(0,velo));
 }
 
-void BossObject::RunAction()
+void BossObject::RunMovement()
 {
 	switch (movementNumber)
 	{
