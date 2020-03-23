@@ -67,7 +67,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<PlayerData>(entity);
 
 		//Sets up components
-		std::string fileName = "spritesheet.png";
+		std::string fileName = "spritesheet_full.png";
 		auto& animController = ECS::GetComponent<AnimationController>(entity);
 
 		animController.InitUVs(fileName);
@@ -95,6 +95,29 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		animation.AddFrame(vec2(752.f, 544.f), vec2(376, 0.f));
 		animation.SetRepeating(true);
 		animation.SetSecPerFrame(0.1f);
+
+		//Jumping while facing right
+		auto& jumpRight = animController.GetAnimation(2);
+
+		jumpRight.AddFrame(vec2(46,1789), vec2(768,922));
+		jumpRight.AddFrame(vec2(818,1794), vec2(1589,923));
+		jumpRight.AddFrame(vec2(1652,1801), vec2(2538,929));
+		jumpRight.AddFrame(vec2(2483,1801), vec2(3075,933));
+		jumpRight.SetRepeating(false);
+		jumpRight.SetSecPerFrame(0.1f);
+
+		//idle animation facing right
+		auto& idleRight = animController.GetAnimation(3);
+
+		idleRight.AddFrame(vec2(97,2703), vec2(689,1839));
+		idleRight.AddFrame(vec2(897,2703), vec2(1489,1848));
+		idleRight.AddFrame(vec2(1697,2703), vec2(1742,1857));
+		idleRight.AddFrame(vec2(2497,2703), vec2(3089,1866));
+		idleRight.AddFrame(vec2(3297,2703), vec2(3889,1862));
+		idleRight.AddFrame(vec2(4097,2703), vec2(5489,1844));
+		idleRight.AddFrame(vec2(5697,2703), vec2(6289,1834));
+		idleRight.SetRepeating(true);
+		idleRight.SetSecPerFrame(0.1f);
 
 		//Sets up components
 
