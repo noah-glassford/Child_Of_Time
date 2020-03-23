@@ -115,7 +115,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(0.f), float32(-39.f));
+		tempDef.position.Set(float32(0.f), float32(60.f));
 		tempDef.fixedRotation = true;
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -469,7 +469,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_kinematicBody;
-		tempDef.position.Set(float32(1080.f), float32(-100.f));
+		tempDef.position.Set(float32(-2000.f), float32(-100.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -1039,7 +1039,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_kinematicBody;
-		tempDef.position.Set(float32(2000.f), float32(120.f));
+		tempDef.position.Set(float32(-2000.f), float32(120.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -1206,7 +1206,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
 	}
-	//setup platform for after the first platform challenge #7, entity #29
+	//setup platform for after the first platform challenge #7, entity #30
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -1245,7 +1245,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
 	}
-	//setup shadow klock, entity #30
+	//setup shadow klock, entity #31
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -1308,8 +1308,9 @@ void Level1Scene::GeneralUpdates()
 		platformSpeedMulti -= 0.015f;
 	else if (!ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed&& platformSpeedMulti < 1.f && ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).canUseTimeSlow) platformSpeedMulti += 0.02f;
 	//Viginette
-	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x > 3050)
+	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x > 3050) {
 		EffectManager::CreateEffect(Vignette, BackEnd::GetWindowWidth(), BackEnd::GetWindowHeight());
+	}
 	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x > 3550) {
 		EffectManager::RemoveEffect(0);
 		ECS::GetComponent<Sprite>(6).LoadSprite(newSign, 120, 150);
@@ -1318,6 +1319,16 @@ void Level1Scene::GeneralUpdates()
 		ECS::GetComponent<PhysicsBody>(1).GetBody()->SetTransform(b2Vec2(0, -39), 0);
 		ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
 		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).canUseTimeSlow = true;
+		//new platforms
+		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetTransform(b2Vec2(1080, -100), 0);
+		ECS::GetComponent<PhysicsBody>(25).GetBody()->SetTransform(b2Vec2(2000, 120), 0);
+		ECS::GetComponent<PhysicsBody>(18).GetBody()->SetTransform(b2Vec2(2025, -230), 0);
+		ECS::GetComponent<PhysicsBody>(19).GetBody()->SetTransform(b2Vec2(2150, 80), 0);
+		ECS::GetComponent<PhysicsBody>(11).GetBody()->SetTransform(b2Vec2(1070, -350), 0);
+		ECS::GetComponent<PhysicsBody>(20).GetBody()->SetTransform(b2Vec2(4000, -350), 0);
+		//ECS::GetComponent<PhysicsBody>(21).GetBody()->SetTransform(b2Vec2(4000, -350), 0);
+		ECS::GetComponent<PhysicsBody>(22).GetBody()->SetTransform(b2Vec2(4000, -350), 0);
+		ECS::GetComponent<PhysicsBody>(26).GetBody()->SetTransform(b2Vec2(2850, -100), 0);
 	}
 }
 
@@ -1355,9 +1366,9 @@ void Level1Scene::PlatformMovement()
 	ECS::GetComponent<PhysicsBody>(15).GetBody()->SetLinearVelocity(b2Vec2(plat15MovementSpeedX * platformSpeedMulti, plat15MovementSpeedY * platformSpeedMulti));
 
 	//plat 25 movements
-	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x > 1850 && ECS::GetComponent<PhysicsBody>(25).GetBody()->GetPosition().y < 600)
-		plat25MovementSpeedY = 80.f;
-	else if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x < 1850 && ECS::GetComponent<PhysicsBody>(25).GetBody()->GetPosition().y > 120)
+	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x > 1800 && ECS::GetComponent<PhysicsBody>(25).GetBody()->GetPosition().y < 350)
+		plat25MovementSpeedY = 60.f;
+	else if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x < 1800 && ECS::GetComponent<PhysicsBody>(25).GetBody()->GetPosition().y > 120)
 		plat25MovementSpeedY = -40.f;
 	else
 		plat25MovementSpeedY = 0.f;
