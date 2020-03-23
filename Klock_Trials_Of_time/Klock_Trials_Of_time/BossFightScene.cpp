@@ -106,6 +106,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		//Sets up components
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 49.f));
 		ECS::GetComponent<PlayerData>(entity).Health = 6;
+		ECS::GetComponent<PlayerData>(entity).canUseTimeSlow = true;
 		//Grabs reference to various components
 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
