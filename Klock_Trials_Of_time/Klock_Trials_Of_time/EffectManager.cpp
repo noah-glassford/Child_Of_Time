@@ -323,7 +323,7 @@ void EffectManager::AdjustIndices(int indexToRemove)
 void EffectManager::RemoveEffect(int index)
 {
 	//Delete the variable if it isn't = to nullptr and then set it to nullptr
-	if (m_effects[index] != nullptr)
+	if(m_effects[index] != nullptr)
 	{
 		m_effects[index]->Unload();
 		delete m_effects[index];

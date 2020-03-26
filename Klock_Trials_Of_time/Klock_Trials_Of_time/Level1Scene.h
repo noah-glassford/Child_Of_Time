@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 #include "SoundEngine.h"
+#include "Game.h"
 
 class Level1Scene : public Scene
 {
@@ -16,8 +17,9 @@ public:
 	unsigned int tempent;
 	bool tempbool{ 1 };
 
-
 	//functions to make it less messy this is a huge file anyways
 	void PlatformMovement();
+	void GeneralUpdates();
+	void EnemyUpdates();
 	void KlockAttack();
 };

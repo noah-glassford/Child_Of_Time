@@ -46,8 +46,6 @@ void Game::InitGame()
 	//initialise all the sound
 	SoundManager::init("./Assets/Sounds/");
 
-
-
 	//Creates a new scene.
 	//Replace this with your own scene.
 
@@ -57,7 +55,7 @@ void Game::InitGame()
 	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[1]; //bincht
+	m_activeScene = m_scenes[3];
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -68,9 +66,6 @@ void Game::InitGame()
 	BackEnd::SetWindowName(m_activeScene->GetName());
 
 	PhysicsSystem::Init();
-
-
-
 }
 
 bool Game::Run()
@@ -137,13 +132,13 @@ void Game::Update()
 		}
 	}
 
-	if (ECS::GetComponent<PlayerData>(1).TimeSinceHit > 0)
+	if (ECS::GetComponent<PlayerData>(mainp).TimeSinceHit > 0)
 	{
-		ECS::GetComponent <PlayerData>(1).TimeSinceHit -= deltaTime;
+		ECS::GetComponent <PlayerData>(mainp).TimeSinceHit -= deltaTime;
 	}
 	else
 	{
-		ECS::GetComponent<PlayerData>(1).Hit = 1;
+		ECS::GetComponent<PlayerData>(mainp).Hit = 1;
 	}
 
 	if (ECS::GetComponent<PlayerData>(mainp).TimeSinceAtt > 0)
@@ -153,50 +148,6 @@ void Game::Update()
 	}
 	else
 		ECS::GetComponent<PlayerData>(mainp).CanAttack = 1;
-	
-	//std::cout << 1 / deltaTime << std::endl;
-	
-	
-	//if (!ECS::GetComponent<PlayerData>(1).isSlowed)
-	//	EffectManager::RemoveEffect(0);
-	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
-
-	//Adding the time slow as a proof of concept
-
-	//Used to set direction
-	/*
-	if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x > 800)
-		direction = 0;
-	else if (ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x < 400)
-		direction = 1;
-
-	//std::cout << ECS::GetComponent<PhysicsBody>(8).GetBody()->GetPosition().x << std::endl;
-	//Anything that can be affected by the time controls is done in this if statement
-	if (!isSlowed)
-	{
-		if (direction)
-			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(50.f, 0.f));
-		if (!direction)
-			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(-50.f, 0.f));
-	}
-	else if (isSlowed)
-	{
-		if (direction)
-			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(10.f, 0.f));
-		if (!direction)
-			ECS::GetComponent<PhysicsBody>(8).GetBody()->SetLinearVelocity(b2Vec2(-10.f, 0.f));
-	}
-	*/
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//     a.i     testing
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	/*
-		if (ECS::GetComponent<PhysicsBody>(6).GetBody()->GetPosition().y < 50)
-			ECS::GetComponent<PhysicsBody>(6).GetBody()->SetLinearVelocity(b2Vec2(0.f, 5.f));
-
-		else if (ECS::GetComponent<PhysicsBody>(6).GetBody()->GetPosition().y > 400)
-			ECS::GetComponent<PhysicsBody>(6).GetBody()->SetLinearVelocity(b2Vec2(-50.f, 0.f));
-			*/
 
 	m_activeScene->Update();
 }
@@ -375,7 +326,7 @@ void Game::KeyboardHold()
 	if (Input::GetKey(Key::A))
 	{
 		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft&& ECS::GetComponent<PlayerData>(1).Hit)
-			Klock.MoveLeft(30.f);
+			Klock.MoveLeft(38.f);
 		ECS::GetComponent<PlayerData>(1).facingLeft = 1;
 
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
@@ -383,16 +334,16 @@ void Game::KeyboardHold()
 	if (Input::GetKey(Key::D))
 	{
 		if (!ECS::GetComponent<PlayerData>(1).OnWallRight&& ECS::GetComponent<PlayerData>(1).Hit)
-			Klock.MoveRight(30.f);
+			Klock.MoveRight(38.f);
 
 		ECS::GetComponent<PlayerData>(1).facingLeft = 0;
 
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
 	}
 	if (Input::GetKey(Key::O))
-		ECS::GetComponent<Camera>(26).Zoom(-5);
+		ECS::GetComponent<Camera>(EntityIdentifier::MainCamera()).Zoom(-5);
 	if (Input::GetKey(Key::I))
-		ECS::GetComponent<Camera>(26).Zoom(5);
+		ECS::GetComponent<Camera>(EntityIdentifier::MainCamera()).Zoom(5);
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
 	m_activeScene->KeyboardHold();
@@ -407,10 +358,9 @@ void Game::KeyboardDown()
 	{
 		if (ECS::GetComponent<PlayerData>(1).Grounded)
 		{
-			Klock.Jump(3000000.f);
+			Klock.Jump(4200000.f);
 			Sound2D _jump("jump.wav", "group1");
 			_jump.play();
-
 		}
 	}
 	if (Input::GetKeyDown(Key::R) && ECS::GetComponent<PlayerData>(1).CanAttack)
@@ -418,7 +368,7 @@ void Game::KeyboardDown()
 	else
 		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = false;
 
-	if (Input::GetKeyDown(Key::E) && slowSpamBlock)
+	if (Input::GetKeyDown(Key::E) && slowSpamBlock && ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).canUseTimeSlow)
 	{
 		slowSpamBlock = false;
 		Sound2D _TimeStop("timestop.wav", "group1");
