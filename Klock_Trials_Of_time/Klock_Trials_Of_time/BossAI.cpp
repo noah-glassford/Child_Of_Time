@@ -1,10 +1,14 @@
 #include "BossAI.h"
 
-void BossObject::PickAction()
+void BossObject::PickMovement()
 {
-	
-	movementNumber =  rand() % 4; //Picks some action
-	
+	movementNumber =  rand() % 4; //Picks some number for movement
+}
+
+void BossObject::PickAttack()
+{
+	AttackNumber = rand() % 2;
+	std::cout << AttackNumber;
 }
 
 void BossObject::RunAI()
@@ -13,28 +17,45 @@ void BossObject::RunAI()
 	
 	RunMovement();
 
+	RunAttack();
+
 	if (doMovement)
 	{
-		PickAction();
-		BossActionTimer = 1.5;
+		PickMovement();
+		BossMovementTimer = 1.5;
+	}
+	if (doAttack)
+	{
+		PickAttack();
+		BossAttackTimer = 3.f;
 	}
 }
 
 void BossObject::IncrementTimer()
 {
-	
-	if (BossActionTimer > 0.f)
+	if (BossMovementTimer > 0.f)
 	{
-		BossActionTimer -= Timer::deltaTime;
+		BossMovementTimer -= Timer::deltaTime;
 		doMovement = false;
 	}
-	else if (BossActionTimer <= 0.f)
+	else if (BossMovementTimer <= 0.f)
 	{
-		BossActionTimer = 0.f;
+		BossMovementTimer = 0.f;
 		doMovement = true;
-		//std::cout << "bruh\n";
-		
+		//std::cout << "bruh\n";	
 	}
+
+	if (BossAttackTimer > 0.f)
+	{
+		BossAttackTimer -= Timer::deltaTime;
+		doAttack = 0;
+	}
+	else if (BossAttackTimer <= 0.f)
+	{
+		BossAttackTimer = 0.f;
+		doAttack = 1;
+	}
+
 }
 
 void BossObject::TestAttack()
@@ -50,6 +71,16 @@ void BossObject::MoveHorizontal(float velo)
 void BossObject::MoveVertical(float velo)
 {
 	ECS::GetComponent<PhysicsBody>(EntityNumber).GetBody()->SetLinearVelocity(b2Vec2(0,velo));
+}
+
+void BossObject::RunAttack()
+{
+	switch (AttackNumber)
+	{
+	case 0:
+		TestAttack();
+	}
+			
 }
 
 void BossObject::RunMovement()

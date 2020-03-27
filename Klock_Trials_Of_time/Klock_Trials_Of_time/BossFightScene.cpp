@@ -72,7 +72,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 
 		animController.InitUVs(fileName);
 		animController.AddAnimation(Animation());
-		animController.SetActiveAnim(0);
+		
 		auto& anim = animController.GetAnimation(0);
 		//Walking right animation
 
@@ -126,7 +126,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		idleRight.SetSecPerFrame(0.1f);
 
 		//Sets up components
-
+		animController.SetActiveAnim(1);
 		//Sets up components
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 0.f, 97.f));
@@ -563,6 +563,52 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 
 #pragma endregion
 
+#pragma region AttackObjects
+//I don't feel like dealing with deleting objects and stuff and the game will run the same
+//it quite literally just places stuff under the map
+
+	//This is just a basic projectile that moves in a straight line
+	//ent 7
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 50, 50);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(20.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_kinematicBody;
+		tempDef.position.Set(float32(0.f), float32(-200.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 28), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
+	}
+
+#pragma endregion
 
 	//Makes the camera focus on the main player
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
