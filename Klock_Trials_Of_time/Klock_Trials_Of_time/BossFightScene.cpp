@@ -24,6 +24,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 #pragma region CORE_OBJECTS
 //This region contains all the main gameplay objects
 //Main Camera, entity 0
+	//camera ent 0
 	{
 
 		auto entity = ECS::CreateEntity();
@@ -399,7 +400,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 #pragma region Platforms
 //This region contains all the platforms
 
-	//ent 3
+	//ent 5
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -439,7 +440,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
 	}
 
-	//ent 4
+	//ent 6
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -479,7 +480,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
 	}
 
-	//ent 5
+	//ent 7
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -520,7 +521,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 	}
 
 
-	//ent 6
+	//ent 8
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -547,7 +548,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 
-		tempDef.type = b2_staticBody;
+		tempDef.type = b2_kinematicBody;
 		tempDef.position.Set(float32(-300.f), float32(150.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -568,7 +569,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 //it quite literally just places stuff under the map
 
 	//This is just a basic projectile that moves in a straight line
-	//ent 7
+	//ent 9
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();

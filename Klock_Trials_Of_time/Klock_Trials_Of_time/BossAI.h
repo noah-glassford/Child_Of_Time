@@ -32,6 +32,8 @@ public:
 
 	void RunMovement();
 
+	void AttackStraightProjectile(b2Vec2 velo);
+
 	int AttackNumber;
 
 	int movementNumber;
