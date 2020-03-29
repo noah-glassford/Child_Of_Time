@@ -1295,6 +1295,12 @@ void Level1Scene::Update()
 	GeneralUpdates();
 	PlatformMovement();
 	EnemyUpdates();
+
+	
+	
+
+
+	
 }
 
 void Level1Scene::GeneralUpdates()

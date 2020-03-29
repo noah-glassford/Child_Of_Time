@@ -55,10 +55,13 @@ void Game::InitGame()
 	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[3];
+	m_activeScene = m_scenes[1];
+
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
+
+	ECS::GetComponent<PlayerData>(1).CurrentScene = 1;
 
 	//Sets m_register to point to the register in the active scene
 	m_register = m_activeScene->GetScene();
@@ -149,6 +152,23 @@ void Game::Update()
 	else
 		ECS::GetComponent<PlayerData>(mainp).CanAttack = 1;
 
+	//The unironic worst way to do this (scene switching code)
+	/*
+	Commented out until we know what coords level 1 ends at
+	CLARK IF YOU TOUCH THIS I WILL DRIVE TO OSHAWA AND COUGH ON YOU
+	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 400) //This is where we want scene switch to happen
+	{
+		if (ECS::GetComponent<PlayerData>(1).CurrentScene == 1)
+		{
+			//change scene
+			m_activeScene = m_scenes[2];
+
+			m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
+
+			m_register = m_activeScene->GetScene();
+		}
+	}
+	*/
 	m_activeScene->Update();
 }
 
