@@ -156,7 +156,7 @@ void Game::Update()
 	/*
 	Commented out until we know what coords level 1 ends at
 	CLARK IF YOU TOUCH THIS I WILL DRIVE TO OSHAWA AND COUGH ON YOU
-	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 400) //This is where we want scene switch to happen
+	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 400) //This is where we put scene switch condition
 	{
 		if (ECS::GetComponent<PlayerData>(1).CurrentScene == 1)
 		{

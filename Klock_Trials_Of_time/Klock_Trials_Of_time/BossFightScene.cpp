@@ -197,12 +197,13 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 		ECS::AttachComponent<BossObject>(entity);
+		ECS::AttachComponent<PlayerData>(entity);
 
 		//Sets up components
-		std::string fileName = "Missing_Texture.jpg";
+		std::string fileName = "shadowklock.png";
 
 		//Sets up components
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 50, 60);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 0.f, 97.f));
 
 		//Grabs reference to various components
@@ -231,7 +232,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 			vec2(0.f, 0.f), true, 1.5f);
 
 		//Sets the body to hit klock if he touches it
-		ECS::GetComponent<PhysicsBody>(1).GetBody()->GetFixtureList()->SetUserData((void*)8);
+		ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)8);
 		
 
 		//Sets up the identifier
@@ -603,6 +604,8 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 28), float(tempSpr.GetHeight() - 12),
 			vec2(0.f, 0.f), false, 1.5f);
+
+		ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)8);
 
 		//Sets up the Identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
