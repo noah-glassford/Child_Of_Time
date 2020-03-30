@@ -8,6 +8,7 @@ void BossObject::PickMovement()
 void BossObject::PickAttack()
 {
 	AttackNumber = rand() % 3;
+	SetAttackPosition(b2Vec2(-50, 0));
 	std::cout << AttackNumber;
 }
 
@@ -30,6 +31,7 @@ void BossObject::RunAI()
 	if (doAttack)
 	{
 		PickAttack();
+
 		BossAttackTimer = 3.f;
 	}
 }
@@ -78,12 +80,14 @@ void BossObject::MoveVertical(float velo)
 
 void BossObject::RunAttack()
 {
+	
 	switch (AttackNumber)
 	{
 	case 0:
 		TestAttack();
 	case 1:
-		AttackStraightProjectile(b2Vec2(50,0));
+		ECS::GetComponent<PhysicsBody>(9).GetBody()->SetLinearVelocity(b2Vec2(-50,0));
+		
 	}
 			
 }
@@ -107,8 +111,7 @@ void BossObject::RunMovement()
 	}
 }
 
-void BossObject::AttackStraightProjectile(b2Vec2 velo)
+void BossObject::SetAttackPosition(b2Vec2 offset)
 {
-	//ECS::GetComponent<PhysicsBody>(7).SetPosition(ECS::GetComponent<PhysicsBody>(2).GetPosition());
-	ECS::GetComponent<PhysicsBody>(9).GetBody()->SetLinearVelocity(velo);
+	ECS::GetComponent<PhysicsBody>(9).GetBody()->SetTransform(b2Vec2(ECS::GetComponent<PhysicsBody>(2).GetPosition().x + offset.x,ECS::GetComponent<PhysicsBody>(2).GetPosition().y + offset.y),0);
 }

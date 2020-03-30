@@ -32,7 +32,7 @@ public:
 
 	void RunMovement();
 
-	void AttackStraightProjectile(b2Vec2 velo);
+	void SetAttackPosition(b2Vec2 offset);
 
 	int AttackNumber;
 
