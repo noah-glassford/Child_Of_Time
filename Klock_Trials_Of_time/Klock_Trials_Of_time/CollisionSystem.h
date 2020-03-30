@@ -111,6 +111,8 @@ inline void CollisionListener::BeginContact(b2Contact* contact)
 		//ECS::GetComponent<PlayerData>(1).Hit = 1;
 		
 	}
+
+
 }
 inline void CollisionListener::EndContact(b2Contact* contact)
 {
