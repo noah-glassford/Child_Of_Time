@@ -166,6 +166,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="JSON.h" />
     <ClInclude Include="Level2Scene.h" />
+    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="MovementSystem.h" />
     <ClInclude Include="PhysicsBody.h" />
@@ -224,6 +225,7 @@
     <ClCompile Include="Level1Scene.cpp" />
     <ClCompile Include="Level2Scene.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="MovementSystem.cpp" />
     <ClCompile Include="PhysicsBody.cpp" />

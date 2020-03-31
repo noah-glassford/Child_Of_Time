@@ -49,19 +49,20 @@ void Game::InitGame()
 	//Creates a new scene.
 	//Replace this with your own scene.
 
-	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene")); //0
+	//m_scenes.push_back(new PhysicsTestScene("Physics Test Scene")); //0
+	m_scenes.push_back(new MainMenu("Main Menu Scene")); //0
 	m_scenes.push_back(new Level1Scene("Level 1 Scene")); //1
 	m_scenes.push_back(new Level2Scene("Level 2 Scene")); //2
 	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[3];
+	m_activeScene = m_scenes[0];
 
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 
-	ECS::GetComponent<PlayerData>(1).CurrentScene = 1;
+	ECS::GetComponent<PlayerData>(1).CurrentScene = 0;
 
 	//Sets m_register to point to the register in the active scene
 	m_register = m_activeScene->GetScene();
@@ -115,42 +116,45 @@ void Game::Update()
 	//Update Physics System
 	PhysicsSystem::Update(m_register, m_activeScene->GetPhysicsWorld());
 
-	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
-	unsigned int mainp = EntityIdentifier::MainPlayer();
+	if (ECS::GetComponent<PlayerData>(1).CurrentScene != 0)
+	{
+		//std::cout << UsedUpTime << " " << isSlowed << std::endl;
+		unsigned int mainp = EntityIdentifier::MainPlayer();
 
-	if (ECS::GetComponent<PlayerData>(mainp).UsedUpTime > 0 && !ECS::GetComponent<PlayerData>(1).isSlowed)
-		ECS::GetComponent<PlayerData>(mainp).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime - deltaTime * 2;
+		if (ECS::GetComponent<PlayerData>(mainp).UsedUpTime > 0 && !ECS::GetComponent<PlayerData>(1).isSlowed)
+			ECS::GetComponent<PlayerData>(mainp).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime - deltaTime * 2;
 
-	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed) {
-		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime <= 8.f)
-			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime + deltaTime;
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed) {
+			if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime <= 8.f)
+				ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime + deltaTime;
 
-		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime < 8.f)
-			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
+			if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime < 8.f)
+				ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
 
-		else if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime > 8.f)
-		{
-			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
-			EffectManager::RemoveEffect(0);
+			else if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime > 8.f)
+			{
+				ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
+				EffectManager::RemoveEffect(0);
+			}
 		}
-	}
 
-	if (ECS::GetComponent<PlayerData>(mainp).TimeSinceHit > 0)
-	{
-		ECS::GetComponent <PlayerData>(mainp).TimeSinceHit -= deltaTime;
-	}
-	else
-	{
-		ECS::GetComponent<PlayerData>(mainp).Hit = 1;
-	}
+		if (ECS::GetComponent<PlayerData>(mainp).TimeSinceHit > 0)
+		{
+			ECS::GetComponent <PlayerData>(mainp).TimeSinceHit -= deltaTime;
+		}
+		else
+		{
+			ECS::GetComponent<PlayerData>(mainp).Hit = 1;
+		}
 
-	if (ECS::GetComponent<PlayerData>(mainp).TimeSinceAtt > 0)
-	{
-		ECS::GetComponent<PlayerData>(mainp).TimeSinceAtt -= deltaTime;
-		ECS::GetComponent<PlayerData>(mainp).CanAttack = 0;
+		if (ECS::GetComponent<PlayerData>(mainp).TimeSinceAtt > 0)
+		{
+			ECS::GetComponent<PlayerData>(mainp).TimeSinceAtt -= deltaTime;
+			ECS::GetComponent<PlayerData>(mainp).CanAttack = 0;
+		}
+		else
+			ECS::GetComponent<PlayerData>(mainp).CanAttack = 1;
 	}
-	else
-		ECS::GetComponent<PlayerData>(mainp).CanAttack = 1;
 
 	//The unironic worst way to do this (scene switching code)
 	/*
@@ -332,91 +336,98 @@ void Game::GamepadTrigger(XInputController* con)
 
 void Game::KeyboardHold()
 {
-	//Make sure that the player is always entity 1
-
-	MovementSystem Klock; //Handles all the movement functions for Klock
-	Klock.SetBothBodies(EntityIdentifier::MainPlayer());
-
-	Klock.SetIsTouching(); //Klock specific contact updating
-
-	if (Input::GetKey(Key::S))
+	if (ECS::GetComponent<PlayerData>(1).CurrentScene != 0)
 	{
-		//Crouching will be done here
-	}
-	if (Input::GetKey(Key::A))
-	{
-		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft&& ECS::GetComponent<PlayerData>(1).Hit)
-			Klock.MoveLeft(38.f);
-		ECS::GetComponent<PlayerData>(1).facingLeft = 1;
+		//Make sure that the player is always entity 1
 
-		ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
-	}
-	if (Input::GetKey(Key::D))
-	{
-		if (!ECS::GetComponent<PlayerData>(1).OnWallRight&& ECS::GetComponent<PlayerData>(1).Hit)
-			Klock.MoveRight(38.f);
+		MovementSystem Klock; //Handles all the movement functions for Klock
+		Klock.SetBothBodies(EntityIdentifier::MainPlayer());
 
-		ECS::GetComponent<PlayerData>(1).facingLeft = 0;
+		Klock.SetIsTouching(); //Klock specific contact updating
 
-		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
+		if (Input::GetKey(Key::S))
+		{
+			//Crouching will be done here
+		}
+		if (Input::GetKey(Key::A))
+		{
+			if (!ECS::GetComponent<PlayerData>(1).OnWallLeft&& ECS::GetComponent<PlayerData>(1).Hit)
+				Klock.MoveLeft(38.f);
+			ECS::GetComponent<PlayerData>(1).facingLeft = 1;
+
+			ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
+		}
+		if (Input::GetKey(Key::D))
+		{
+			if (!ECS::GetComponent<PlayerData>(1).OnWallRight&& ECS::GetComponent<PlayerData>(1).Hit)
+				Klock.MoveRight(38.f);
+
+			ECS::GetComponent<PlayerData>(1).facingLeft = 0;
+
+			ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
+		}
+		if (Input::GetKey(Key::O))
+			ECS::GetComponent<Camera>(EntityIdentifier::MainCamera()).Zoom(-5);
+		if (Input::GetKey(Key::I))
+			ECS::GetComponent<Camera>(EntityIdentifier::MainCamera()).Zoom(5);
+		//Active scene now captures this input and can use it
+		//Look at base Scene class for more info.
 	}
-	if (Input::GetKey(Key::O))
-		ECS::GetComponent<Camera>(EntityIdentifier::MainCamera()).Zoom(-5);
-	if (Input::GetKey(Key::I))
-		ECS::GetComponent<Camera>(EntityIdentifier::MainCamera()).Zoom(5);
-	//Active scene now captures this input and can use it
-	//Look at base Scene class for more info.
 	m_activeScene->KeyboardHold();
 }
 
 void Game::KeyboardDown()
 {
-	MovementSystem Klock;
-	Klock.SetBothBodies(EntityIdentifier::MainPlayer());
-
-	if (Input::GetKeyDown(Key::W))
+	if (ECS::GetComponent<PlayerData>(1).CurrentScene != 0)
 	{
-		if (ECS::GetComponent<PlayerData>(1).Grounded)
+		MovementSystem Klock;
+		Klock.SetBothBodies(EntityIdentifier::MainPlayer());
+
+		if (Input::GetKeyDown(Key::W))
 		{
-			Klock.Jump(4200000.f);
-			Sound2D _jump("jump.wav", "group1");
-			_jump.play();
+			if (ECS::GetComponent<PlayerData>(1).Grounded)
+			{
+				Klock.Jump(4200000.f);
+				Sound2D _jump("jump.wav", "group1");
+				_jump.play();
+			}
+		}
+		if (Input::GetKeyDown(Key::R) && ECS::GetComponent<PlayerData>(1).CanAttack)
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = true;
+		else
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = false;
+
+		if (Input::GetKeyDown(Key::E) && slowSpamBlock && ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).canUseTimeSlow)
+		{
+			slowSpamBlock = false;
+			Sound2D _TimeStop("timestop.wav", "group1");
+			Sound2D _TimeRestart("timeresume.wav", "group1");
+			if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed == false)
+			{
+				ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
+				_TimeStop.play();
+			}
+			else
+			{
+				ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
+				_TimeRestart.play();
+			}
+			if (ECS::GetComponent<PlayerData>(1).isSlowed)
+				EffectManager::CreateEffect(Vignette, BackEnd::GetWindowWidth(), BackEnd::GetWindowHeight());
+			else
+				EffectManager::RemoveEffect(0);
 		}
 	}
-	if (Input::GetKeyDown(Key::R) && ECS::GetComponent<PlayerData>(1).CanAttack)
-		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = true;
-	else
-		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = false;
-
-	if (Input::GetKeyDown(Key::E) && slowSpamBlock && ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).canUseTimeSlow)
-	{
-		slowSpamBlock = false;
-		Sound2D _TimeStop("timestop.wav", "group1");
-		Sound2D _TimeRestart("timeresume.wav", "group1");
-		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed == false)
-		{
-			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
-			_TimeStop.play();
-		}
-		else
-		{
-			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
-			_TimeRestart.play();
-		}
-		if (ECS::GetComponent<PlayerData>(1).isSlowed)
-			EffectManager::CreateEffect(Vignette, BackEnd::GetWindowWidth(), BackEnd::GetWindowHeight());
-		else
-			EffectManager::RemoveEffect(0);
-	}
-
 	m_activeScene->KeyboardDown();
 }
 
 void Game::KeyboardUp()
 {
-	if (Input::GetKeyUp(Key::E)) {
+	if (ECS::GetComponent<PlayerData>(1).CurrentScene != 0)
+		if (Input::GetKeyUp(Key::E)) 
+		{
 		slowSpamBlock = true;
-	}
+		}
 
 	m_activeScene->KeyboardUp();
 }
