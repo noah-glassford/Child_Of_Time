@@ -176,6 +176,34 @@ void Game::Update()
 	m_activeScene->Update();
 }
 
+void Game::Switchscene(int scene)
+{
+	m_activeScene = m_scenes[scene];
+
+	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
+
+	m_register = m_activeScene->GetScene();
+}
+
+void Game::MainMenuControlls(SDL_MouseButtonEvent event)
+{
+	
+	float windowWidth = BackEnd::GetWindowWidth();
+	float windowHeight = BackEnd::GetWindowHeight();
+
+
+	if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT))
+	{
+		vec3(click) = vec3((event.x/windowWidth)*100,(event.y/windowHeight)*100,0.f);
+		std::cout << click.x << "\n" << click.y << "\n";
+
+		if (click.x < 57 && click.x > 52 && click.y > 45 && click.y < 54)
+		{
+			Switchscene(1);
+		}
+	}
+}
+
 void Game::GUI()
 {
 	UI::Start(BackEnd::GetWindowWidth(), BackEnd::GetWindowHeight());
@@ -205,6 +233,9 @@ void Game::CheckEvents()
 
 	if (m_wheel)
 		MouseWheel(BackEnd::GetWheelEvent());
+
+	if(ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
+		MainMenuControlls(BackEnd::GetClickEvent());
 }
 
 void Game::AcceptInput()
@@ -455,6 +486,13 @@ void Game::MouseClick(SDL_MouseButtonEvent evnt)
 {
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
+	float windowWidth = BackEnd::GetWindowWidth();
+	float windowHeight = BackEnd::GetWindowHeight();
+
+
+
+	//std::cout << (evnt.x/windowWidth)*100 << "\n" << (evnt.y/windowHeight) *100 << "\n\n";
+
 	m_activeScene->MouseClick(evnt);
 
 	if (m_guiActive)

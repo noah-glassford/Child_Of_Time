@@ -49,6 +49,10 @@ public:
 	//*Update the animation system
 	void Update();
 
+	void Switchscene(int scene);
+
+	void MainMenuControlls(SDL_MouseButtonEvent event);
+
 	//Runs the GUI
 	//*Uses ImGUI for this
 	void GUI();
