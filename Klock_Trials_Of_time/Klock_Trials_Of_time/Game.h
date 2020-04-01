@@ -9,6 +9,7 @@
 #include "CollisionSystem.h"
 #include "MovementSystem.h"
 #include "SoundEngine.h"
+#include "MainMenu.h"
 
 
 
@@ -51,6 +52,10 @@ public:
 	//Runs the GUI
 	//*Uses ImGUI for this
 	void GUI();
+
+	void Switchscene(int scene);
+
+	void MainMenuControlls(SDL_MouseButtonEvent event);
 
 	//Check events
 	//*Checks the results of the events that have been polled
