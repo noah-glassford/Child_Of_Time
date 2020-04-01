@@ -634,7 +634,7 @@ void BossFightScene::Update()
 
 	
 	//Gets rid of the rock attack if it hits something
-	if (ECS::GetComponent<PhysicsBody>(9).GetBody()->GetContactList() != 0 || ECS::GetComponent<PhysicsBody>(9).GetBody()->GetPosition().x < -300)
+	if (ECS::GetComponent<PhysicsBody>(9).GetBody()->GetPosition().x < -300)
 	{
 		ECS::GetComponent<PhysicsBody>(9).GetBody()->SetTransform(b2Vec2(-999, 0), 0);
 	}
