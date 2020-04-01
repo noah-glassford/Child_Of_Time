@@ -52,6 +52,9 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		auto entity = ECS::CreateEntity();
 		ECS::SetIsMainPlayer(entity, true);
 
+		Sound2D _jump("Level2Music.mp3", "group1");
+		_jump.play();
+
 		//Add components
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);

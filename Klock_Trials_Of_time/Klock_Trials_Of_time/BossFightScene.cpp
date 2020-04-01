@@ -20,6 +20,9 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 
 	//Sets up aspect ratio for the camera
 	float aspectRatio = windowWidth / windowHeight;
+
+	Sound2D _jump("BossMusic.mp3", "group1");
+	_jump.play();
 	
 #pragma region CORE_OBJECTS
 //This region contains all the main gameplay objects
