@@ -56,7 +56,7 @@ void Game::InitGame()
 	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[0];
+	m_activeScene = m_scenes[3];
 
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -367,8 +367,8 @@ void Game::GamepadTrigger(XInputController* con)
 
 void Game::KeyboardHold()
 {
-	if (ECS::GetComponent<PlayerData>(1).CurrentScene != 0)
-	{
+	
+	
 		//Make sure that the player is always entity 1
 
 		MovementSystem Klock; //Handles all the movement functions for Klock
@@ -382,15 +382,18 @@ void Game::KeyboardHold()
 		}
 		if (Input::GetKey(Key::A))
 		{
-			if (!ECS::GetComponent<PlayerData>(1).OnWallLeft&& ECS::GetComponent<PlayerData>(1).Hit)
+			if (!ECS::GetComponent<PlayerData>(1).OnWallLeft/*&& ECS::GetComponent<PlayerData>(1).Hit*/)
+			{
+				//std::cout << "bruh movement debug";
 				Klock.MoveLeft(38.f);
+			}
 			ECS::GetComponent<PlayerData>(1).facingLeft = 1;
 
 			ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
 		}
 		if (Input::GetKey(Key::D))
 		{
-			if (!ECS::GetComponent<PlayerData>(1).OnWallRight&& ECS::GetComponent<PlayerData>(1).Hit)
+			if (!ECS::GetComponent<PlayerData>(1).OnWallRight/*&& ECS::GetComponent<PlayerData>(1).Hit*/)
 				Klock.MoveRight(38.f);
 
 			ECS::GetComponent<PlayerData>(1).facingLeft = 0;
@@ -403,14 +406,13 @@ void Game::KeyboardHold()
 			ECS::GetComponent<Camera>(EntityIdentifier::MainCamera()).Zoom(5);
 		//Active scene now captures this input and can use it
 		//Look at base Scene class for more info.
-	}
+	
 	m_activeScene->KeyboardHold();
 }
 
 void Game::KeyboardDown()
 {
-	if (ECS::GetComponent<PlayerData>(1).CurrentScene != 0)
-	{
+	
 		MovementSystem Klock;
 		Klock.SetBothBodies(EntityIdentifier::MainPlayer());
 
@@ -448,13 +450,13 @@ void Game::KeyboardDown()
 			else
 				EffectManager::RemoveEffect(0);
 		}
-	}
+	
 	m_activeScene->KeyboardDown();
 }
 
 void Game::KeyboardUp()
 {
-	if (ECS::GetComponent<PlayerData>(1).CurrentScene != 0)
+
 		if (Input::GetKeyUp(Key::E)) 
 		{
 		slowSpamBlock = true;

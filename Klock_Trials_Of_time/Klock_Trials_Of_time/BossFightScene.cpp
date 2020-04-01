@@ -20,6 +20,10 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 
 	//Sets up aspect ratio for the camera
 	float aspectRatio = windowWidth / windowHeight;
+
+	//plays the music
+	Sound2D _jump("BossMusic.mp3", "group1");
+	_jump.play();
 	
 #pragma region CORE_OBJECTS
 //This region contains all the main gameplay objects
@@ -54,7 +58,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 	}
 
 
-	//Setup klock, entity 1
+	//Klock entity, used by the player, core entity #1
 	{
 		//Create new Entity
 		auto entity = ECS::CreateEntity();
@@ -68,12 +72,12 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<PlayerData>(entity);
 
 		//Sets up components
-		std::string fileName = "spritesheet_full.png";
+		std::string fileName = "spritesheet.png";
 		auto& animController = ECS::GetComponent<AnimationController>(entity);
 
 		animController.InitUVs(fileName);
 		animController.AddAnimation(Animation());
-		
+		animController.SetActiveAnim(0);
 		auto& anim = animController.GetAnimation(0);
 		//Walking right animation
 
@@ -90,7 +94,6 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		//animController.SetActiveAnim(1);
 		auto& animation = animController.GetAnimation(1);
 
-
 		animation.AddFrame(vec2(376.f, 544.f), vec2(0.f, 0.f));
 		animation.AddFrame(vec2(752.f, 544.f), vec2(367.f, 0.f));
 		animation.AddFrame(vec2(1128.f, 544.f), vec2(752.f, 0.f));
@@ -98,46 +101,17 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		animation.SetRepeating(true);
 		animation.SetSecPerFrame(0.1f);
 
-		//Jumping while facing right
-		animController.InitUVs(fileName);
-		animController.AddAnimation(Animation());
-		auto& jumpRight = animController.GetAnimation(2);
-
-		jumpRight.AddFrame(vec2(46,1789), vec2(768,922));
-		jumpRight.AddFrame(vec2(818,1794), vec2(1589,923));
-		jumpRight.AddFrame(vec2(1652,1801), vec2(2538,929));
-		jumpRight.AddFrame(vec2(2483,1801), vec2(3075,933));
-		jumpRight.SetRepeating(false);
-		jumpRight.SetSecPerFrame(0.1f);
-
-		//idle animation facing right
-		animController.InitUVs(fileName);
-		animController.AddAnimation(Animation());
-		auto& idleRight = animController.GetAnimation(3);
-
-
-		idleRight.AddFrame(vec2(97,2703), vec2(689,1839));
-		idleRight.AddFrame(vec2(897,2703), vec2(1489,1848));
-		idleRight.AddFrame(vec2(1697,2703), vec2(1742,1857));
-		idleRight.AddFrame(vec2(2497,2703), vec2(3089,1866));
-		idleRight.AddFrame(vec2(3297,2703), vec2(3889,1862));
-		idleRight.AddFrame(vec2(4097,2703), vec2(5489,1844));
-		idleRight.AddFrame(vec2(5697,2703), vec2(6289,1834));
-		idleRight.SetRepeating(true);
-		idleRight.SetSecPerFrame(0.1f);
-
 		//Sets up components
-		animController.SetActiveAnim(1);
+
 		//Sets up components
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 0.f, 97.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 0.f, 49.f));
 
 		//Grabs reference to various components
 		//Sets up components
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 49.f));
 		ECS::GetComponent<PlayerData>(entity).Health = 6;
-		ECS::GetComponent<PlayerData>(entity).canUseTimeSlow = true;
-		ECS::GetComponent<PlayerData>(entity).CurrentScene = 3;
+		ECS::GetComponent<PlayerData>(entity).CurrentScene = 1;
 		//Grabs reference to various components
 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -150,7 +124,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(0.f), float32(0.f));
+		tempDef.position.Set(float32(0.f), float32(60.f));
 		tempDef.fixedRotation = true;
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -634,8 +608,8 @@ void BossFightScene::Update()
 	ECS::GetComponent<Transform>(4).SetPosition(ECS::GetComponent<HorizontalScroll>(0).GetCam()->GetPosition().x - 220, ECS::GetComponent<VerticalScroll>(0).GetCam()->GetPosition().y + 200, 99);
 
 	
-	//Gets rid of the rock attack if it hits something
-	if (ECS::GetComponent<PhysicsBody>(9).GetBody()->GetContactList() != 0 || ECS::GetComponent<PhysicsBody>(9).GetBody()->GetPosition().x < -300)
+	//Gets rid of the rock attack if it goes off the edge of the screen
+	if ( ECS::GetComponent<PhysicsBody>(9).GetBody()->GetPosition().x < -300)
 	{
 		ECS::GetComponent<PhysicsBody>(9).GetBody()->SetTransform(b2Vec2(-999, 0), 0);
 	}

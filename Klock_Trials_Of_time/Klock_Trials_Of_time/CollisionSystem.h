@@ -64,6 +64,8 @@ inline void CollisionListener::BeginContact(b2Contact* contact)
 			ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.7f;
 			//ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(-20000000, 1000000000, 0));
 			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(-30, 30));
+			std::cout << "hard r";
+
 
 		}
 	}
@@ -78,6 +80,8 @@ inline void CollisionListener::BeginContact(b2Contact* contact)
 			ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.7f;
 			//ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(-20000000, 100000000, 0));
 			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(-30, 30));
+			std::cout << "hard r";
+
 		}
 	
 	}
@@ -92,6 +96,7 @@ inline void CollisionListener::BeginContact(b2Contact* contact)
 			ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.7f;
 			//ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(20000000, 100000000, 0));
 			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(30, 30));
+			std::cout << "hard r";
 
 		}
 	}
@@ -105,6 +110,7 @@ inline void CollisionListener::BeginContact(b2Contact* contact)
 			ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.7f;
 			//ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(200000000,100000000, 0));
 			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(30, 30));
+			std::cout << "hard r";
 
 		}
 		

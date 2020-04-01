@@ -26,6 +26,11 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 	//Sets up aspect ratio for the camera
 	float aspectRatio = windowWidth / windowHeight;
 
+	//plays music
+	Sound2D _jump("Level2Music.mp3", "group1");
+	_jump.play();
+	
+	
 	//Background ent 0
 	{
 		//Create new entity
@@ -47,6 +52,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 
 	//Setup klock, entity 1
 		//Setup klock, entity 1
+//Klock entity, used by the player, core entity #1
 	{
 		//Create new Entity
 		auto entity = ECS::CreateEntity();
@@ -93,13 +99,13 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 
 		//Sets up components
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 0.f, 97.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 0.f, 49.f));
 
 		//Grabs reference to various components
 		//Sets up components
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 49.f));
 		ECS::GetComponent<PlayerData>(entity).Health = 6;
-		ECS::GetComponent<PlayerData>(entity).CurrentScene = 2;
+		ECS::GetComponent<PlayerData>(entity).CurrentScene = 1;
 		//Grabs reference to various components
 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -112,7 +118,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(0.f), float32(150.f));
+		tempDef.position.Set(float32(0.f), float32(60.f));
 		tempDef.fixedRotation = true;
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
