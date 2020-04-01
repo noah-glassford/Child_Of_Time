@@ -56,7 +56,7 @@ void Game::InitGame()
 
 	//Sets active scene reference to our scene
 	m_activeScene = m_scenes[3];
-
+	//cuck
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
