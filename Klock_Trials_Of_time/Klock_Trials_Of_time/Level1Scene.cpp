@@ -980,17 +980,52 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
+		ECS::AttachComponent<AnimationController>(entity);
 
-		//Sets up components
-		std::string fileName = "1_enemy1.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 80, 80);
-		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(20.f, 0.f, 51.f));
+		
 
 		//Grabs reference to various components
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
 
+		//Sets up components
+		std::string fileName = "L1Enemy.png";
+		auto& animController = ECS::GetComponent<AnimationController>(entity);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(0);
+		auto& anim = animController.GetAnimation(0);
+		//Walking right animation
+
+		anim.AddFrame(vec2(0.f, 0.f), vec2(716.f, 640.f));
+		anim.AddFrame(vec2(716.f, 0.f), vec2(716.f, 640.f));
+		anim.AddFrame(vec2(1432.f, 0.f), vec2(716.f, 640.f));
+		anim.AddFrame(vec2(2148.f, 0.f), vec2(716.f, 640.f));
+		anim.AddFrame(vec2(0.f, 640.f), vec2(716.f, 640.f));
+		anim.AddFrame(vec2(716.f, 640.f), vec2(716.f, 640.f));
+		anim.AddFrame(vec2(1432.f, 640.f), vec2(716.f, 640.f));
+		anim.AddFrame(vec2(2148.f, 640.f), vec2(716.f, 640.f));
+		anim.AddFrame(vec2(0.f, 1280.f), vec2(716.f, 640.f));
+		anim.AddFrame(vec2(716.f, 1280.f), vec2(716.f, 640.f));
+		anim.AddFrame(vec2(1432.f, 1280.f), vec2(716.f, 640.f));
+		anim.AddFrame(vec2(2148.f, 1280.f), vec2(716.f, 640.f));
+		anim.AddFrame(vec2(0.f, 1920.f), vec2(716.f, 640.f));
+		anim.AddFrame(vec2(716.f, 1920.f), vec2(716.f, 640.f));
+		anim.AddFrame(vec2(1432.f, 1920.f), vec2(716.f, 640.f));
+		anim.AddFrame(vec2(2148.f, 1920.f), vec2(716.f, 640.f));
+
+		anim.SetRepeating(true);
+		anim.SetSecPerFrame(0.1f);
+		
+		//Sets up components
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 0.f, 49.f));
+
+		//Grabs reference to various components
+		//Sets up components
+		
+		//ECS::GetComponent<PlayerData>(entity).Health = 6;
 		//Physics body covers half the sprite
 			//Id type is environment
 		float shrinkX = 0.f;

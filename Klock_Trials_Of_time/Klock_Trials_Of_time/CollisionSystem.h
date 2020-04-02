@@ -50,8 +50,11 @@ inline void CollisionListener::BeginContact(b2Contact* contact)
 
 	if ((int)fixtureAUserData == 8 && (int)fixtureBUserData == 7) //klock hit enemy
 	{
-		std::cout << ECS::GetComponent<PlayerData>(2).Health;
-		ECS::GetComponent<PlayerData>(2).Health--;
+		if (ECS::GetComponent<PlayerData>(1).CurrentScene == 3)
+		{
+			ECS::GetComponent<PlayerData>(2).Health--;
+			std::cout << "fuck";
+		}
 	}
 
 	//all the klock getting hit by stuff
@@ -101,11 +104,10 @@ inline void CollisionListener::BeginContact(b2Contact* contact)
 			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(30, 30));
 			//if (ECS::GetComponent<PlayerData>(1).CurrentScene == 3)
 				//ECS::GetComponent<PhysicsBody>(9).GetBody()->SetTransform(b2Vec2(-9999,-9999),0);
-		}
-	
-		
-		
+		}	
 	}
+
+
 	if ((int)fixtureBUserData == 8 && (int)fixtureAUserData == 5)
 	{
 	//	std::cout << "Klock got hit by an enemy on his left";

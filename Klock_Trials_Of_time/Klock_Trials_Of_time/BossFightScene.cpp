@@ -203,6 +203,8 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<BossObject>(entity);
 		ECS::AttachComponent<PlayerData>(entity);
 
+		ECS::GetComponent<PlayerData>(entity).Health = 15;
+
 		//Sets up components
 		std::string fileName = "shadowklock.png";
 
@@ -662,6 +664,11 @@ void BossFightScene::Update()
 	//ECS::GetComponent<Transform>(3).SetPosition(ECS::GetComponent<HorizontalScroll>(0).GetCam()->GetPosition().x - 260, ECS::GetComponent<VerticalScroll>(0).GetCam()->GetPosition().y + 150, 99);
 	//ECS::GetComponent<Transform>(4).SetPosition(ECS::GetComponent<HorizontalScroll>(0).GetCam()->GetPosition().x - 220, ECS::GetComponent<VerticalScroll>(0).GetCam()->GetPosition().y + 200, 99);
 	ECS::GetComponent<PlayerData>(1).CurrentScene = 3;
+
+	if (ECS::GetComponent<PlayerData>(2).Health == 0)
+	{
+		ECS::GetComponent<PhysicsBody>(2).GetBody()->SetTransform(b2Vec2(-999, 999), 0);
+	}
 	
 	//Gets rid of the rock attack if it hits something
 	if (ECS::GetComponent<PhysicsBody>(10).GetBody()->GetPosition().x < -400)
@@ -673,34 +680,37 @@ void BossFightScene::Update()
 		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetTransform(b2Vec2(-999, 999), 0);
 		ECS::GetComponent<PhysicsBody>(10).moveonnextstep = 0;
 	}
-	//Attacking stuff
-	if (createdint)
-	{
-		ECS::DestroyEntity(tempent);
-		createdint = 0;
-		
-	}
+
 	if (ECS::GetComponent<PlayerData>(1).isAttacking)
 	{
+		std::cout << "BRUH";
+
 		createdint = 1;
+
 		auto entity = ECS::CreateEntity();
 		tempent = entity;
 		//std::cout << entity << " " << tempent;
 		//Add components
 		ECS::AttachComponent<Transform>(entity);
-
+		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 
 		//Sets up components
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 98.f));
 
+		std::string fileName = "floatplatform.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 20, 20);
 		//Grabs reference to various components
 		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
 
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x + 15), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
+		if (ECS::GetComponent<PlayerData>(1).facingLeft)
+			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x - 45), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
+		else
+			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x + 45), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
+
 		tempDef.fixedRotation = true;
 		tempDef.gravityScale = 0;
 
@@ -712,13 +722,16 @@ void BossFightScene::Update()
 		//fixture definition
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
+		if (ECS::GetComponent<PlayerData>(1).facingLeft)
+			polygonShape.SetAsBox(20.f, 20.f, b2Vec2(-45.f, 0.f), 0);
+		else
+			polygonShape.SetAsBox(20.f, 20.f, b2Vec2(45.f, 0.f), 0);
+
 		myFixtureDef.shape = &polygonShape;
 		myFixtureDef.density = 0;
 		myFixtureDef.isSensor = 1;
 		//myFixtureDef.friction = 1.f;
 
-		//Combat fixture
-		polygonShape.SetAsBox(12.f, 12.f, b2Vec2(0.f, 35.f), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		footSensorFixture->SetUserData((void*)7);
@@ -727,6 +740,13 @@ void BossFightScene::Update()
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "da hitbox");
 		std::cout << entity << "\n" << tempent << "\n";
+	}
+	else if (ECS::GetComponent<PlayerData>(1).TimeSinceAtt <= 0 && createdint == 1)
+	{
+		ECS::DestroyEntity(tempent);
+		std::cout << "Destroyed ent";
+		ECS::GetComponent<PlayerData>(1).TimeSinceAtt = 0.7f;
+		createdint = 0;
 	}
 
 	ECS::GetComponent<BossObject>(2).RunAI();

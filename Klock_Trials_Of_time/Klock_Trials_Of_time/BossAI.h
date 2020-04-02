@@ -34,6 +34,10 @@ public:
 
 	void SetAttackPosition(b2Vec2 offset);
 
+	b2Vec2 velocity; //for attacks
+
+	bool lockAttack;
+	
 	int AttackNumber;
 
 	int movementNumber;
