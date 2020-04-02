@@ -26,7 +26,7 @@ void BossObject::RunAI()
 	if (doMovement)
 	{
 		PickMovement();
-		BossMovementTimer = 1.5;
+		BossMovementTimer = 1.0;
 	}
 	if (doAttack)
 	{
@@ -70,12 +70,24 @@ void BossObject::TestAttack()
 
 void BossObject::MoveHorizontal(float velo)
 {
-	ECS::GetComponent<PhysicsBody>(EntityNumber).GetBody()->SetLinearVelocity(b2Vec2(velo,0));
+	float velocity = velo;
+	if (ECS::GetComponent<PlayerData>(1).isSlowed)
+		velocity = velocity / 3;
+	else
+		velocity = velo;
+	
+	ECS::GetComponent<PhysicsBody>(EntityNumber).GetBody()->SetLinearVelocity(b2Vec2(velocity,0));
 }
 
 void BossObject::MoveVertical(float velo)
 {
-	ECS::GetComponent<PhysicsBody>(EntityNumber).GetBody()->SetLinearVelocity(b2Vec2(0,velo));
+	float velocity = velo;
+	if (ECS::GetComponent<PlayerData>(1).isSlowed)
+		velocity = velocity / 3;
+	else
+		velocity = velo;
+	
+	ECS::GetComponent<PhysicsBody>(EntityNumber).GetBody()->SetLinearVelocity(b2Vec2(0,velocity));
 }
 
 void BossObject::RunAttack()
@@ -84,9 +96,15 @@ void BossObject::RunAttack()
 	switch (AttackNumber)
 	{
 	case 0:
-		TestAttack();
+		//TestAttack();
 	case 1:
-		ECS::GetComponent<PhysicsBody>(9).GetBody()->SetLinearVelocity(b2Vec2(-50,0));
+
+		float velocity = 50;
+		if (ECS::GetComponent<PlayerData>(1).isSlowed)
+			velocity = velocity / 3;
+		else
+			velocity = 50;
+		ECS::GetComponent<PhysicsBody>(9).GetBody()->SetLinearVelocity(b2Vec2(-velocity,0));
 		
 	}
 			
@@ -97,16 +115,16 @@ void BossObject::RunMovement()
 	switch (movementNumber)
 	{
 	case 0:
-		MoveHorizontal(30.f);
+		MoveHorizontal(50.f);
 		break;
 	case 1:
-		MoveVertical(30.f);
+		MoveVertical(50.f);
 		break;
 	case 2:
-		MoveVertical(-30.f);
+		MoveVertical(-50.f);
 		break;
 	case 3:
-		MoveHorizontal(-30.f);
+		MoveHorizontal(-50.f);
 		break;
 	}
 }
