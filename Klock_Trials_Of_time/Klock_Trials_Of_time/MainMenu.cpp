@@ -27,7 +27,7 @@ void MainMenu::InitScene(float windowWidth, float windowHeight)
 		vec4 temp = ECS::GetComponent<Camera>(entity).GetOrthoSize();
 		ECS::GetComponent<Camera>(entity).SetWindowSize(vec2(float(windowWidth), float(windowHeight)));
 		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
-		ECS::GetComponent<Camera>(entity).Zoom(-180);
+		ECS::GetComponent<Camera>(entity).Zoom(-430);
 
 
 
@@ -118,7 +118,7 @@ void MainMenu::InitScene(float windowWidth, float windowHeight)
 
 		//Grabs reference to various components
 		//Sets up components
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 49.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(999999.f, 9999999.f, 49.f));
 		ECS::GetComponent<PlayerData>(entity).Health = 6;
 		ECS::GetComponent<PlayerData>(entity).canUseTimeSlow = true;
 		ECS::GetComponent<PlayerData>(entity).CurrentScene = 0;
@@ -134,7 +134,7 @@ void MainMenu::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(0.f), float32(0.f));
+		tempDef.position.Set(float32(99999999999999999999.f), float32(9999999999999999.f));
 		tempDef.fixedRotation = true;
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -173,8 +173,26 @@ void MainMenu::InitScene(float windowWidth, float windowHeight)
 
 	}
 
+	//Background entity, core entity #2
+	{
+	//Create new entity
+	auto entity = ECS::CreateEntity();
 
-	//Entity 2 button
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+
+	//Sets up components
+	std::string fileName = "MenuScreen.png";
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
+	ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
+
+	unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
+	ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
+	}
+	//loading screen
+		//Background entity, core entity #3
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -184,17 +202,13 @@ void MainMenu::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Transform>(entity);
 
 		//Sets up components
-		std::string fileName = "timecombat.png"; //this is a place holder
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 50, 50);
+		std::string fileName = "LoadingScreen1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
 		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(50.f, 0.f, 50.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 1.f));
 
-		//Grabs reference to various components
-		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
-
-		//Sets up the Identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
-		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
+		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
 	}
 
 

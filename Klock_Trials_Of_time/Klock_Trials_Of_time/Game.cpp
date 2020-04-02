@@ -55,7 +55,7 @@ void Game::InitGame()
 	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[3];
+	m_activeScene = m_scenes[0];
 	//cuck
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -190,6 +190,8 @@ void Game::GUI()
 
 void Game::Switchscene(int scene)
 {
+	
+
 	m_activeScene = m_scenes[scene];
 
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -221,8 +223,8 @@ void Game::MainMenuControlls(SDL_MouseButtonEvent event)
 void Game::CheckEvents()
 {
 	
-	if (ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
-		MainMenuControlls(BackEnd::GetClickEvent());
+	//if (ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
+	//	MainMenuControlls(BackEnd::GetClickEvent());
 	
 	if (m_close)
 		m_window->Close();
@@ -441,6 +443,16 @@ void Game::KeyboardDown()
 			EffectManager::CreateEffect(Vignette, BackEnd::GetWindowWidth(), BackEnd::GetWindowHeight());
 		else
 			EffectManager::RemoveEffect(0);
+	}
+	
+	if (Input::GetKeyDown(Key::Enter) && ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
+	{
+	//	ECS::GetComponent<Transform>(3).SetPositionX(0.f);
+		std::cout << "m8";
+		ECS::GetComponent<Transform>(3).SetPosition(vec3(0, 0, 5));
+		if (ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
+			Switchscene(1);
+		
 	}
 
 	m_activeScene->KeyboardDown();
