@@ -203,6 +203,8 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<BossObject>(entity);
 		ECS::AttachComponent<PlayerData>(entity);
 
+		ECS::GetComponent<PlayerData>(entity).Health = 15;
+
 		//Sets up components
 		std::string fileName = "shadowklock.png";
 
@@ -662,6 +664,11 @@ void BossFightScene::Update()
 	//ECS::GetComponent<Transform>(3).SetPosition(ECS::GetComponent<HorizontalScroll>(0).GetCam()->GetPosition().x - 260, ECS::GetComponent<VerticalScroll>(0).GetCam()->GetPosition().y + 150, 99);
 	//ECS::GetComponent<Transform>(4).SetPosition(ECS::GetComponent<HorizontalScroll>(0).GetCam()->GetPosition().x - 220, ECS::GetComponent<VerticalScroll>(0).GetCam()->GetPosition().y + 200, 99);
 	ECS::GetComponent<PlayerData>(1).CurrentScene = 3;
+
+	if (ECS::GetComponent<PlayerData>(2).Health == 0)
+	{
+		ECS::GetComponent<PhysicsBody>(2).GetBody()->SetTransform(b2Vec2(-999, 999), 0);
+	}
 	
 	//Gets rid of the rock attack if it hits something
 	if (ECS::GetComponent<PhysicsBody>(10).GetBody()->GetPosition().x < -400)
@@ -727,6 +734,8 @@ void BossFightScene::Update()
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "da hitbox");
 		std::cout << entity << "\n" << tempent << "\n";
+
+		
 	}
 
 	ECS::GetComponent<BossObject>(2).RunAI();

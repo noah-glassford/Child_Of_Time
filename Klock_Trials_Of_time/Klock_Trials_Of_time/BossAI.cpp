@@ -134,7 +134,7 @@ void BossObject::RunAttack()
 	switch (AttackNumber)
 	{
 	case 1:
-		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(tempvelo);
+		//ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(tempvelo);
 		break;
 	}
 }
@@ -144,16 +144,16 @@ void BossObject::RunMovement()
 	switch (movementNumber)
 	{
 	case 0:
-		MoveHorizontal(50.f);
+		//MoveHorizontal(50.f);
 		break;
 	case 1:
 		MoveVertical(-50.f);
 		break;
 	case 2:
-		MoveVertical(50.f);
+		MoveVertical(-50.f);
 		break;
 	case 3:
-		MoveHorizontal(-50.f);
+		//MoveHorizontal(-50.f);
 		break;
 	}
 }
