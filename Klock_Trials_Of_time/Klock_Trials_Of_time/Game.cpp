@@ -55,7 +55,7 @@ void Game::InitGame()
 	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[3];
+	m_activeScene = m_scenes[1];
 	//cuck
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -199,10 +199,8 @@ void Game::Switchscene(int scene)
 
 void Game::MainMenuControlls(SDL_MouseButtonEvent event)
 {
-
 	float windowWidth = BackEnd::GetWindowWidth();
 	float windowHeight = BackEnd::GetWindowHeight();
-
 
 	if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT))
 	{
@@ -216,14 +214,11 @@ void Game::MainMenuControlls(SDL_MouseButtonEvent event)
 	}
 }
 
-
-
 void Game::CheckEvents()
 {
-	
 	if (ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
 		MainMenuControlls(BackEnd::GetClickEvent());
-	
+
 	if (m_close)
 		m_window->Close();
 
@@ -417,12 +412,12 @@ void Game::KeyboardDown()
 			_jump.play();
 		}
 	}
-	if (Input::GetKeyDown(Key::R) && ECS::GetComponent<PlayerData>(1).CanAttack)
+	if (Input::GetKeyDown(Key::K) && ECS::GetComponent<PlayerData>(1).CanAttack)
 		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = true;
 	else
 		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = false;
 
-	if (Input::GetKeyDown(Key::E) && slowSpamBlock && ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).canUseTimeSlow)
+	if (Input::GetKeyDown(Key::L) && slowSpamBlock && ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).canUseTimeSlow)
 	{
 		slowSpamBlock = false;
 		Sound2D _TimeStop("timestop.wav", "group1");
@@ -448,7 +443,7 @@ void Game::KeyboardDown()
 
 void Game::KeyboardUp()
 {
-	if (Input::GetKeyUp(Key::E)) {
+	if (Input::GetKeyUp(Key::L)) {
 		slowSpamBlock = true;
 	}
 
@@ -478,7 +473,7 @@ void Game::MouseClick(SDL_MouseButtonEvent evnt)
 {
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
-	
+
 	m_activeScene->MouseClick(evnt);
 
 	if (m_guiActive)
