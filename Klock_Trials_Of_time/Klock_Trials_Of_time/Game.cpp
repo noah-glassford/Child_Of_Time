@@ -450,8 +450,8 @@ void Game::KeyboardDown()
 	//	ECS::GetComponent<Transform>(3).SetPositionX(0.f);
 		std::cout << "m8";
 		ECS::GetComponent<Transform>(3).SetPosition(vec3(0, 0, 5));
-		if (ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
-			Switchscene(1);
+		//if (ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
+			//Switchscene(1);
 		
 	}
 
@@ -463,7 +463,9 @@ void Game::KeyboardUp()
 	if (Input::GetKeyUp(Key::E)) {
 		slowSpamBlock = true;
 	}
-
+	if (Input::GetKeyUp(Key::Enter) && ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
+		Switchscene(1);
+	
 	m_activeScene->KeyboardUp();
 }
 
