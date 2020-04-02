@@ -49,16 +49,19 @@ void Game::InitGame()
 	//Creates a new scene.
 	//Replace this with your own scene.
 
-	m_scenes.push_back(new PhysicsTestScene("Physics Test Scene")); //0
+	m_scenes.push_back(new MainMenu("Main Menu Scene")); //0
 	m_scenes.push_back(new Level1Scene("Level 1 Scene")); //1
 	m_scenes.push_back(new Level2Scene("Level 2 Scene")); //2
 	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
 	//Sets active scene reference to our scene
 	m_activeScene = m_scenes[3];
+	//cuck
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
+
+	ECS::GetComponent<PlayerData>(1).CurrentScene = 0;
 
 	//Sets m_register to point to the register in the active scene
 	m_register = m_activeScene->GetScene();
@@ -149,6 +152,23 @@ void Game::Update()
 	else
 		ECS::GetComponent<PlayerData>(mainp).CanAttack = 1;
 
+	//The unironic worst way to do this (scene switching code)
+	/*
+	Commented out until we know what coords level 1 ends at
+	CLARK IF YOU TOUCH THIS I WILL DRIVE TO OSHAWA AND COUGH ON YOU
+	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 400) //This is where we put scene switch condition
+	{
+		if (ECS::GetComponent<PlayerData>(1).CurrentScene == 1)
+		{
+			//change scene
+			m_activeScene = m_scenes[2];
+
+			m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
+
+			m_register = m_activeScene->GetScene();
+		}
+	}
+	*/
 	m_activeScene->Update();
 }
 
@@ -168,8 +188,44 @@ void Game::GUI()
 	UI::End();
 }
 
+void Game::Switchscene(int scene)
+{
+	
+
+	m_activeScene = m_scenes[scene];
+
+	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
+
+	m_register = m_activeScene->GetScene();
+}
+
+void Game::MainMenuControlls(SDL_MouseButtonEvent event)
+{
+
+	float windowWidth = BackEnd::GetWindowWidth();
+	float windowHeight = BackEnd::GetWindowHeight();
+
+
+	if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT))
+	{
+		vec3(click) = vec3((event.x / windowWidth) * 100, (event.y / windowHeight) * 100, 0.f);
+		std::cout << click.x << "\n" << click.y << "\n";
+
+		if (click.x < 57 && click.x > 52 && click.y > 45 && click.y < 54)
+		{
+			Switchscene(1);
+		}
+	}
+}
+
+
+
 void Game::CheckEvents()
 {
+	
+	//if (ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
+	//	MainMenuControlls(BackEnd::GetClickEvent());
+	
 	if (m_close)
 		m_window->Close();
 
@@ -388,6 +444,16 @@ void Game::KeyboardDown()
 		else
 			EffectManager::RemoveEffect(0);
 	}
+	
+	if (Input::GetKeyDown(Key::Enter) && ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
+	{
+	//	ECS::GetComponent<Transform>(3).SetPositionX(0.f);
+		std::cout << "m8";
+		ECS::GetComponent<Transform>(3).SetPosition(vec3(0, 0, 5));
+		//if (ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
+			//Switchscene(1);
+		
+	}
 
 	m_activeScene->KeyboardDown();
 }
@@ -397,7 +463,9 @@ void Game::KeyboardUp()
 	if (Input::GetKeyUp(Key::E)) {
 		slowSpamBlock = true;
 	}
-
+	if (Input::GetKeyUp(Key::Enter) && ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
+		Switchscene(1);
+	
 	m_activeScene->KeyboardUp();
 }
 
@@ -424,6 +492,7 @@ void Game::MouseClick(SDL_MouseButtonEvent evnt)
 {
 	//Active scene now captures this input and can use it
 	//Look at base Scene class for more info.
+	
 	m_activeScene->MouseClick(evnt);
 
 	if (m_guiActive)

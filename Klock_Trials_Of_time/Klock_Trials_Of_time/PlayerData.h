@@ -25,6 +25,8 @@ public:
 
 	bool CanAttack = 1;
 
+	int CurrentScene;//Honestly have no fucking idea where else to put this
+
 	bool facingLeft{ 0 };
 
 	bool isSlowed;

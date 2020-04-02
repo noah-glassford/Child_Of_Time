@@ -1,3 +1,5 @@
+//Clark for the love of god don't touch these files
+
 #pragma once
 #include "PlayerData.h"
 #include "Timer.h"
@@ -12,7 +14,9 @@ public:
 	BossObject() {};
 
 
-	void PickAction(); //Picks which action the boss will do randomly
+	void PickMovement(); //Picks which action the boss will do randomly
+
+	void PickAttack();
 
 	void RunAI(); //Function called every frame to run the AI
 
@@ -24,14 +28,24 @@ public:
 
 	void MoveVertical(float velo);
 
+	void RunAttack();
+
 	void RunMovement();
+
+	void SetAttackPosition(b2Vec2 offset);
+
+	int AttackNumber;
 
 	int movementNumber;
 
 	int EntityNumber;
 
-	float BossActionTimer;
+	float BossMovementTimer;
+
+	float BossAttackTimer;
 
 	bool doMovement;
+
+	bool doAttack;
 
 };
