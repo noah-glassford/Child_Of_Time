@@ -1307,7 +1307,7 @@ void Level1Scene::GeneralUpdates()
 {
 	//background scrolls with the camera
 	ECS::GetComponent<Transform>(0).SetPositionX((ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x / 8) + 2550);
-	ECS::GetComponent<Transform>(0).SetPositionY((ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y / 1.2));
+	ECS::GetComponent<Transform>(0).SetPositionY((ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y / 1.2) + 150);
 
 	//checks if the player has the time slowed and adjusts accordingly
 	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed&& platformSpeedMulti > 0.1f && ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).canUseTimeSlow)
@@ -1332,6 +1332,7 @@ void Level1Scene::GeneralUpdates()
 		ECS::GetComponent<PhysicsBody>(19).GetBody()->SetTransform(b2Vec2(2150, 80), 0);
 		ECS::GetComponent<PhysicsBody>(11).GetBody()->SetTransform(b2Vec2(1070, -350), 0);
 		ECS::GetComponent<PhysicsBody>(20).GetBody()->SetTransform(b2Vec2(4000, -350), 0);
+		//this line is broken and i don't know why the fuck it be like that, workin on fixing it
 		//ECS::GetComponent<PhysicsBody>(21).GetBody()->SetTransform(b2Vec2(4000, -350), 0);
 		ECS::GetComponent<PhysicsBody>(22).GetBody()->SetTransform(b2Vec2(4000, -350), 0);
 		ECS::GetComponent<PhysicsBody>(26).GetBody()->SetTransform(b2Vec2(2850, -100), 0);

@@ -833,7 +833,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_kinematicBody;
-		tempDef.position.Set(float32(1150.f), float32(300.f));
+		tempDef.position.Set(float32(1150.f), float32(150.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -872,7 +872,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_kinematicBody;
-		tempDef.position.Set(float32(1150.f), float32(500.f));
+		tempDef.position.Set(float32(1150.f), float32(200.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
