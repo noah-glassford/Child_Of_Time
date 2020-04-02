@@ -998,22 +998,15 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		auto& anim = animController.GetAnimation(0);
 		//Walking right animation
 
-		anim.AddFrame(vec2(0.f, 0.f), vec2(716.f, 640.f));
-		anim.AddFrame(vec2(716.f, 0.f), vec2(716.f, 640.f));
-		anim.AddFrame(vec2(1432.f, 0.f), vec2(716.f, 640.f));
-		anim.AddFrame(vec2(2148.f, 0.f), vec2(716.f, 640.f));
-		anim.AddFrame(vec2(0.f, 640.f), vec2(716.f, 640.f));
-		anim.AddFrame(vec2(716.f, 640.f), vec2(716.f, 640.f));
-		anim.AddFrame(vec2(1432.f, 640.f), vec2(716.f, 640.f));
-		anim.AddFrame(vec2(2148.f, 640.f), vec2(716.f, 640.f));
-		anim.AddFrame(vec2(0.f, 1280.f), vec2(716.f, 640.f));
-		anim.AddFrame(vec2(716.f, 1280.f), vec2(716.f, 640.f));
-		anim.AddFrame(vec2(1432.f, 1280.f), vec2(716.f, 640.f));
-		anim.AddFrame(vec2(2148.f, 1280.f), vec2(716.f, 640.f));
-		anim.AddFrame(vec2(0.f, 1920.f), vec2(716.f, 640.f));
-		anim.AddFrame(vec2(716.f, 1920.f), vec2(716.f, 640.f));
-		anim.AddFrame(vec2(1432.f, 1920.f), vec2(716.f, 640.f));
-		anim.AddFrame(vec2(2148.f, 1920.f), vec2(716.f, 640.f));
+		//robson fuck you, you fucking cuck. I bet if you ever get a significant other they will have an onlyfans. I hope you spill dorito dust on your fur suit sonicfox looks ass sounding ass being ass mother fucker. Platkop kaffir gaan eet jo ma se poss.
+		anim.AddFrame(vec2(0.f, 642.f), vec2(716.f, 0.f));
+		anim.AddFrame(vec2(716.f, 642.f), vec2(1432.f, 0.f));
+		anim.AddFrame(vec2(1432.f, 642.f), vec2(2148.f, 0.f));
+		anim.AddFrame(vec2(2148.f, 642.f), vec2(2864.f, 0.f));
+		anim.AddFrame(vec2(0.f, 1284.f), vec2(716.f, 642.f));
+		anim.AddFrame(vec2(716.f, 1284.f), vec2(1432.f, 642.f));
+		anim.AddFrame(vec2(1432.f, 1284.f), vec2(2148.f, 642.f));
+		anim.AddFrame(vec2(2148.f, 1284.f), vec2(2864.f, 642.f));
 
 		anim.SetRepeating(true);
 		anim.SetSecPerFrame(0.1f);
