@@ -707,7 +707,10 @@ void BossFightScene::Update()
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x + 15), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
+		if (!ECS::GetComponent<PlayerData>(1).facingLeft)
+			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x + 15), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
+		else
+			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x - 15), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
 		tempDef.fixedRotation = true;
 		tempDef.gravityScale = 0;
 
@@ -725,7 +728,7 @@ void BossFightScene::Update()
 		//myFixtureDef.friction = 1.f;
 
 		//Combat fixture
-		polygonShape.SetAsBox(12.f, 12.f, b2Vec2(0.f, 35.f), 0);
+		polygonShape.SetAsBox(25.f, 25.f, b2Vec2(0.f, 35.f), 0);
 		myFixtureDef.isSensor = true;
 		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
 		footSensorFixture->SetUserData((void*)7);
