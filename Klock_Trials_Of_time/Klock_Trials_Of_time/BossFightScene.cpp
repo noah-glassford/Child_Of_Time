@@ -647,7 +647,134 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 	}
 
 #pragma endregion
-	
+
+#pragma region moreplatforms
+	//ent 5
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "BossPlatform.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 20);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 50.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(0.f), float32(20.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)10);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
+	}
+
+	//ent 5
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "BossPlatform.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 20);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 50.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(-170.f), float32(-60.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)10);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
+	}
+
+	//ent 5
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "BossPlatform.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 20);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 50.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(140.f), float32(-60.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)10);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
+	}
+#pragma endregion
 
 	Sound2D _jump("BossMusic.mp3", "group1");
 	_jump.play();
