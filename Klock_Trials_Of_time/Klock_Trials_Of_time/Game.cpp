@@ -190,6 +190,8 @@ void Game::GUI()
 
 void Game::Switchscene(int scene)
 {
+	
+
 	m_activeScene = m_scenes[scene];
 
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -437,6 +439,16 @@ void Game::KeyboardDown()
 		else
 			EffectManager::RemoveEffect(0);
 	}
+	
+	if (Input::GetKeyDown(Key::Enter) && ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
+	{
+	//	ECS::GetComponent<Transform>(3).SetPositionX(0.f);
+		std::cout << "m8";
+		ECS::GetComponent<Transform>(3).SetPosition(vec3(0, 0, 5));
+		//if (ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
+			//Switchscene(1);
+		
+	}
 
 	m_activeScene->KeyboardDown();
 }
@@ -446,7 +458,9 @@ void Game::KeyboardUp()
 	if (Input::GetKeyUp(Key::L)) {
 		slowSpamBlock = true;
 	}
-
+	if (Input::GetKeyUp(Key::Enter) && ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
+		Switchscene(1);
+	
 	m_activeScene->KeyboardUp();
 }
 

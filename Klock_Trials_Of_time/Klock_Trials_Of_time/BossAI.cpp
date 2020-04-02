@@ -7,9 +7,35 @@ void BossObject::PickMovement()
 
 void BossObject::PickAttack()
 {
-	AttackNumber = rand() % 3;
+	lockAttack = 1;
+	AttackNumber = 1;
 	SetAttackPosition(b2Vec2(-50, 0));
-	std::cout << AttackNumber;
+	
+	if (ECS::GetComponent<PhysicsBody>(2).GetPosition().x < ECS::GetComponent<PhysicsBody>(1).GetPosition().x)
+	{
+		lockAttack == 0;
+		velocity = (b2Vec2(120, 0));
+	}
+	if (ECS::GetComponent<PhysicsBody>(2).GetPosition().x > ECS::GetComponent<PhysicsBody>(1).GetPosition().x)
+	{
+		lockAttack = 0;
+		velocity = (b2Vec2(-120, 0));
+	}
+
+	if (ECS::GetComponent<PhysicsBody>(2).GetPosition().y > ECS::GetComponent<PhysicsBody>(1).GetPosition().y + 75&&
+		ECS::GetComponent<PhysicsBody>(2).GetPosition().x < ECS::GetComponent<PhysicsBody>(1).GetPosition().x)
+	{
+		lockAttack = 0;
+		velocity = (b2Vec2(120, -120));
+	}
+	if (ECS::GetComponent<PhysicsBody>(2).GetPosition().y > ECS::GetComponent<PhysicsBody>(1).GetPosition().y+75&&
+		ECS::GetComponent<PhysicsBody>(2).GetPosition().x > ECS::GetComponent<PhysicsBody>(1).GetPosition().x)
+	{
+		lockAttack = 0;
+		velocity = (b2Vec2(-120, -120));
+	}
+	
+	//std::cout << AttackNumber;
 }
 
 void BossObject::RunAI()
@@ -26,7 +52,7 @@ void BossObject::RunAI()
 	if (doMovement)
 	{
 		PickMovement();
-		BossMovementTimer = 1.5;
+		BossMovementTimer = 1.0;
 	}
 	if (doAttack)
 	{
@@ -70,26 +96,47 @@ void BossObject::TestAttack()
 
 void BossObject::MoveHorizontal(float velo)
 {
-	ECS::GetComponent<PhysicsBody>(EntityNumber).GetBody()->SetLinearVelocity(b2Vec2(velo,0));
+	float velocity = velo;
+	if (ECS::GetComponent<PlayerData>(1).isSlowed)
+		velocity = velocity / 3;
+	else
+		velocity = velo;
+	
+	ECS::GetComponent<PhysicsBody>(EntityNumber).GetBody()->SetLinearVelocity(b2Vec2(velocity,0));
 }
 
 void BossObject::MoveVertical(float velo)
 {
-	ECS::GetComponent<PhysicsBody>(EntityNumber).GetBody()->SetLinearVelocity(b2Vec2(0,velo));
+	float velocity = velo;
+	if (ECS::GetComponent<PlayerData>(1).isSlowed)
+		velocity = velocity / 3;
+	else
+		velocity = velo;
+	
+	ECS::GetComponent<PhysicsBody>(EntityNumber).GetBody()->SetLinearVelocity(b2Vec2(0,velocity));
 }
 
 void BossObject::RunAttack()
 {
-	
+	b2Vec2 tempvelo = velocity;
+	if (ECS::GetComponent<PlayerData>(1).isSlowed)
+	{
+		tempvelo.x = tempvelo.x / 4;
+		tempvelo.y = tempvelo.y / 4;
+	}
+	else
+	{
+		tempvelo = velocity;
+	}
+
+
+
 	switch (AttackNumber)
 	{
-	case 0:
-		TestAttack();
 	case 1:
-		ECS::GetComponent<PhysicsBody>(9).GetBody()->SetLinearVelocity(b2Vec2(-50,0));
-		
+		//ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(tempvelo);
+		break;
 	}
-			
 }
 
 void BossObject::RunMovement()
@@ -97,21 +144,21 @@ void BossObject::RunMovement()
 	switch (movementNumber)
 	{
 	case 0:
-		MoveHorizontal(30.f);
+		//MoveHorizontal(50.f);
 		break;
 	case 1:
-		MoveVertical(30.f);
+		MoveVertical(-50.f);
 		break;
 	case 2:
-		MoveVertical(-30.f);
+		MoveVertical(-50.f);
 		break;
 	case 3:
-		MoveHorizontal(-30.f);
+		//MoveHorizontal(-50.f);
 		break;
 	}
 }
 
 void BossObject::SetAttackPosition(b2Vec2 offset)
 {
-	ECS::GetComponent<PhysicsBody>(9).GetBody()->SetTransform(b2Vec2(ECS::GetComponent<PhysicsBody>(2).GetPosition().x + offset.x,ECS::GetComponent<PhysicsBody>(2).GetPosition().y + offset.y),0);
+	ECS::GetComponent<PhysicsBody>(10).GetBody()->SetTransform(b2Vec2(ECS::GetComponent<PhysicsBody>(2).GetPosition().x + offset.x,ECS::GetComponent<PhysicsBody>(2).GetPosition().y + offset.y),0);
 }
