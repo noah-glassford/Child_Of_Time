@@ -16,20 +16,26 @@ public:
 	bool OnWallLeft;
 
 	bool isAttacking{ 0 };
-	
+
 	bool canjump;//This is literally only used to make playing with a controller not feel bad
 
 	int Health{ 3 };
 
-	int framesSinceAtt{ 0 };
+	float TimeSinceAtt{ 0 };
+
+	bool CanAttack = 1;
+
+	int CurrentScene;//Honestly have no fucking idea where else to put this
 
 	bool facingLeft{ 0 };
 
 	bool isSlowed;
-	
+
 	float UsedUpTime{ 0 };
 
 	float TimeSinceHit = 0.f;
 
 	bool Hit{ 0 };
+
+	bool canUseTimeSlow = false;
 };

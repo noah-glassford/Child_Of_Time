@@ -4,10 +4,13 @@ float platAcc;
 
 float plat4MoveSpeed = 12;
 float plat6MoveSpeed = 0;
+float plat1819MoveSpeed = -100;
+float plat23MoveSpeed = 24;
+float plat27MoveSpeed = 20;
 
 Level2Scene::Level2Scene(std::string name)
 {
-	m_gravity = b2Vec2(float32(0.f), float32(-35.f));
+	m_gravity = b2Vec2(float32(0.f), float32(-60.f));
 	m_physicsWorld->SetGravity(m_gravity);
 	m_physicsWorld->SetContactListener(&listener);
 }
@@ -48,6 +51,9 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		//Create new Entity
 		auto entity = ECS::CreateEntity();
 		ECS::SetIsMainPlayer(entity, true);
+
+		Sound2D _jump("Level2Music.mp3", "group1");
+		_jump.play();
 
 		//Add components
 		ECS::AttachComponent<Sprite>(entity);
@@ -145,6 +151,8 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit() | EntityIdentifier::AnimationBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Klock");
 	}
+
+	ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).canUseTimeSlow = true; // make sure this is called after the player is built
 
 	{//Creates camera entity, entity 2
 		auto entity = ECS::CreateEntity();
@@ -303,7 +311,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 
 		//Sets up components
 		std::string fileName = "2_plat3.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 50, 200);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 50, 160);
 		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 50.f));
 
@@ -319,7 +327,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_kinematicBody;
-		tempDef.position.Set(float32(350.f), float32(475.f));
+		tempDef.position.Set(float32(350.f), float32(400.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -408,7 +416,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
 	}
-	//setup platform #3 used after the first door, entity 8
+	//setup platform #3 used after the first door, entity 9
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -447,7 +455,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
 	}
-	//setup platform used as you return from the door, entity 9
+	//setup platform used as you return from the door, entity 10
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -486,7 +494,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
 	}
-	//setup platform #2 used as you return from the door, entity 10
+	//setup platform #2 used as you return from the door, entity 11
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -525,7 +533,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
 	}
-	//setup platform #3 used as you return from the door, entity 11
+	//setup platform #3 used as you return from the door, entity 12
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -564,7 +572,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
 	}
-	//setup roof platform #1, entity 12
+	//setup roof platform #1, entity 13
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -603,7 +611,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
 	}
-	//setup platform used as you return from the door, entity 13
+	//setup platform used as you return from the door, entity 14
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -642,7 +650,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
 	}
-	//setup wall used to block player from skiping intro, entity 14
+	//setup wall used to block player from skiping intro, entity 15
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -681,7 +689,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
 	}
-	//setup wall used right after the intro, entity 15
+	//setup wall used right after the intro, entity 16
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -720,7 +728,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
 	}
-	//setup platform used right after the main sequence, entity 16
+	//setup platform used right after the main sequence, entity 17
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -758,6 +766,702 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		//Sets up the Identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 	}
+	//setup platform to use as falling door #1, entity 18
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat3.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 50, 200);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_kinematicBody;
+		tempDef.position.Set(float32(950.f), float32(100.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 24), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 4");
+	}
+	//setup platform to use as falling door #2, entity 19
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat3.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 50, 200);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_kinematicBody;
+		tempDef.position.Set(float32(1150.f), float32(150.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 24), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 4");
+	}
+	//setup platform to use as falling door #3, entity 20
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat3.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 50, 200);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_kinematicBody;
+		tempDef.position.Set(float32(1150.f), float32(200.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 24), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 4");
+	}
+	//setup platform used right after the falling rock sequence, entity 21
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat4.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 200, 50);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(20.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(1350.f), float32(50.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 28), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+	}
+	//setup platform #2 used right after the falling rock sequence, entity 22
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat4.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 200, 50);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(20.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(1600.f), float32(125.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 28), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+	}
+	//setup platform #3 used right after the falling rock sequence, entity 23
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 50);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_kinematicBody;
+		tempDef.position.Set(float32(1780.f), float32(125.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 24), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 4");
+	}
+	//setup platform #4 used right after the falling rock sequence, entity 24
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat4.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 200, 50);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(20.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(1620.f), float32(325.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 28), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+	}
+	//setup platform #5 used right after the falling rock sequence, entity 25
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat4.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 250, 50);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(20.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(1300.f), float32(295.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 28), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+	}
+	//setup platform #6 used right after the falling rock sequence, entity 26
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat4.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 20);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(20.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(1300.f), float32(410.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 28), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+	}
+	//setup platform #7 used right after the falling rock sequence, entity 27
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 20);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(20.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_kinematicBody;
+		tempDef.position.Set(float32(1375.f), float32(480.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 28), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+	}
+	//setup platform #8 used right after the falling rock sequence, entity 28
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat4.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 200, 50);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(20.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(1750.f), float32(480.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 28), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+	}
+	//setup wall used right after the second sequence, entity 29
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat3.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 50, 400);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(20.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(1900.f), float32(325.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 28), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
+	}
+	//setup wall #2 used right after the second sequence, entity 30
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat3.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 50, 400);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(20.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(2000.f), float32(450.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 28), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
+	}
+	//setup platform used right after the third sequence, entity 31
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat4.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 200, 50);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(20.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(1980.f), float32(150.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 28), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+	}
+	//Time remaining hud entity 32
+	{
+		auto entity = ECS::CreateEntity();
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<AnimationController>(entity);
+
+		std::string fileName = "timemeter.png";
+
+		auto& animController = ECS::GetComponent<AnimationController>(entity);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(0);
+		auto& full = animController.GetAnimation(0);
+		full.AddFrame(vec2(0.f, 614.f), vec2(584.f, 0.f));
+		full.SetRepeating(true);
+		full.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus1 = animController.GetAnimation(1);
+		minus1.AddFrame(vec2(637.f, 614.f), vec2(1221.f, 0.f));
+		minus1.SetRepeating(true);
+		minus1.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus2 = animController.GetAnimation(2);
+		minus2.AddFrame(vec2(1258, 614), vec2(1842, 0));
+		minus2.SetRepeating(true);
+		minus2.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus3 = animController.GetAnimation(3);
+		minus3.AddFrame(vec2(1883, 614), vec2(2467, 0));
+		minus3.SetRepeating(true);
+		minus3.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus4 = animController.GetAnimation(4);
+		minus4.AddFrame(vec2(0, 1318), vec2(584, 704));
+		minus4.SetRepeating(true);
+		minus4.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus5 = animController.GetAnimation(5);
+		minus5.AddFrame(vec2(656, 1318), vec2(1240, 704));
+		minus5.SetRepeating(true);
+		minus5.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus6 = animController.GetAnimation(6);
+		minus6.AddFrame(vec2(1288, 1318), vec2(1872, 704));
+		minus6.SetRepeating(true);
+		minus6.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus7 = animController.GetAnimation(7);
+		minus7.AddFrame(vec2(1898, 1318), vec2(2482, 704));
+		minus7.SetRepeating(true);
+		minus7.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus8 = animController.GetAnimation(8);
+		minus8.AddFrame(vec2(2501, 1318), vec2(3085, 700));
+		minus8.SetRepeating(true);
+		minus8.SetSecPerFrame(0.1f);
+
+
+
+		ECS::GetComponent<Transform>(entity).SetPosition(ECS::GetComponent<PhysicsBody>(1).GetPosition().x, ECS::GetComponent<PhysicsBody>(1).GetPosition().y, 99);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
+
+		//Sets up identifier
+		unsigned int bitHolder = EntityIdentifier::TransformBit() | EntityIdentifier::AnimationBit() | EntityIdentifier::SpriteBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Time Left UI");
+
+	}
+
+	//Hp HUD entity 33
+	{
+		auto entity = ECS::CreateEntity();
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<AnimationController>(entity);
+
+		std::string fileName = "health.png";
+
+		auto& animController = ECS::GetComponent<AnimationController>(entity);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(0);
+		auto& full = animController.GetAnimation(0);
+		full.AddFrame(vec2(0.f, 207.f), vec2(818.f, 0.f));
+		full.SetRepeating(true);
+		full.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus1 = animController.GetAnimation(1);
+		minus1.AddFrame(vec2(0.f, 440.f), vec2(818.f, 233.f));
+		minus1.SetRepeating(true);
+		minus1.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus2 = animController.GetAnimation(2);
+		minus2.AddFrame(vec2(0, 680), vec2(818, 473));
+		minus2.SetRepeating(true);
+		minus2.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus3 = animController.GetAnimation(3);
+		minus3.AddFrame(vec2(0, 920), vec2(818, 713));
+		minus3.SetRepeating(true);
+		minus3.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus4 = animController.GetAnimation(4);
+		minus4.AddFrame(vec2(970, 270), vec2(1788, 0));
+		minus4.SetRepeating(true);
+		minus4.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus5 = animController.GetAnimation(5);
+		minus5.AddFrame(vec2(970, 484), vec2(1788, 227));
+		minus5.SetRepeating(true);
+		minus5.SetSecPerFrame(0.1f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		auto& minus6 = animController.GetAnimation(6);
+		minus6.AddFrame(vec2(970, 682), vec2(1788, 475));
+		minus6.SetRepeating(true);
+		minus6.SetSecPerFrame(0.1f);
+
+
+		ECS::GetComponent<Transform>(entity).SetPosition(ECS::GetComponent<PhysicsBody>(1).GetPosition().x, ECS::GetComponent<PhysicsBody>(1).GetPosition().y, 99);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 200, 40, true, &animController);
+
+		//Sets up identifier
+		unsigned int bitHolder = EntityIdentifier::TransformBit() | EntityIdentifier::AnimationBit() | EntityIdentifier::SpriteBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "HP UI");
+
+	}
+
+
 	//Makes the camera focus on the main player
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
@@ -765,19 +1469,76 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 
 void Level2Scene::Update()
 {
+	std::cout << ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x << '\n';
+
+	ECS::GetComponent<Transform>(32).SetPosition(ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x - 280, ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y + 150, 99);
+	ECS::GetComponent<Transform>(33).SetPosition(ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x - 220, ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y + 200, 99);
+
+	//Time slow resource ui for scene 1
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime < 2)
+		ECS::GetComponent<AnimationController>(32).SetActiveAnim(0);
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 2)
+		ECS::GetComponent<AnimationController>(32).SetActiveAnim(1);
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 4)
+		ECS::GetComponent<AnimationController>(32).SetActiveAnim(2);
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 6)
+		ECS::GetComponent<AnimationController>(32).SetActiveAnim(3);
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 8)
+		ECS::GetComponent<AnimationController>(32).SetActiveAnim(4);
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 10)
+		ECS::GetComponent<AnimationController>(32).SetActiveAnim(5);
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 12)
+		ECS::GetComponent<AnimationController>(32).SetActiveAnim(6);
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 14)
+		ECS::GetComponent<AnimationController>(32).SetActiveAnim(7);
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 16)
+		ECS::GetComponent<AnimationController>(32).SetActiveAnim(8);
+
+	//Updates the HP bar ui
+	int i = ECS::GetComponent<PlayerData>(1).Health;
+	switch (i)
+	{
+	case 0:	ECS::GetComponent<AnimationController>(33).SetActiveAnim(6);
+		break;
+	case 1: ECS::GetComponent<AnimationController>(33).SetActiveAnim(5);
+		break;
+	case 2: ECS::GetComponent<AnimationController>(33).SetActiveAnim(4);
+		break;
+	case 3: ECS::GetComponent<AnimationController>(33).SetActiveAnim(3);
+		break;
+	case 4: ECS::GetComponent<AnimationController>(33).SetActiveAnim(2);
+		break;
+	case 5: ECS::GetComponent<AnimationController>(33).SetActiveAnim(1);
+		break;
+	case 6: ECS::GetComponent<AnimationController>(33).SetActiveAnim(0);
+		break;
+	}
+
+	
+	
 	//background scrolls with the camera
 	ECS::GetComponent<Transform>(0).SetPositionX((ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x / 8) + 2800);
-	ECS::GetComponent<Transform>(0).SetPositionY((ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y / 1.4));
-
+	ECS::GetComponent<Transform>(0).SetPositionY((ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y / 1.2));
+	
 	//respawn mechanic
 	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().y < -50) {
-		ECS::GetComponent<PhysicsBody>(1).GetBody()->SetTransform(b2Vec2(0, 150), 0);
-		ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
+		if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x < 800) { //checkpint 1
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetTransform(b2Vec2(0, 150), 0);
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
+		}
+		else if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x < 1350) { //checkpoint 2
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetTransform(b2Vec2(850, 150), 0);
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
+		}
+		else if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x < 2000) { //checkpoint 2
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetTransform(b2Vec2(1350, 150), 0);
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
+		}
 	}
 	//slowed down time check
 	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed&& platAcc > 0.1f)
-		platAcc -= 0.008f;
-	else if (!ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed&& platAcc < 1.f) platAcc += 0.02f;
+		platAcc -= 0.025f;
+	else if (!ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed&& platAcc < 1.f) platAcc += 0.035f;
 
 	//platform 4 movements
 	if (ECS::GetComponent<PhysicsBody>(4).GetBody()->GetPosition().y < 0 || ECS::GetComponent<PhysicsBody>(4).GetBody()->GetPosition().y > 150)
@@ -786,10 +1547,31 @@ void Level2Scene::Update()
 
 	//entity 6 door close
 	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x > 235 && ECS::GetComponent<PhysicsBody>(6).GetBody()->GetPosition().y > 250)
-		plat6MoveSpeed = -120.f;
-	else if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x < 235 && ECS::GetComponent<PhysicsBody>(6).GetBody()->GetPosition().y < 475)
+		plat6MoveSpeed = -60.f;
+	else if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x < 235 && ECS::GetComponent<PhysicsBody>(6).GetBody()->GetPosition().y < 400)
 		plat6MoveSpeed = 30.f;
 	else
 		plat6MoveSpeed = 0.f;
 	ECS::GetComponent<PhysicsBody>(6).GetBody()->SetLinearVelocity(b2Vec2(0.f, plat6MoveSpeed * platAcc));
+
+	//entity 18, 19 & 20 (falling rocks)
+	ECS::GetComponent<PhysicsBody>(18).GetBody()->SetLinearVelocity(b2Vec2(0.f, plat1819MoveSpeed * platAcc));
+	ECS::GetComponent<PhysicsBody>(19).GetBody()->SetLinearVelocity(b2Vec2(0.f, plat1819MoveSpeed * platAcc));
+	ECS::GetComponent<PhysicsBody>(20).GetBody()->SetLinearVelocity(b2Vec2(0.f, plat1819MoveSpeed * platAcc));
+
+	if (ECS::GetComponent<PhysicsBody>(18).GetBody()->GetPosition().y < -400)
+		ECS::GetComponent<PhysicsBody>(18).GetBody()->SetTransform(b2Vec2(950, 800), 0.f);
+	if (ECS::GetComponent<PhysicsBody>(19).GetBody()->GetPosition().y < -400)
+		ECS::GetComponent<PhysicsBody>(19).GetBody()->SetTransform(b2Vec2(1050, 800), 0.f);
+	if (ECS::GetComponent<PhysicsBody>(20).GetBody()->GetPosition().y < -400)
+		ECS::GetComponent<PhysicsBody>(20).GetBody()->SetTransform(b2Vec2(1150, 800), 0.f);
+
+	//platform 23 movements
+	if (ECS::GetComponent<PhysicsBody>(23).GetBody()->GetPosition().y < 100 || ECS::GetComponent<PhysicsBody>(23).GetBody()->GetPosition().y > 350)
+		plat23MoveSpeed = -plat23MoveSpeed;
+	ECS::GetComponent<PhysicsBody>(23).GetBody()->SetLinearVelocity(b2Vec2(0.f, plat23MoveSpeed * platAcc));
+	//platform 27 movements
+	if (ECS::GetComponent<PhysicsBody>(27).GetBody()->GetPosition().x < 1375 || ECS::GetComponent<PhysicsBody>(27).GetBody()->GetPosition().x > 1600)
+		plat27MoveSpeed = -plat27MoveSpeed;
+	ECS::GetComponent<PhysicsBody>(27).GetBody()->SetLinearVelocity(b2Vec2(plat27MoveSpeed * platAcc, 0.f));
 }

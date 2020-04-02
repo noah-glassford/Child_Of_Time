@@ -143,6 +143,7 @@
     <ClInclude Include="AnimationSystem.h" />
     <ClInclude Include="BackEnd.h" />
     <ClInclude Include="BloomEffect.h" />
+    <ClInclude Include="BossAI.h" />
     <ClInclude Include="BossFightScene.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraSystem.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="JSON.h" />
     <ClInclude Include="Level2Scene.h" />
+    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="MovementSystem.h" />
     <ClInclude Include="PhysicsBody.h" />
@@ -200,6 +202,7 @@
     <ClCompile Include="AnimationSystem.cpp" />
     <ClCompile Include="BackEnd.cpp" />
     <ClCompile Include="BloomEffect.cpp" />
+    <ClCompile Include="BossAI.cpp" />
     <ClCompile Include="BossFightScene.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraSystem.cpp" />
@@ -222,6 +225,7 @@
     <ClCompile Include="Level1Scene.cpp" />
     <ClCompile Include="Level2Scene.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="MovementSystem.cpp" />
     <ClCompile Include="PhysicsBody.cpp" />
