@@ -7,9 +7,9 @@ void BossObject::PickMovement()
 
 void BossObject::PickAttack()
 {
-	AttackNumber = rand() % 3;
+	AttackNumber = 1;
 	SetAttackPosition(b2Vec2(-50, 0));
-	std::cout << AttackNumber;
+	//std::cout << AttackNumber;
 }
 
 void BossObject::RunAI()
@@ -92,22 +92,25 @@ void BossObject::MoveVertical(float velo)
 
 void BossObject::RunAttack()
 {
+	b2Vec2 velocity;
+	if (ECS::GetComponent<PhysicsBody>(2).GetPosition().x < ECS::GetComponent<PhysicsBody>(1).GetPosition().x)
+		velocity = (b2Vec2(120, 0));
+	else if (ECS::GetComponent<PhysicsBody>(2).GetPosition().x > ECS::GetComponent<PhysicsBody>(1).GetPosition().x)
+		velocity = (b2Vec2(-120, 0));
+	else if (ECS::GetComponent<PhysicsBody>(2).GetPosition().y > ECS::GetComponent<PhysicsBody>(1).GetPosition().y  && 
+		ECS::GetComponent<PhysicsBody>(2).GetPosition().x < ECS::GetComponent<PhysicsBody>(1).GetPosition().x)
+		velocity = (b2Vec2(120, -120));
+	else if (ECS::GetComponent<PhysicsBody>(2).GetPosition().y > ECS::GetComponent<PhysicsBody>(1).GetPosition().y&&
+		ECS::GetComponent<PhysicsBody>(2).GetPosition().x > ECS::GetComponent<PhysicsBody>(1).GetPosition().x)
+		velocity = (b2Vec2(-120, -120));
+
 	
 	switch (AttackNumber)
 	{
-	case 0:
-		//TestAttack();
 	case 1:
-
-		float velocity = 50;
-		if (ECS::GetComponent<PlayerData>(1).isSlowed)
-			velocity = velocity / 3;
-		else
-			velocity = 50;
-		ECS::GetComponent<PhysicsBody>(9).GetBody()->SetLinearVelocity(b2Vec2(-velocity,0));
-		
+		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(velocity);
+		break;
 	}
-			
 }
 
 void BossObject::RunMovement()
@@ -118,10 +121,10 @@ void BossObject::RunMovement()
 		MoveHorizontal(50.f);
 		break;
 	case 1:
-		MoveVertical(50.f);
+		MoveVertical(-50.f);
 		break;
 	case 2:
-		MoveVertical(-50.f);
+		MoveVertical(50.f);
 		break;
 	case 3:
 		MoveHorizontal(-50.f);
@@ -131,5 +134,5 @@ void BossObject::RunMovement()
 
 void BossObject::SetAttackPosition(b2Vec2 offset)
 {
-	ECS::GetComponent<PhysicsBody>(9).GetBody()->SetTransform(b2Vec2(ECS::GetComponent<PhysicsBody>(2).GetPosition().x + offset.x,ECS::GetComponent<PhysicsBody>(2).GetPosition().y + offset.y),0);
+	ECS::GetComponent<PhysicsBody>(10).GetBody()->SetTransform(b2Vec2(ECS::GetComponent<PhysicsBody>(2).GetPosition().x + offset.x,ECS::GetComponent<PhysicsBody>(2).GetPosition().y + offset.y),0);
 }
