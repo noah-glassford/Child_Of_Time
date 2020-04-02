@@ -7,8 +7,34 @@ void BossObject::PickMovement()
 
 void BossObject::PickAttack()
 {
+	lockAttack = 1;
 	AttackNumber = 1;
 	SetAttackPosition(b2Vec2(-50, 0));
+	
+	if (ECS::GetComponent<PhysicsBody>(2).GetPosition().x < ECS::GetComponent<PhysicsBody>(1).GetPosition().x)
+	{
+		lockAttack == 0;
+		velocity = (b2Vec2(120, 0));
+	}
+	if (ECS::GetComponent<PhysicsBody>(2).GetPosition().x > ECS::GetComponent<PhysicsBody>(1).GetPosition().x)
+	{
+		lockAttack = 0;
+		velocity = (b2Vec2(-120, 0));
+	}
+
+	if (ECS::GetComponent<PhysicsBody>(2).GetPosition().y > ECS::GetComponent<PhysicsBody>(1).GetPosition().y + 75&&
+		ECS::GetComponent<PhysicsBody>(2).GetPosition().x < ECS::GetComponent<PhysicsBody>(1).GetPosition().x)
+	{
+		lockAttack = 0;
+		velocity = (b2Vec2(120, -120));
+	}
+	if (ECS::GetComponent<PhysicsBody>(2).GetPosition().y > ECS::GetComponent<PhysicsBody>(1).GetPosition().y+75&&
+		ECS::GetComponent<PhysicsBody>(2).GetPosition().x > ECS::GetComponent<PhysicsBody>(1).GetPosition().x)
+	{
+		lockAttack = 0;
+		velocity = (b2Vec2(-120, -120));
+	}
+	
 	//std::cout << AttackNumber;
 }
 
@@ -92,23 +118,23 @@ void BossObject::MoveVertical(float velo)
 
 void BossObject::RunAttack()
 {
-	b2Vec2 velocity;
-	if (ECS::GetComponent<PhysicsBody>(2).GetPosition().x < ECS::GetComponent<PhysicsBody>(1).GetPosition().x)
-		velocity = (b2Vec2(120, 0));
-	else if (ECS::GetComponent<PhysicsBody>(2).GetPosition().x > ECS::GetComponent<PhysicsBody>(1).GetPosition().x)
-		velocity = (b2Vec2(-120, 0));
-	else if (ECS::GetComponent<PhysicsBody>(2).GetPosition().y > ECS::GetComponent<PhysicsBody>(1).GetPosition().y  && 
-		ECS::GetComponent<PhysicsBody>(2).GetPosition().x < ECS::GetComponent<PhysicsBody>(1).GetPosition().x)
-		velocity = (b2Vec2(120, -120));
-	else if (ECS::GetComponent<PhysicsBody>(2).GetPosition().y > ECS::GetComponent<PhysicsBody>(1).GetPosition().y&&
-		ECS::GetComponent<PhysicsBody>(2).GetPosition().x > ECS::GetComponent<PhysicsBody>(1).GetPosition().x)
-		velocity = (b2Vec2(-120, -120));
+	b2Vec2 tempvelo = velocity;
+	if (ECS::GetComponent<PlayerData>(1).isSlowed)
+	{
+		tempvelo.x = tempvelo.x / 4;
+		tempvelo.y = tempvelo.y / 4;
+	}
+	else
+	{
+		tempvelo = velocity;
+	}
 
-	
+
+
 	switch (AttackNumber)
 	{
 	case 1:
-		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(velocity);
+		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(tempvelo);
 		break;
 	}
 }
