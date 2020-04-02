@@ -1474,6 +1474,76 @@ void Level2Scene::Update()
 	ECS::GetComponent<Transform>(32).SetPosition(ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x - 280, ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y + 150, 99);
 	ECS::GetComponent<Transform>(33).SetPosition(ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x - 220, ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y + 200, 99);
 
+	if (ECS::GetComponent<PlayerData>(1).isAttacking)
+	{
+		std::cout << "BRUH";
+
+		createdint = 1;
+
+		auto entity = ECS::CreateEntity();
+		tempent = entity;
+		//std::cout << entity << " " << tempent;
+		//Add components
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 98.f));
+
+		std::string fileName = "floatplatform.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 20, 20);
+		//Grabs reference to various components
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_dynamicBody;
+		if (ECS::GetComponent<PlayerData>(1).facingLeft)
+			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x - 45), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
+		else
+			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x + 45), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
+
+		tempDef.fixedRotation = true;
+		tempDef.gravityScale = 0;
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(1), float(1),
+			vec2(0.f, 0.f), true, true);
+
+		//fixture definition
+		b2PolygonShape polygonShape;
+		b2FixtureDef myFixtureDef;
+		if (ECS::GetComponent<PlayerData>(1).facingLeft)
+			polygonShape.SetAsBox(20.f, 20.f, b2Vec2(-45.f, 0.f), 0);
+		else
+			polygonShape.SetAsBox(20.f, 20.f, b2Vec2(45.f, 0.f), 0);
+
+		myFixtureDef.shape = &polygonShape;
+		myFixtureDef.density = 0;
+		myFixtureDef.isSensor = 1;
+		//myFixtureDef.friction = 1.f;
+
+		myFixtureDef.isSensor = true;
+		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
+		footSensorFixture->SetUserData((void*)7);
+
+		//Sets up the identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "da hitbox");
+		std::cout << entity << "\n" << tempent << "\n";
+	}
+	else if (ECS::GetComponent<PlayerData>(1).TimeSinceAtt <= 0 && createdint == 1)
+	{
+		ECS::DestroyEntity(tempent);
+		std::cout << "Destroyed ent";
+		ECS::GetComponent<PlayerData>(1).TimeSinceAtt = 0.7f;
+		createdint = 0;
+	}
+	
+	
+	
 	//Time slow resource ui for scene 1
 	if (ECS::GetComponent<PlayerData>(1).UsedUpTime < 2)
 		ECS::GetComponent<AnimationController>(32).SetActiveAnim(0);
