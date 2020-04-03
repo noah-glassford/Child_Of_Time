@@ -57,7 +57,6 @@ void Game::InitGame()
 	//Sets active scene reference to our scene
 	m_activeScene = m_scenes[0];
 
-
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 
@@ -115,8 +114,6 @@ void Game::Update()
 	//Update Physics System
 	PhysicsSystem::Update(m_register, m_activeScene->GetPhysicsWorld());
 
-
-	
 	//Animation stuff
 	//if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().x == 0)
 		//ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
@@ -125,48 +122,37 @@ void Game::Update()
 
 	if (ECS::GetComponent<AnimationController>(1).GetActiveAnim() == 6 && ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().x == 0)
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(4);
-	if (ECS::GetComponent<PlayerData>(1).facingLeft && ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().x == 0)
+	if (ECS::GetComponent<PlayerData>(1).facingLeft&& ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().x == 0)
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(4);
 
-
 	if (ECS::GetComponent<AnimationController>(1).GetAnimation(ECS::GetComponent<AnimationController>(1).GetActiveAnim()).GetAnimationDone() && !ECS::GetComponent<PlayerData>(1).facingLeft)
-		{
+	{
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
-		}
+	}
 	else if (ECS::GetComponent<AnimationController>(1).GetAnimation(ECS::GetComponent<AnimationController>(1).GetActiveAnim()).GetAnimationDone() && ECS::GetComponent<PlayerData>(1).facingLeft)
 	{
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(4);
 	}
 
-
-
-
-
-
-	
-	if (!ECS::GetComponent<PlayerData>(1).Grounded && !ECS::GetComponent<PlayerData>(1).facingLeft && ECS::GetComponent<AnimationController>(1).GetAnimation(ECS::GetComponent<AnimationController>(1).GetActiveAnim()).GetAnimationDone()
+	if (!ECS::GetComponent<PlayerData>(1).Grounded && !ECS::GetComponent<PlayerData>(1).facingLeft&& ECS::GetComponent<AnimationController>(1).GetAnimation(ECS::GetComponent<AnimationController>(1).GetActiveAnim()).GetAnimationDone()
 		)
 	{
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
 	}
-	else if (!ECS::GetComponent<PlayerData>(1).Grounded && ECS::GetComponent<PlayerData>(1).facingLeft && ECS::GetComponent<AnimationController>(1).GetAnimation(ECS::GetComponent<AnimationController>(1).GetActiveAnim()).GetAnimationDone()
+	else if (!ECS::GetComponent<PlayerData>(1).Grounded&& ECS::GetComponent<PlayerData>(1).facingLeft&& ECS::GetComponent<AnimationController>(1).GetAnimation(ECS::GetComponent<AnimationController>(1).GetActiveAnim()).GetAnimationDone()
 		)
 	{
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(5);
 	}
-	
 
-	
 	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 3600 && ECS::GetComponent<PlayerData>(1).CurrentScene == 1 &&
-		 ECS::GetComponent<PlayerData>(1).canUseTimeSlow == 1)
+		ECS::GetComponent<PlayerData>(1).canUseTimeSlow == 1)
 		Switchscene(2);
-	
+
 	if (ECS::GetComponent<PlayerData>(1).Health == 0)
 	{
-		
 		Switchscene(0);
 	}
-	
 
 	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
 	unsigned int mainp = EntityIdentifier::MainPlayer();
@@ -174,7 +160,7 @@ void Game::Update()
 	if (ECS::GetComponent<PlayerData>(mainp).UsedUpTime > 0 && !ECS::GetComponent<PlayerData>(1).isSlowed)
 		ECS::GetComponent<PlayerData>(mainp).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime - deltaTime * 2;
 
-	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed) 
+	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed)
 	{
 		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime <= 8.f)
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime + deltaTime;
@@ -206,7 +192,7 @@ void Game::Update()
 	else
 	{
 		ECS::GetComponent<PlayerData>(mainp).CanAttack = 1;
-//		ECS::GetComponent<AnimationController>(1).GetAnimation(3).SetRepeating(false);
+		//		ECS::GetComponent<AnimationController>(1).GetAnimation(3).SetRepeating(false);
 	}
 	//The unironic worst way to do this (scene switching code)
 	/*
@@ -246,9 +232,8 @@ void Game::GUI()
 
 void Game::Switchscene(int scene)
 {
-
 	m_activeScene->Unload();
-	
+
 	m_activeScene = m_scenes[scene];
 
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -298,7 +283,6 @@ void Game::AcceptInput()
 	//Just calls all the other input functions
 	GamepadInput();
 
-	
 	KeyboardHold();
 	KeyboardDown();
 	KeyboardUp();
@@ -438,26 +422,21 @@ void Game::KeyboardHold()
 			Klock.MoveLeft(38.f);
 		ECS::GetComponent<PlayerData>(1).facingLeft = 1;
 		//if (!ECS::GetComponent<AnimationController>(1).GetActiveAnim() == 3)
-		if (ECS::GetComponent<PlayerData>(1).Grounded && ECS::GetComponent<AnimationController>(1).GetActiveAnim() != 7)
-		ECS::GetComponent<AnimationController>(1).SetActiveAnim(6);
-
-		
-
-
+		if (ECS::GetComponent<PlayerData>(1).Grounded&& ECS::GetComponent<AnimationController>(1).GetActiveAnim() != 7)
+			ECS::GetComponent<AnimationController>(1).SetActiveAnim(6);
 	}
 	if (Input::GetKey(Key::D))
 	{
 		if (!ECS::GetComponent<PlayerData>(1).OnWallRight&& ECS::GetComponent<PlayerData>(1).Hit)
 			Klock.MoveRight(38.f);
-		
+
 		ECS::GetComponent<PlayerData>(1).facingLeft = 0;
 		//if (!ECS::GetComponent<AnimationController>(1).GetActiveAnim() == 3)
-		if (ECS::GetComponent<PlayerData>(1).Grounded && ECS::GetComponent<AnimationController>(1).GetActiveAnim() != 3)
-		ECS::GetComponent<AnimationController>(1).SetActiveAnim(2);
+		if (ECS::GetComponent<PlayerData>(1).Grounded&& ECS::GetComponent<AnimationController>(1).GetActiveAnim() != 3)
+			ECS::GetComponent<AnimationController>(1).SetActiveAnim(2);
 	}
 	else
 	{
-		
 	}
 	if (Input::GetKey(Key::O))
 		ECS::GetComponent<Camera>(EntityIdentifier::MainCamera()).Zoom(-5);
@@ -475,7 +454,6 @@ void Game::KeyboardDown()
 
 	if (Input::GetKeyDown(Key::W))
 	{
-		
 		if (ECS::GetComponent<PlayerData>(1).Grounded)
 		{
 			Klock.Jump(4200000.f);
@@ -487,7 +465,6 @@ void Game::KeyboardDown()
 				ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
 			else
 				ECS::GetComponent<AnimationController>(1).SetActiveAnim(5);
-			
 		}
 	}
 	if (Input::GetKeyDown(Key::K) && ECS::GetComponent<PlayerData>(1).CanAttack)
@@ -530,15 +507,14 @@ void Game::KeyboardDown()
 		else
 			EffectManager::RemoveEffect(0);
 	}
-	
+
 	if (Input::GetKeyDown(Key::Enter) && ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
 	{
-	//	ECS::GetComponent<Transform>(3).SetPositionX(0.f);
+		//	ECS::GetComponent<Transform>(3).SetPositionX(0.f);
 		std::cout << "m8";
 		ECS::GetComponent<Transform>(3).SetPosition(vec3(0, 0, 5));
 		//if (ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
 			//Switchscene(1);
-		
 	}
 
 	m_activeScene->KeyboardDown();
@@ -551,7 +527,7 @@ void Game::KeyboardUp()
 	}
 	if (Input::GetKeyUp(Key::Enter) && ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
 		Switchscene(1);
-	
+
 	m_activeScene->KeyboardUp();
 }
 

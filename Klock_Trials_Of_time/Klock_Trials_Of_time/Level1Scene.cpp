@@ -68,8 +68,6 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "KlockSpriteSheet.png";
 		auto& animController = ECS::GetComponent<AnimationController>(entity);
 
-		
-		
 		//Walking left animation
 		animController.InitUVs(fileName);
 		animController.AddAnimation(Animation());
@@ -78,13 +76,11 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		//Idle Animation
 		for (int i = 0; i <= 15; i++)
 		{
-			
-			idle.AddFrame(vec2(806 * i, 914), vec2(806* i + 806, 0));
-		
+			idle.AddFrame(vec2(806 * i, 914), vec2(806 * i + 806, 0));
 		}
 		idle.SetRepeating(true);
 		idle.SetSecPerFrame(0.05f);
-		
+
 		//jump right animation
 		animController.InitUVs(fileName);
 		animController.AddAnimation(Animation());
@@ -102,14 +98,14 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		animController.AddAnimation(Animation());
 		animController.SetActiveAnim(2);
 		auto& walkRight = animController.GetAnimation(2);
-		
+
 		for (int i = 21; i <= 30; i++)
 		{
 			walkRight.AddFrame(vec2(806 * i, 914), vec2(806 * i + 806, 0));
 		}
 		walkRight.SetRepeating(true);
 		walkRight.SetSecPerFrame(0.05f);
-		
+
 		animController.InitUVs(fileName);
 		animController.AddAnimation(Animation());
 		animController.SetActiveAnim(3);
@@ -124,7 +120,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		animController.InitUVs(fileName);
 		animController.AddAnimation(Animation());
 		animController.SetActiveAnim(4);
-		
+
 		auto& IdleLeft = animController.GetAnimation(4);
 		for (int i = 0; i <= 15; i++)
 		{
@@ -168,9 +164,6 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		}
 		punchLeft.SetRepeating(false);
 		punchLeft.SetSecPerFrame(0.05f);
-		
-		
-	
 
 		//Sets up components
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
@@ -192,7 +185,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(2275.f), float32(100.f));
+		tempDef.position.Set(float32(0.f), float32(0.f));
 		tempDef.fixedRotation = true;
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -247,7 +240,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		vec4 temp = ECS::GetComponent<Camera>(entity).GetOrthoSize();
 		ECS::GetComponent<Camera>(entity).SetWindowSize(vec2(float(windowWidth), float(windowHeight)));
 		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
-		ECS::GetComponent<Camera>(entity).Zoom(-190);
+		ECS::GetComponent<Camera>(entity).Zoom(-140);
 
 		ECS::GetComponent<HorizontalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
 		ECS::GetComponent<HorizontalScroll>(entity).SetOffset(15.f);
@@ -392,7 +385,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "signmove.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 120, 150);
 		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(175.f, -25.f, 50.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(175.f, -25.f, 30.f));
 
 		//Grabs reference to various components
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -1118,7 +1111,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		anim.SetSecPerFrame(0.1f);
 
 		ECS::GetComponent<PlayerData>(entity).Health = 4;
-		
+
 		//Sets up components
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 0.f, 49.f));
@@ -1615,9 +1608,6 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 	}
 	Sound2D _Music("Level1Music.mp3", "group1");
 	_Music.play();
-	
-	
-	
 
 	//Makes the camera focus on the main player
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
@@ -1631,19 +1621,16 @@ void Level1Scene::Update()
 	PlatformMovement();
 	EnemyUpdates();
 
-	
-
 	if (ECS::GetComponent<PlayerData>(23).Health == 0)
-		ECS::GetComponent<PhysicsBody>(23).GetBody()->SetTransform(b2Vec2(99999,999999),0);
+		ECS::GetComponent<PhysicsBody>(23).GetBody()->SetTransform(b2Vec2(99999, 999999), 0);
 
 	if (ECS::GetComponent<PlayerData>(24).Health == 0)
 		ECS::GetComponent<PhysicsBody>(24).GetBody()->SetTransform(b2Vec2(99999, 999999), 0);
 
 	ECS::GetComponent<PlayerData>(1).CurrentScene = 1;
-	
+
 	if (ECS::GetComponent<PlayerData>(1).isAttacking)
 	{
-		
 		std::cout << "BRUH";
 
 		createdint = 1;
@@ -1715,10 +1702,7 @@ void Level1Scene::Update()
 
 		ECS::GetComponent<PlayerData>(1).TimeSinceAtt = 0.4f;
 		createdint = 0;
-		
 	}
-
-
 
 	ECS::GetComponent<Transform>(32).SetPosition(ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x - 280, ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y + 150, 99);
 	ECS::GetComponent<Transform>(33).SetPosition(ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x - 220, ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y + 200, 99);
@@ -1771,9 +1755,10 @@ void Level1Scene::GeneralUpdates()
 	ECS::GetComponent<Transform>(0).SetPositionY((ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y / 1.2) + 150);
 
 	//checks if the player has the time slowed and adjusts accordingly
-	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed&& platformSpeedMulti > 0.1f && ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).canUseTimeSlow)
-		platformSpeedMulti -= 0.015f;
-	else if (!ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed&& platformSpeedMulti < 1.f && ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).canUseTimeSlow) platformSpeedMulti += 0.02f;
+	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed)
+		platformSpeedMulti = 0.1f;
+	else
+		platformSpeedMulti = 1.0f;
 
 	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x > 3550 && ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).canUseTimeSlow == false) {
 		ECS::GetComponent<Sprite>(6).LoadSprite(newSign, 120, 150);
