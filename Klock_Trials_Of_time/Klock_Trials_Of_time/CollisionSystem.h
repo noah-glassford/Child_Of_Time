@@ -47,6 +47,7 @@ inline void CollisionListener::BeginContact(b2Contact* contact)
 			_EnemyHurt.play();
 			//std::cout << "fuck";
 		}
+		std::cout << ECS::GetComponent<PlayerData>(2).Health;
 	}
 
 	if ((int)fixtureBUserData == 3) //Klock Footsensor	
@@ -66,6 +67,7 @@ inline void CollisionListener::BeginContact(b2Contact* contact)
 			_EnemyHurt.play();
 			//std::cout << "fuck";
 		}
+		std::cout << ECS::GetComponent<PlayerData>(2).Health;
 
 	}
 

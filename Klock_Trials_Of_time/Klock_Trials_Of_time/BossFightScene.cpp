@@ -266,7 +266,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<PlayerData>(entity);
 		ECS::AttachComponent<AnimationController>(entity);
 
-		ECS::GetComponent<PlayerData>(entity).Health = 15;
+		ECS::GetComponent<PlayerData>(entity).Health = 10;
 		
 		auto& animController = ECS::GetComponent<AnimationController>(entity);
 
@@ -1043,7 +1043,7 @@ void BossFightScene::Update()
 		//Sets up the identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "da hitbox");
-		std::cout << entity << "\n" << tempent << "\n";
+		//std::cout << entity << "\n" << tempent << "\n";
 	}
 	else if (ECS::GetComponent<PlayerData>(1).TimeSinceAtt <= 0 && createdint == 1)
 	{

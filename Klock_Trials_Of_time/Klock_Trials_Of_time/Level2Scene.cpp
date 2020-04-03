@@ -1923,6 +1923,10 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 4");
 	}
+	Sound2D _Music("Level2Music.mp3", "group1");
+	_Music.play();
+
+
 	//Makes the camera focus on the main player
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
