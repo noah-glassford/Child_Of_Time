@@ -7,6 +7,8 @@ float plat6MoveSpeed = 0;
 float plat1819MoveSpeed = -100;
 float plat23MoveSpeed = 24;
 float plat27MoveSpeed = 20;
+float plat34MoveSpeed = -80;
+float plat42MoveSpeed = -80;
 
 Level2Scene::Level2Scene(std::string name)
 {
@@ -72,8 +74,6 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "KlockSpriteSheet.png";
 		auto& animController = ECS::GetComponent<AnimationController>(entity);
 
-
-
 		//Walking left animation
 		animController.InitUVs(fileName);
 		animController.AddAnimation(Animation());
@@ -82,9 +82,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		//Idle Animation
 		for (int i = 0; i <= 15; i++)
 		{
-
 			idle.AddFrame(vec2(806 * i, 914), vec2(806 * i + 806, 0));
-
 		}
 		idle.SetRepeating(true);
 		idle.SetSecPerFrame(0.05f);
@@ -173,9 +171,6 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		punchLeft.SetRepeating(false);
 		punchLeft.SetSecPerFrame(0.05f);
 
-
-
-
 		//Sets up components
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 0.f, 49.f));
@@ -196,7 +191,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(0.f), float32(150.f));
+		tempDef.position.Set(float32(0.f), float32(0.f));
 		tempDef.fixedRotation = true;
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -249,7 +244,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		vec4 temp = ECS::GetComponent<Camera>(entity).GetOrthoSize();
 		ECS::GetComponent<Camera>(entity).SetWindowSize(vec2(float(windowWidth), float(windowHeight)));
 		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
-		ECS::GetComponent<Camera>(entity).Zoom(-125);
+		ECS::GetComponent<Camera>(entity).Zoom(-140);
 
 		ECS::GetComponent<HorizontalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
 		ECS::GetComponent<HorizontalScroll>(entity).SetOffset(15.f);
@@ -1222,7 +1217,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_kinematicBody;
-		tempDef.position.Set(float32(1375.f), float32(480.f));
+		tempDef.position.Set(float32(1375.f), float32(500.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -1461,15 +1456,12 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		minus8.SetRepeating(true);
 		minus8.SetSecPerFrame(0.1f);
 
-
-
 		ECS::GetComponent<Transform>(entity).SetPosition(ECS::GetComponent<PhysicsBody>(1).GetPosition().x, ECS::GetComponent<PhysicsBody>(1).GetPosition().y, 99);
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
 
 		//Sets up identifier
 		unsigned int bitHolder = EntityIdentifier::TransformBit() | EntityIdentifier::AnimationBit() | EntityIdentifier::SpriteBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Time Left UI");
-
 	}
 
 	//Hp HUD entity 33
@@ -1533,17 +1525,404 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		minus6.SetRepeating(true);
 		minus6.SetSecPerFrame(0.1f);
 
-
 		ECS::GetComponent<Transform>(entity).SetPosition(ECS::GetComponent<PhysicsBody>(1).GetPosition().x, ECS::GetComponent<PhysicsBody>(1).GetPosition().y, 99);
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 200, 40, true, &animController);
 
 		//Sets up identifier
 		unsigned int bitHolder = EntityIdentifier::TransformBit() | EntityIdentifier::AnimationBit() | EntityIdentifier::SpriteBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "HP UI");
-
 	}
 
+	//setup platform for falling rtock section #2, #1, entity 34
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
 
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat3.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 50, 160);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_kinematicBody;
+		tempDef.position.Set(float32(2170.f), float32(0.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 24), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 4");
+	}
+	//setup platform for falling rtock section #2, #2, entity 35
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat2.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 120, 50);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_kinematicBody;
+		tempDef.position.Set(float32(2370.f), float32(100.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 24), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 4");
+	}
+	//setup platform for falling rtock section #2, #3, entity 36
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat2.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 60, 25);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_kinematicBody;
+		tempDef.position.Set(float32(2450.f), float32(150.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 24), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 4");
+	}
+	//setup platform for falling rtock section #2, #4 , entity 37
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 120, 50);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_kinematicBody;
+		tempDef.position.Set(float32(2600.f), float32(210.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 24), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 4");
+	}
+	//setup platform for break in falling rock #2 , entity 38
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat2.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 80, 50);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(2030.f), float32(340.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 24), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 4");
+	}
+	//setup platform for falling rtock section #2, #5, entity 39
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 90, 38);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_kinematicBody;
+		tempDef.position.Set(float32(2520.f), float32(305.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 24), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 4");
+	}
+	//setup platform for falling rtock section #2, #6, entity 40
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat4.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 90, 38);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_kinematicBody;
+		tempDef.position.Set(float32(2300.f), float32(340.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 24), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 4");
+	}
+	//setup platform for falling rtock section #2, #7, entity 41
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat2.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 90, 38);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_kinematicBody;
+		tempDef.position.Set(float32(2180.f), float32(360.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 24), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 4");
+	}
+	//setup platform for break #2 in falling rock #2 , entity 42
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat2.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 80, 50);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_kinematicBody;
+		tempDef.position.Set(float32(2770.f), float32(480.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 24), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 4");
+	}
+	//setup platform for break #2 in falling rock #2 , entity 43
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "2_plat3.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 60, 300);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(2700.f), float32(750.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 24), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 4");
+	}
 	//Makes the camera focus on the main player
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
@@ -1558,11 +1937,8 @@ void Level2Scene::Update()
 	ECS::GetComponent<Transform>(32).SetPosition(ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x - 280, ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y + 150, 99);
 	ECS::GetComponent<Transform>(33).SetPosition(ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x - 220, ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y + 200, 99);
 
-	
 	if (ECS::GetComponent<PlayerData>(1).isAttacking)
 	{
-
-		
 		std::cout << "BRUH";
 
 		createdint = 1;
@@ -1634,30 +2010,26 @@ void Level2Scene::Update()
 
 		ECS::GetComponent<PlayerData>(1).TimeSinceAtt = 0.4f;
 		createdint = 0;
-
 	}
 
-	
-	
-	
 	//Time slow resource ui for scene 1
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime < 2)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime < 1)
 		ECS::GetComponent<AnimationController>(32).SetActiveAnim(0);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 2)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 1)
 		ECS::GetComponent<AnimationController>(32).SetActiveAnim(1);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 4)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 2)
 		ECS::GetComponent<AnimationController>(32).SetActiveAnim(2);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 6)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 3)
 		ECS::GetComponent<AnimationController>(32).SetActiveAnim(3);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 8)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 4)
 		ECS::GetComponent<AnimationController>(32).SetActiveAnim(4);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 10)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 5)
 		ECS::GetComponent<AnimationController>(32).SetActiveAnim(5);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 12)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 6)
 		ECS::GetComponent<AnimationController>(32).SetActiveAnim(6);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 14)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 7)
 		ECS::GetComponent<AnimationController>(32).SetActiveAnim(7);
-	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 16)
+	if (ECS::GetComponent<PlayerData>(1).UsedUpTime > 8)
 		ECS::GetComponent<AnimationController>(32).SetActiveAnim(8);
 
 	//Updates the HP bar ui
@@ -1680,12 +2052,10 @@ void Level2Scene::Update()
 		break;
 	}
 
-	
-	
 	//background scrolls with the camera
 	ECS::GetComponent<Transform>(0).SetPositionX((ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x / 8) + 2800);
 	ECS::GetComponent<Transform>(0).SetPositionY((ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y / 1.2));
-	
+
 	//respawn mechanic
 	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().y < -50) {
 		if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x < 800) { //checkpint 1
@@ -1698,6 +2068,10 @@ void Level2Scene::Update()
 		}
 		else if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x < 2000) { //checkpoint 2
 			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetTransform(b2Vec2(1350, 150), 0);
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
+		}
+		else if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x < 3000) { //checkpoint 2
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetTransform(b2Vec2(2050, 200), 0);
 			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
 		}
 	}
@@ -1740,4 +2114,36 @@ void Level2Scene::Update()
 	if (ECS::GetComponent<PhysicsBody>(27).GetBody()->GetPosition().x < 1375 || ECS::GetComponent<PhysicsBody>(27).GetBody()->GetPosition().x > 1600)
 		plat27MoveSpeed = -plat27MoveSpeed;
 	ECS::GetComponent<PhysicsBody>(27).GetBody()->SetLinearVelocity(b2Vec2(plat27MoveSpeed * platAcc, 0.f));
+
+	//really cool falling rock section
+	ECS::GetComponent<PhysicsBody>(34).GetBody()->SetLinearVelocity(b2Vec2(0.f, plat34MoveSpeed * platAcc));
+	ECS::GetComponent<PhysicsBody>(35).GetBody()->SetLinearVelocity(b2Vec2(0.f, plat34MoveSpeed * platAcc));
+	ECS::GetComponent<PhysicsBody>(36).GetBody()->SetLinearVelocity(b2Vec2(0.f, plat34MoveSpeed * platAcc));
+	ECS::GetComponent<PhysicsBody>(37).GetBody()->SetLinearVelocity(b2Vec2(0.f, plat34MoveSpeed * platAcc));
+	ECS::GetComponent<PhysicsBody>(39).GetBody()->SetLinearVelocity(b2Vec2(0.f, plat34MoveSpeed * platAcc));
+	ECS::GetComponent<PhysicsBody>(40).GetBody()->SetLinearVelocity(b2Vec2(0.f, plat34MoveSpeed * platAcc));
+	ECS::GetComponent<PhysicsBody>(41).GetBody()->SetLinearVelocity(b2Vec2(0.f, plat34MoveSpeed * platAcc));
+
+	if (ECS::GetComponent<PhysicsBody>(34).GetBody()->GetPosition().y < -400)
+		ECS::GetComponent<PhysicsBody>(34).GetBody()->SetTransform(b2Vec2(2170, 1200), 0.f);
+	if (ECS::GetComponent<PhysicsBody>(35).GetBody()->GetPosition().y < -400)
+		ECS::GetComponent<PhysicsBody>(35).GetBody()->SetTransform(b2Vec2(2310, 1200), 0.f);
+	if (ECS::GetComponent<PhysicsBody>(36).GetBody()->GetPosition().y < -400)
+		ECS::GetComponent<PhysicsBody>(36).GetBody()->SetTransform(b2Vec2(2450, 1200), 0.f);
+	if (ECS::GetComponent<PhysicsBody>(37).GetBody()->GetPosition().y < -400)
+		ECS::GetComponent<PhysicsBody>(37).GetBody()->SetTransform(b2Vec2(2600, 1200), 0.f);
+	if (ECS::GetComponent<PhysicsBody>(39).GetBody()->GetPosition().y < -400)
+		ECS::GetComponent<PhysicsBody>(39).GetBody()->SetTransform(b2Vec2(2460, 1200), 0.f);
+	if (ECS::GetComponent<PhysicsBody>(40).GetBody()->GetPosition().y < -400)
+		ECS::GetComponent<PhysicsBody>(40).GetBody()->SetTransform(b2Vec2(2350, 1200), 0.f);
+	if (ECS::GetComponent<PhysicsBody>(41).GetBody()->GetPosition().y < -400)
+		ECS::GetComponent<PhysicsBody>(41).GetBody()->SetTransform(b2Vec2(2180, 1200), 0.f);
+
+	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x > 2730 && ECS::GetComponent<PhysicsBody>(42).GetBody()->GetPosition().y < 620)
+		plat42MoveSpeed = 120.f;
+	else if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x < 2700 && ECS::GetComponent<PhysicsBody>(42).GetBody()->GetPosition().y > 480)
+		plat42MoveSpeed = -10.f;
+	else
+		plat42MoveSpeed = 0.f;
+	ECS::GetComponent<PhysicsBody>(42).GetBody()->SetLinearVelocity(b2Vec2(0.f, plat42MoveSpeed));
 }
