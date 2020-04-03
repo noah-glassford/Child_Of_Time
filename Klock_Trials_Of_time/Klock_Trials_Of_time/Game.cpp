@@ -55,7 +55,7 @@ void Game::InitGame()
 	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[1];
+	m_activeScene = m_scenes[0];
 
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -122,20 +122,40 @@ void Game::Update()
 		//ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
 	if (ECS::GetComponent<AnimationController>(1).GetActiveAnim() == 2 && ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().x == 0)
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
-	if (!ECS::GetComponent<PlayerData>(1).Grounded && !ECS::GetComponent<PlayerData>(1).facingLeft)
+
+	if (ECS::GetComponent<AnimationController>(1).GetActiveAnim() == 6 && ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().x == 0)
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(4);
+	if (ECS::GetComponent<PlayerData>(1).facingLeft && ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().x == 0)
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(4);
+
+
+	if (ECS::GetComponent<AnimationController>(1).GetAnimation(ECS::GetComponent<AnimationController>(1).GetActiveAnim()).GetAnimationDone() && !ECS::GetComponent<PlayerData>(1).facingLeft)
+		{
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
+		}
+	else if (ECS::GetComponent<AnimationController>(1).GetAnimation(ECS::GetComponent<AnimationController>(1).GetActiveAnim()).GetAnimationDone() && ECS::GetComponent<PlayerData>(1).facingLeft)
 	{
-		
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(4);
+	}
+
+
+
+
+
+
+	
+	if (!ECS::GetComponent<PlayerData>(1).Grounded && !ECS::GetComponent<PlayerData>(1).facingLeft && ECS::GetComponent<AnimationController>(1).GetAnimation(ECS::GetComponent<AnimationController>(1).GetActiveAnim()).GetAnimationDone()
+		)
+	{
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
 	}
-	else if (!ECS::GetComponent<PlayerData>(1).Grounded && ECS::GetComponent<PlayerData>(1).facingLeft)
+	else if (!ECS::GetComponent<PlayerData>(1).Grounded && ECS::GetComponent<PlayerData>(1).facingLeft && ECS::GetComponent<AnimationController>(1).GetAnimation(ECS::GetComponent<AnimationController>(1).GetActiveAnim()).GetAnimationDone()
+		)
 	{
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(5);
 	}
 	
-	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking == true && !ECS::GetComponent<PlayerData>(1).facingLeft)
-		ECS::GetComponent<AnimationController>(1).SetActiveAnim(3);
-	else if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking == true && ECS::GetComponent<PlayerData>(1).facingLeft)
-		ECS::GetComponent<AnimationController>(1).SetActiveAnim(7);
+
 	
 	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 3600 && ECS::GetComponent<PlayerData>(1).CurrentScene == 1 &&
 		 ECS::GetComponent<PlayerData>(1).canUseTimeSlow == 1)
@@ -227,6 +247,8 @@ void Game::GUI()
 void Game::Switchscene(int scene)
 {
 
+	m_activeScene->Unload();
+	
 	m_activeScene = m_scenes[scene];
 
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -276,6 +298,7 @@ void Game::AcceptInput()
 	//Just calls all the other input functions
 	GamepadInput();
 
+	
 	KeyboardHold();
 	KeyboardDown();
 	KeyboardUp();
@@ -415,7 +438,7 @@ void Game::KeyboardHold()
 			Klock.MoveLeft(38.f);
 		ECS::GetComponent<PlayerData>(1).facingLeft = 1;
 		//if (!ECS::GetComponent<AnimationController>(1).GetActiveAnim() == 3)
-		if (ECS::GetComponent<PlayerData>(1).Grounded)
+		if (ECS::GetComponent<PlayerData>(1).Grounded && ECS::GetComponent<AnimationController>(1).GetActiveAnim() != 7)
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(6);
 
 		
@@ -429,7 +452,7 @@ void Game::KeyboardHold()
 		
 		ECS::GetComponent<PlayerData>(1).facingLeft = 0;
 		//if (!ECS::GetComponent<AnimationController>(1).GetActiveAnim() == 3)
-		if (ECS::GetComponent<PlayerData>(1).Grounded)
+		if (ECS::GetComponent<PlayerData>(1).Grounded && ECS::GetComponent<AnimationController>(1).GetActiveAnim() != 3)
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(2);
 	}
 	else
@@ -472,10 +495,13 @@ void Game::KeyboardDown()
 		ECS::GetComponent<AnimationController>(1).GetAnimation(3).Reset();
 		ECS::GetComponent<AnimationController>(1).GetAnimation(7).Reset();
 		if (!ECS::GetComponent<PlayerData>(1).facingLeft)
+		{
 			ECS::GetComponent<AnimationController>(1).SetActiveAnim(3);
+		}
 		else
+		{
 			ECS::GetComponent<AnimationController>(1).SetActiveAnim(7);
-		
+		}
 
 		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = true;
 	}
