@@ -4,6 +4,7 @@
 */
 #include "PhysicsSystem.h"
 #include "MovementSystem.h"
+#include "SoundEngine.h"
 /*
 This system is to make collision less shit
 Also contains the collision listener
@@ -25,6 +26,8 @@ inline void CollisionListener::BeginContact(b2Contact* contact)
 	void* fixtureAUserData = contact->GetFixtureA()->GetUserData();
 	void* fixtureBUserData = contact->GetFixtureB()->GetUserData();
 
+	Sound2D _EnemyHurt("enemyhurt.wav", "group1");
+
 	if ((int)fixtureAUserData == 3) //Klock Footsensor
 	{
 		ECS::GetComponent<PlayerData>(1).Grounded = true;
@@ -38,8 +41,12 @@ inline void CollisionListener::BeginContact(b2Contact* contact)
 
 	if ((int)fixtureBUserData == 8 && (int)fixtureAUserData == 7) //Klock hit enemy
 	{
-		std::cout << ECS::GetComponent<PlayerData>(2).Health;
-		ECS::GetComponent<PlayerData>(2).Health--;
+		if (ECS::GetComponent<PlayerData>(1).CurrentScene == 3)
+		{
+			ECS::GetComponent<PlayerData>(2).Health--;
+			_EnemyHurt.play();
+			//std::cout << "fuck";
+		}
 	}
 
 	if ((int)fixtureBUserData == 3) //Klock Footsensor	
@@ -56,7 +63,8 @@ inline void CollisionListener::BeginContact(b2Contact* contact)
 		if (ECS::GetComponent<PlayerData>(1).CurrentScene == 3)
 		{
 			ECS::GetComponent<PlayerData>(2).Health--;
-			std::cout << "fuck";
+			_EnemyHurt.play();
+			//std::cout << "fuck";
 		}
 
 	}
@@ -206,6 +214,8 @@ inline void CollisionListener::BeginContact(b2Contact* contact)
 
 	if ((int)fixtureBUserData == 11 && (int)fixtureAUserData == 7)
 	{
+		_EnemyHurt.play();
+		
 		ECS::GetComponent<PlayerData>(23).Health--;
 		if (!ECS::GetComponent<PlayerData>(1).facingLeft)
 			ECS::GetComponent<PhysicsBody>(23).GetBody()->SetLinearVelocity(b2Vec2(20, 20));

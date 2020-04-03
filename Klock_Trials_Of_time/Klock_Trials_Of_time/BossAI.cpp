@@ -125,8 +125,8 @@ void BossObject::RunAttack()
 	b2Vec2 tempvelo = velocity;
 	if (ECS::GetComponent<PlayerData>(1).isSlowed)
 	{
-		tempvelo.x = tempvelo.x / 4;
-		tempvelo.y = tempvelo.y / 4;
+		tempvelo.x = tempvelo.x / 10;
+		tempvelo.y = tempvelo.y / 10;
 	}
 	else
 	{
