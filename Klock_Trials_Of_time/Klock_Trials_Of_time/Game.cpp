@@ -40,11 +40,13 @@ void Game::InitGame()
 	//Initializes the backend with window width and height values
 	BackEnd::InitBackEnd(1920.f, 1080.f);
 
+	SoundManager::init("./Assets/Sounds/");
+	
 	//Grabs the initialized window
 	m_window = BackEnd::GetWindow();
 
 	//initialise all the sound
-	SoundManager::init("./Assets/Sounds/");
+	
 
 	//Creates a new scene.
 	//Replace this with your own scene.
@@ -55,7 +57,7 @@ void Game::InitGame()
 	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[0];
+	m_activeScene = m_scenes[3];
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -134,7 +136,22 @@ void Game::Update()
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(4);
 	}
 
-	if (!ECS::GetComponent<PlayerData>(1).Grounded && !ECS::GetComponent<PlayerData>(1).facingLeft&& ECS::GetComponent<AnimationController>(1).GetAnimation(ECS::GetComponent<AnimationController>(1).GetActiveAnim()).GetAnimationDone()
+	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().y > 0 || ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().y < -0.01
+		&& !ECS::GetComponent<PlayerData>(1).facingLeft)
+	{
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
+	}
+	else if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().y > 0 || ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().y < -0.01
+		 && ECS::GetComponent<PlayerData>(1).facingLeft)
+	{
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(5);
+	}
+
+
+
+
+	
+	if (!ECS::GetComponent<PlayerData>(1).Grounded && !ECS::GetComponent<PlayerData>(1).facingLeft && ECS::GetComponent<AnimationController>(1).GetAnimation(ECS::GetComponent<AnimationController>(1).GetActiveAnim()).GetAnimationDone()
 		)
 	{
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
@@ -151,7 +168,13 @@ void Game::Update()
 
 	if (ECS::GetComponent<PlayerData>(1).Health == 0)
 	{
-		Switchscene(0);
+		if (ECS::GetComponent<PlayerData>(1).CurrentScene == 3)
+		{
+			ECS::GetComponent<PhysicsBody>(2).DeleteBody();
+			ECS::GetComponent<PhysicsBody>(10).DeleteBody();
+		}
+		
+		Switchscene(ECS::GetComponent<PlayerData>(1).CurrentScene);
 	}
 
 	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
@@ -232,6 +255,9 @@ void Game::GUI()
 
 void Game::Switchscene(int scene)
 {
+	SoundManager::stop();
+	
+	
 	m_activeScene->Unload();
 
 	m_activeScene = m_scenes[scene];

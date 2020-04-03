@@ -42,10 +42,14 @@ public:
 	*/
 	static unsigned createChannelGroup(const std::string& groupName);
 
+	static unsigned stop();
+
 	/*
 	plays a 2d sound at the respective indicies
 	*/
 	static unsigned play2DSound(unsigned soundIndex, unsigned groupIndex);
+
+	static unsigned stopAllSounds(unsigned soundIndex, unsigned groupIndex);
 
 	//set num times to loop, -1 for infinite
 	static void loopSound(unsigned index, int loopCount);

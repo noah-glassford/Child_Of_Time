@@ -8,6 +8,8 @@ MainMenu::MainMenu(std::string name)
 
 void MainMenu::InitScene(float windowWidth, float windowHeight)
 {
+	
+	
 	m_sceneReg = new entt::registry;
 
 	ECS::AttachRegister(m_sceneReg);

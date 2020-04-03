@@ -8,10 +8,18 @@ Scene::Scene(std::string name)
 
 void Scene::Unload()
 {
+	
+	
 	if (m_sceneReg != nullptr)
 	{
 		delete m_sceneReg;
 		m_sceneReg = nullptr;
+	}
+
+	if (m_physicsWorld != nullptr)
+	{
+		delete m_physicsWorld;
+		m_physicsWorld = nullptr;
 	}
 }
 

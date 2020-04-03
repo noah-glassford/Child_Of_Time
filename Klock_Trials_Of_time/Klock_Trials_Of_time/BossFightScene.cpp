@@ -5,6 +5,7 @@ BossFightScene::BossFightScene(std::string name)
 	: Scene(name)
 {
 	m_gravity = b2Vec2(float32(0.f), float32(-60.f));
+	
 	m_physicsWorld->SetGravity(m_gravity);
 	m_physicsWorld->SetContactListener(&listener);
 }
@@ -12,13 +13,23 @@ BossFightScene::BossFightScene(std::string name)
 
 void BossFightScene::InitScene(float windowWidth, float windowHeight)
 {
+
+	
 	windowHeighttemp = windowHeight;
 	windowWidthtemp = windowWidth;
 	//Allocates Register
 	m_sceneReg = new entt::registry;
 
+	if (m_physicsWorld == nullptr)
+	{
+		m_physicsWorld = new b2World(m_gravity);
+		m_physicsWorld->SetGravity(m_gravity);
+		m_physicsWorld->SetContactListener(&listener);
+	}
+
 	//Attach the Register
 	ECS::AttachRegister(m_sceneReg);
+	
 
 	//Sets up aspect ratio for the camera
 	float aspectRatio = windowWidth / windowHeight;
