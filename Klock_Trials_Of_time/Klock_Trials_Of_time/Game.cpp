@@ -163,8 +163,13 @@ void Game::Update()
 	
 	if (ECS::GetComponent<PlayerData>(1).Health == 0)
 	{
+		if (ECS::GetComponent<PlayerData>(1).CurrentScene == 3)
+		{
+			ECS::GetComponent<PhysicsBody>(2).DeleteBody();
+			ECS::GetComponent<PhysicsBody>(10).DeleteBody();
+		}
 		
-		Switchscene(0);
+		Switchscene(ECS::GetComponent<PlayerData>(1).CurrentScene);
 	}
 	
 

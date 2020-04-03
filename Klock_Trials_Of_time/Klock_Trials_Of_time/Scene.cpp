@@ -13,6 +13,12 @@ void Scene::Unload()
 		delete m_sceneReg;
 		m_sceneReg = nullptr;
 	}
+
+	if (m_physicsWorld != nullptr)
+	{
+		delete m_physicsWorld;
+		m_physicsWorld = nullptr;
+	}
 }
 
 void Scene::SaveScene()
