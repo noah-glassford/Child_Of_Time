@@ -13,7 +13,7 @@ BossFightScene::BossFightScene(std::string name)
 
 void BossFightScene::InitScene(float windowWidth, float windowHeight)
 {
-	
+
 	
 	windowHeighttemp = windowHeight;
 	windowWidthtemp = windowWidth;

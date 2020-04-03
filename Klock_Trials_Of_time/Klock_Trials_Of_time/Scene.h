@@ -4,6 +4,7 @@
 #include "JSON.h"
 #include "ECS.h"
 #include "Xinput.h"
+#include "SoundEngine.h"
 #include <SDL2/SDL.h>
 #include "CollisionSystem.h"
 

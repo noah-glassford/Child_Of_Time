@@ -8,6 +8,8 @@ Scene::Scene(std::string name)
 
 void Scene::Unload()
 {
+	
+	
 	if (m_sceneReg != nullptr)
 	{
 		delete m_sceneReg;

@@ -23,6 +23,7 @@ Level1Scene::Level1Scene(std::string name)
 
 void Level1Scene::InitScene(float windowWidth, float windowHeight)
 {
+	
 	//Allocates Register
 	m_sceneReg = new entt::registry;
 
@@ -1623,6 +1624,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 	}
 	Sound2D _Music("Level1Music.mp3", "group1");
 	_Music.play();
+	_Music.stop();
 	
 	
 	

@@ -40,11 +40,13 @@ void Game::InitGame()
 	//Initializes the backend with window width and height values
 	BackEnd::InitBackEnd(1920.f, 1080.f);
 
+	SoundManager::init("./Assets/Sounds/");
+	
 	//Grabs the initialized window
 	m_window = BackEnd::GetWindow();
 
 	//initialise all the sound
-	SoundManager::init("./Assets/Sounds/");
+	
 
 	//Creates a new scene.
 	//Replace this with your own scene.
@@ -55,7 +57,7 @@ void Game::InitGame()
 	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[0];
+	m_activeScene = m_scenes[3];
 
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -260,7 +262,9 @@ void Game::GUI()
 
 void Game::Switchscene(int scene)
 {
-
+	SoundManager::stop();
+	
+	
 	m_activeScene->Unload();
 	
 	m_activeScene = m_scenes[scene];

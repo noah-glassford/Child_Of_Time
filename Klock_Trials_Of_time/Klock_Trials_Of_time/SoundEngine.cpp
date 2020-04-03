@@ -5,6 +5,8 @@ FMOD_RESULT SoundManager::_result = FMOD_OK;
 std::string SoundManager::_soundPath = "";
 std::vector<FMOD::Sound*> SoundManager::_sounds = {};
 std::vector<FMOD::ChannelGroup*> SoundManager::_channelGroups = {};
+
+unsigned index = 0;
 std::vector<FMOD::Channel*> SoundManager::_channels = {};
 void SoundManager::init(const std::string& defaultFilePath, unsigned numChannels)
 {
@@ -57,10 +59,27 @@ unsigned SoundManager::createChannelGroup(const std::string& groupName)
 	return _channelGroups.size() - 1;
 }
 
+unsigned SoundManager::stop()
+{
+	int NumChannels = 512;
+	
+	for (int i = 0; i < NumChannels; i++)
+	{
+		FMOD::Channel* pChannel = nullptr;
+		FMOD_RESULT res = _system->getChannel(i, &pChannel);
+
+		if (res == FMOD_OK && pChannel)
+		{
+			pChannel->stop();
+		}
+	}
+	return 0;
+}
+
 unsigned SoundManager::play2DSound(unsigned soundIndex, unsigned groupIndex)
 {
 	//find a free channel for FMOD to use
-	unsigned index = 0;
+	
 	//flag to check if all channels are nullptr
 	bool allNullptr = 1;
 
@@ -86,6 +105,34 @@ unsigned SoundManager::play2DSound(unsigned soundIndex, unsigned groupIndex)
 	return index;
 }
 
+unsigned SoundManager::stopAllSounds(unsigned soundIndex, unsigned groupIndex)
+{
+	//find a free channel for FMOD to use
+
+//flag to check if all channels are nullptr
+	bool allNullptr = 1;
+
+	for (unsigned i = 0; i < _channels.size(); i++)
+	{
+		if (_channels[i] != nullptr)
+		{
+			//Set our index to the current index 1
+			allNullptr = 0;
+			bool playing = false;
+
+			//Check if the channel is playing a sound, if it isn't then thats our index
+			_channels[i]->isPlaying(&playing);
+			if (!playing)//If channel is free
+				index = i;
+		}
+	}
+	if (allNullptr)
+		index = 0;
+	_result = _system->playSound(_sounds[soundIndex], _channelGroups[groupIndex], true, &_channels[index]);
+	checkFmodErrors(_result, "Play Sound 2D");
+	return index;
+}
+
 void SoundManager::loopSound(unsigned index, int loopCount)
 {
 	_sounds[index]->setLoopCount(loopCount);
@@ -103,6 +150,8 @@ void SoundManager::checkFmodErrors(FMOD_RESULT& result, const std::string& where
 	}
 }
 
+
+
 Sound2D::Sound2D(const std::string& path, const std::string& groupName)
 {
 	_sound = SoundManager::load2DSound(path);
@@ -114,11 +163,11 @@ void Sound2D::play()
 	_chanel = SoundManager::play2DSound(_sound, _group);
 }
 
+
+
 void Sound2D::stop()
 {
-//	FMOD_RESULT Studio::Bus::setPaused(
-	
-	
+	_chanel = SoundManager::stopAllSounds(_sound, _group);
 }
 
 bool Sound2D::isPlaying()
