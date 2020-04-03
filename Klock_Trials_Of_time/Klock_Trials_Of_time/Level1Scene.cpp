@@ -1546,7 +1546,7 @@ void Level1Scene::Update()
 	EnemyUpdates();
 
 	
-		
+	ECS::GetComponent<PlayerData>(1).CurrentScene = 1;
 	
 	if (ECS::GetComponent<PlayerData>(1).isAttacking)
 	{

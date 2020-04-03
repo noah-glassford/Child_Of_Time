@@ -55,7 +55,7 @@ void Game::InitGame()
 	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[1];
+	m_activeScene = m_scenes[0];
 	//cuck
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -115,6 +115,10 @@ void Game::Update()
 	//Update Physics System
 	PhysicsSystem::Update(m_register, m_activeScene->GetPhysicsWorld());
 
+	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 3600 && ECS::GetComponent<PlayerData>(1).CurrentScene == 1 &&
+		 ECS::GetComponent<PlayerData>(1).canUseTimeSlow == 1)
+		Switchscene(2);
+	
 	if (ECS::GetComponent<PlayerData>(1).Health == 0)
 	{
 		
