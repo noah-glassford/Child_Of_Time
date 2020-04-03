@@ -138,7 +138,16 @@ void Game::Update()
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(4);
 	}
 
-
+	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().y > 0 || ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().y < -0.01
+		&& !ECS::GetComponent<PlayerData>(1).facingLeft)
+	{
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
+	}
+	else if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().y > 0 || ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().y < -0.01
+		 && ECS::GetComponent<PlayerData>(1).facingLeft)
+	{
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(5);
+	}
 
 
 
