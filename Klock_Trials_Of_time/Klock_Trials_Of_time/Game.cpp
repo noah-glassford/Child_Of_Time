@@ -115,12 +115,27 @@ void Game::Update()
 	//Update Physics System
 	PhysicsSystem::Update(m_register, m_activeScene->GetPhysicsWorld());
 
+
 	
 	//Animation stuff
 	//if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().x == 0)
 		//ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
+	if (ECS::GetComponent<AnimationController>(1).GetActiveAnim() == 2 && ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().x == 0)
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
+	if (!ECS::GetComponent<PlayerData>(1).Grounded && !ECS::GetComponent<PlayerData>(1).facingLeft)
+	{
+		
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
+	}
+	else if (!ECS::GetComponent<PlayerData>(1).Grounded && ECS::GetComponent<PlayerData>(1).facingLeft)
+	{
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(5);
+	}
 	
-
+	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking == true && !ECS::GetComponent<PlayerData>(1).facingLeft)
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(3);
+	else if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking == true && ECS::GetComponent<PlayerData>(1).facingLeft)
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(7);
 	
 	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 3600 && ECS::GetComponent<PlayerData>(1).CurrentScene == 1 &&
 		 ECS::GetComponent<PlayerData>(1).canUseTimeSlow == 1)
@@ -399,17 +414,27 @@ void Game::KeyboardHold()
 		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft&& ECS::GetComponent<PlayerData>(1).Hit)
 			Klock.MoveLeft(38.f);
 		ECS::GetComponent<PlayerData>(1).facingLeft = 1;
-		if (!ECS::GetComponent<AnimationController>(1).GetActiveAnim() == 3)
-			ECS::GetComponent<AnimationController>(1).SetActiveAnim(2);
+		//if (!ECS::GetComponent<AnimationController>(1).GetActiveAnim() == 3)
+		if (ECS::GetComponent<PlayerData>(1).Grounded)
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(6);
+
+		
+
+
 	}
 	if (Input::GetKey(Key::D))
 	{
 		if (!ECS::GetComponent<PlayerData>(1).OnWallRight&& ECS::GetComponent<PlayerData>(1).Hit)
 			Klock.MoveRight(38.f);
-
+		
 		ECS::GetComponent<PlayerData>(1).facingLeft = 0;
-		if (!ECS::GetComponent<AnimationController>(1).GetActiveAnim() == 3)
-			ECS::GetComponent<AnimationController>(1).SetActiveAnim(2);
+		//if (!ECS::GetComponent<AnimationController>(1).GetActiveAnim() == 3)
+		if (ECS::GetComponent<PlayerData>(1).Grounded)
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(2);
+	}
+	else
+	{
+		
 	}
 	if (Input::GetKey(Key::O))
 		ECS::GetComponent<Camera>(EntityIdentifier::MainCamera()).Zoom(-5);
@@ -427,18 +452,29 @@ void Game::KeyboardDown()
 
 	if (Input::GetKeyDown(Key::W))
 	{
+		
 		if (ECS::GetComponent<PlayerData>(1).Grounded)
 		{
 			Klock.Jump(4200000.f);
 			Sound2D _jump("jump.wav", "group1");
 			_jump.play();
+			//ECS::GetComponent<AnimationController>(1).GetAnimation(1).Reset();
+			//ECS::GetComponent<AnimationController>(1).GetAnimation(5).Reset();
+			if (!ECS::GetComponent<PlayerData>(1).facingLeft)
+				ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
+			else
+				ECS::GetComponent<AnimationController>(1).SetActiveAnim(5);
+			
 		}
 	}
 	if (Input::GetKeyDown(Key::K) && ECS::GetComponent<PlayerData>(1).CanAttack)
 	{
 		ECS::GetComponent<AnimationController>(1).GetAnimation(3).Reset();
-		ECS::GetComponent<AnimationController>(1).SetActiveAnim(3);
-		
+		ECS::GetComponent<AnimationController>(1).GetAnimation(7).Reset();
+		if (!ECS::GetComponent<PlayerData>(1).facingLeft)
+			ECS::GetComponent<AnimationController>(1).SetActiveAnim(3);
+		else
+			ECS::GetComponent<AnimationController>(1).SetActiveAnim(7);
 		
 
 		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = true;

@@ -94,8 +94,8 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		{
 			jump.AddFrame(vec2(806 * i, 914), vec2(806 * i + 806, 0));
 		}
-		idle.SetRepeating(false);
-		idle.SetSecPerFrame(0.05f);
+		jump.SetRepeating(false);
+		jump.SetSecPerFrame(0.05f);
 
 		//walk right animation
 		animController.InitUVs(fileName);
@@ -107,7 +107,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		{
 			walkRight.AddFrame(vec2(806 * i, 914), vec2(806 * i + 806, 0));
 		}
-		walkRight.SetRepeating(false);
+		walkRight.SetRepeating(true);
 		walkRight.SetSecPerFrame(0.05f);
 		
 		animController.InitUVs(fileName);
@@ -120,8 +120,57 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		}
 		attackRight.SetRepeating(false);
 		attackRight.SetSecPerFrame(0.05f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(4);
 		
-		ECS::GetComponent<AnimationController>(entity).SetActiveAnim(0);
+		auto& IdleLeft = animController.GetAnimation(4);
+		for (int i = 0; i <= 15; i++)
+		{
+			IdleLeft.AddFrame(vec2(806 * i + 806, 914), vec2(806 * i, 0));
+		}
+		IdleLeft.SetRepeating(true);
+		IdleLeft.SetSecPerFrame(0.05f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(5);
+
+		auto& jumpLeft = animController.GetAnimation(5);
+		for (int i = 16; i <= 20; i++)
+		{
+			jumpLeft.AddFrame(vec2(806 * i + 806, 914), vec2(806 * i, 0));
+		}
+		jumpLeft.SetRepeating(false);
+		jumpLeft.SetSecPerFrame(0.05f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(6);
+
+		auto& runLeft = animController.GetAnimation(6);
+		for (int i = 21; i <= 30; i++)
+		{
+			runLeft.AddFrame(vec2(806 * i + 806, 914), vec2(806 * i, 0));
+		}
+		runLeft.SetRepeating(true);
+		runLeft.SetSecPerFrame(0.05f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(7);
+
+		auto& punchLeft = animController.GetAnimation(7);
+		for (int i = 31; i <= 38; i++)
+		{
+			punchLeft.AddFrame(vec2(806 * i + 806, 914), vec2(806 * i, 0));
+		}
+		punchLeft.SetRepeating(false);
+		punchLeft.SetSecPerFrame(0.05f);
+		
+		
+	
 
 		//Sets up components
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
@@ -1566,6 +1615,9 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 	}
 	Sound2D _Music("Level1Music.mp3", "group1");
 	_Music.play();
+	
+	
+	
 
 	//Makes the camera focus on the main player
 	ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));

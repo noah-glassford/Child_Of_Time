@@ -28,6 +28,7 @@ inline void CollisionListener::BeginContact(b2Contact* contact)
 	if ((int)fixtureAUserData == 3) //Klock Footsensor
 	{
 		ECS::GetComponent<PlayerData>(1).Grounded = true;
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
 	}
 	if ((int)fixtureAUserData == 4) //Klock right side of body sensor
 		ECS::GetComponent<PlayerData>(1).OnWallRight = true;
@@ -409,7 +410,11 @@ inline void CollisionListener::EndContact(b2Contact* contact)
 	fixtureUserData = contact->GetFixtureB()->GetUserData();
 
 	if ((int)fixtureUserData == 3) //Klock Footsensor
+	{
 		ECS::GetComponent< PlayerData>(1).Grounded = false;
+		ECS::GetComponent<AnimationController>(1).GetAnimation(1).Reset();
+		ECS::GetComponent<AnimationController>(1).GetAnimation(5).Reset();
+	}
 
 	if ((int)fixtureUserData == 4) //Klock right side of body sensor
 
