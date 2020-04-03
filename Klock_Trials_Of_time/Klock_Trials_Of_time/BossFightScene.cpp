@@ -61,137 +61,186 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 
 	//Setup klock, entity 1
 	{
-		//Create new Entity
-		auto entity = ECS::CreateEntity();
-		ECS::SetIsMainPlayer(entity, true);
-
-		//Add components
-		ECS::AttachComponent<Sprite>(entity);
-		ECS::AttachComponent<Transform>(entity);
-		ECS::AttachComponent<PhysicsBody>(entity);
-		ECS::AttachComponent<AnimationController>(entity);
-		ECS::AttachComponent<PlayerData>(entity);
-
-		//Sets up components
-		std::string fileName = "spritesheet_full.png";
-		auto& animController = ECS::GetComponent<AnimationController>(entity);
-
-		animController.InitUVs(fileName);
-		animController.AddAnimation(Animation());
 		
-		auto& anim = animController.GetAnimation(0);
-		//Walking right animation
+			//Create new Entity
+			auto entity = ECS::CreateEntity();
+			ECS::SetIsMainPlayer(entity, true);
 
-		anim.AddFrame(vec2(0.f, 544.f), vec2(376.f, 0.f));
-		anim.AddFrame(vec2(376.f, 544.f), vec2(752, 0.f));
-		anim.AddFrame(vec2(752.f, 544.f), vec2(1128.f, 0.f));
-		anim.AddFrame(vec2(376.f, 544.f), vec2(752, 0.f));
-		anim.SetRepeating(true);
-		anim.SetSecPerFrame(0.1f);
+			//Add components
+			ECS::AttachComponent<Sprite>(entity);
+			ECS::AttachComponent<Transform>(entity);
+			ECS::AttachComponent<PhysicsBody>(entity);
+			ECS::AttachComponent<AnimationController>(entity);
+			ECS::AttachComponent<PlayerData>(entity);
 
-		//Walking left animation
-		animController.InitUVs(fileName);
-		animController.AddAnimation(Animation());
-		//animController.SetActiveAnim(1);
-		auto& animation = animController.GetAnimation(1);
-
-
-		animation.AddFrame(vec2(376.f, 544.f), vec2(0.f, 0.f));
-		animation.AddFrame(vec2(752.f, 544.f), vec2(367.f, 0.f));
-		animation.AddFrame(vec2(1128.f, 544.f), vec2(752.f, 0.f));
-		animation.AddFrame(vec2(752.f, 544.f), vec2(376, 0.f));
-		animation.SetRepeating(true);
-		animation.SetSecPerFrame(0.1f);
-
-		//Jumping while facing right
-		animController.InitUVs(fileName);
-		animController.AddAnimation(Animation());
-		auto& jumpRight = animController.GetAnimation(2);
-
-		jumpRight.AddFrame(vec2(46,1789), vec2(768,922));
-		jumpRight.AddFrame(vec2(818,1794), vec2(1589,923));
-		jumpRight.AddFrame(vec2(1652,1801), vec2(2538,929));
-		jumpRight.AddFrame(vec2(2483,1801), vec2(3075,933));
-		jumpRight.SetRepeating(false);
-		jumpRight.SetSecPerFrame(0.1f);
-
-		//idle animation facing right
-		animController.InitUVs(fileName);
-		animController.AddAnimation(Animation());
-		auto& idleRight = animController.GetAnimation(3);
+			//Sets up components
+			std::string fileName = "KlockSpriteSheet.png";
+			auto& animController = ECS::GetComponent<AnimationController>(entity);
 
 
-		idleRight.AddFrame(vec2(97,2703), vec2(689,1839));
-		idleRight.AddFrame(vec2(897,2703), vec2(1489,1848));
-		idleRight.AddFrame(vec2(1697,2703), vec2(1742,1857));
-		idleRight.AddFrame(vec2(2497,2703), vec2(3089,1866));
-		idleRight.AddFrame(vec2(3297,2703), vec2(3889,1862));
-		idleRight.AddFrame(vec2(4097,2703), vec2(5489,1844));
-		idleRight.AddFrame(vec2(5697,2703), vec2(6289,1834));
-		idleRight.SetRepeating(true);
-		idleRight.SetSecPerFrame(0.1f);
 
-		//Sets up components
-		animController.SetActiveAnim(1);
-		//Sets up components
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 0.f, 97.f));
+			//Walking left animation
+			animController.InitUVs(fileName);
+			animController.AddAnimation(Animation());
+			animController.SetActiveAnim(0);
+			auto& idle = animController.GetAnimation(0);
+			//Idle Animation
+			for (int i = 0; i <= 15; i++)
+			{
 
-		//Grabs reference to various components
-		//Sets up components
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 49.f));
-		ECS::GetComponent<PlayerData>(entity).Health = 6;
-		ECS::GetComponent<PlayerData>(entity).canUseTimeSlow = true;
-		ECS::GetComponent<PlayerData>(entity).CurrentScene = 3;
-		//Grabs reference to various components
+				idle.AddFrame(vec2(806 * i, 914), vec2(806 * i + 806, 0));
 
-		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
-		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+			}
+			idle.SetRepeating(true);
+			idle.SetSecPerFrame(0.05f);
 
-		//Physics body covers the entire sprite
-		float shrinkX = tempSpr.GetWidth() / 2.f;
-		float shrinkY = tempSpr.GetHeight() / 2.f;
+			//jump right animation
+			animController.InitUVs(fileName);
+			animController.AddAnimation(Animation());
+			animController.SetActiveAnim(1);
+			auto& jump = animController.GetAnimation(1);
+			for (int i = 16; i <= 20; i++)
+			{
+				jump.AddFrame(vec2(806 * i, 914), vec2(806 * i + 806, 0));
+			}
+			jump.SetRepeating(false);
+			jump.SetSecPerFrame(0.05f);
 
-		b2Body* tempBody;
-		b2BodyDef tempDef;
-		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(0.f), float32(0.f));
-		tempDef.fixedRotation = true;
+			//walk right animation
+			animController.InitUVs(fileName);
+			animController.AddAnimation(Animation());
+			animController.SetActiveAnim(2);
+			auto& walkRight = animController.GetAnimation(2);
 
-		tempBody = m_physicsWorld->CreateBody(&tempDef);
+			for (int i = 21; i <= 30; i++)
+			{
+				walkRight.AddFrame(vec2(806 * i, 914), vec2(806 * i + 806, 0));
+			}
+			walkRight.SetRepeating(true);
+			walkRight.SetSecPerFrame(0.05f);
 
-		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
-			vec2(0.f, 0.f), true, 1.5f);
+			animController.InitUVs(fileName);
+			animController.AddAnimation(Animation());
+			animController.SetActiveAnim(3);
+			auto& attackRight = animController.GetAnimation(3);
+			for (int i = 31; i <= 38; i++)
+			{
+				attackRight.AddFrame(vec2(806 * i, 914), vec2(806 * i + 806, 0));
+			}
+			attackRight.SetRepeating(false);
+			attackRight.SetSecPerFrame(0.05f);
 
-		//fixture definition
-		b2PolygonShape polygonShape;
-		b2FixtureDef myFixtureDef;
-		myFixtureDef.shape = &polygonShape;
-		myFixtureDef.density = 3;
-		//myFixtureDef.friction = 1.f;
+			animController.InitUVs(fileName);
+			animController.AddAnimation(Animation());
+			animController.SetActiveAnim(4);
 
-		//Adds a foot sensor fixture under the body
-		polygonShape.SetAsBox(12.f, 0.0001, b2Vec2(0.f, -25.f), 0);
-		myFixtureDef.isSensor = true;
-		b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
-		footSensorFixture->SetUserData((void*)3);
+			auto& IdleLeft = animController.GetAnimation(4);
+			for (int i = 0; i <= 15; i++)
+			{
+				IdleLeft.AddFrame(vec2(806 * i + 806, 914), vec2(806 * i, 0));
+			}
+			IdleLeft.SetRepeating(true);
+			IdleLeft.SetSecPerFrame(0.05f);
 
-		//Adds a fixture the right side of the body
-		polygonShape.SetAsBox(0.001f, 22.f, b2Vec2(17.6f, 0.f), 0);
-		myFixtureDef.isSensor = true;
-		b2Fixture* RightSideFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
-		RightSideFixture->SetUserData((void*)4);
+			animController.InitUVs(fileName);
+			animController.AddAnimation(Animation());
+			animController.SetActiveAnim(5);
 
-		//Adds a fixture the left side of the body
-		polygonShape.SetAsBox(0.001, 22.f, b2Vec2(-17.6f, 0.f), 0);
-		myFixtureDef.isSensor = true;
-		b2Fixture* LeftSideFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
-		LeftSideFixture->SetUserData((void*)5);
+			auto& jumpLeft = animController.GetAnimation(5);
+			for (int i = 16; i <= 20; i++)
+			{
+				jumpLeft.AddFrame(vec2(806 * i + 806, 914), vec2(806 * i, 0));
+			}
+			jumpLeft.SetRepeating(false);
+			jumpLeft.SetSecPerFrame(0.05f);
 
-		//Sets up the identifier
-		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit() | EntityIdentifier::AnimationBit();
-		ECS::SetUpIdentifier(entity, bitHolder, "Klock");
+			animController.InitUVs(fileName);
+			animController.AddAnimation(Animation());
+			animController.SetActiveAnim(6);
+
+			auto& runLeft = animController.GetAnimation(6);
+			for (int i = 21; i <= 30; i++)
+			{
+				runLeft.AddFrame(vec2(806 * i + 806, 914), vec2(806 * i, 0));
+			}
+			runLeft.SetRepeating(true);
+			runLeft.SetSecPerFrame(0.05f);
+
+			animController.InitUVs(fileName);
+			animController.AddAnimation(Animation());
+			animController.SetActiveAnim(7);
+
+			auto& punchLeft = animController.GetAnimation(7);
+			for (int i = 31; i <= 38; i++)
+			{
+				punchLeft.AddFrame(vec2(806 * i + 806, 914), vec2(806 * i, 0));
+			}
+			punchLeft.SetRepeating(false);
+			punchLeft.SetSecPerFrame(0.05f);
+
+
+
+
+			//Sets up components
+			ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
+			ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 0.f, 49.f));
+
+			//Grabs reference to various components
+			//Sets up components
+			ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 49.f));
+			ECS::GetComponent<PlayerData>(entity).Health = 6;
+			//Grabs reference to various components
+
+			auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+			auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+			//Physics body covers the entire sprite
+			float shrinkX = tempSpr.GetWidth() / 2.f;
+			float shrinkY = tempSpr.GetHeight() / 2.f;
+
+			b2Body* tempBody;
+			b2BodyDef tempDef;
+			tempDef.type = b2_dynamicBody;
+			tempDef.position.Set(float32(0.f), float32(100.f));
+			tempDef.fixedRotation = true;
+
+			tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+			tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
+				vec2(0.f, 0.f), true, 1.5f);
+
+			//fixture definition
+			b2PolygonShape polygonShape;
+			b2FixtureDef myFixtureDef;
+			myFixtureDef.shape = &polygonShape;
+			myFixtureDef.density = 3;
+			//myFixtureDef.friction = 1.f;
+
+			//Adds a foot sensor fixture under the body
+			polygonShape.SetAsBox(12.f, 0.0001, b2Vec2(0.f, -25.f), 0);
+			myFixtureDef.isSensor = true;
+			b2Fixture* footSensorFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
+			footSensorFixture->SetUserData((void*)3);
+
+			//Adds a fixture the right side of the body
+			polygonShape.SetAsBox(0.001f, 22.f, b2Vec2(17.6f, 0.f), 0);
+			myFixtureDef.isSensor = true;
+			b2Fixture* RightSideFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
+			RightSideFixture->SetUserData((void*)4);
+
+			//Adds a fixture the left side of the body
+			polygonShape.SetAsBox(0.001, 22.f, b2Vec2(-17.6f, 0.f), 0);
+			myFixtureDef.isSensor = true;
+			b2Fixture* LeftSideFixture = tempPhysBody.GetBody()->CreateFixture(&myFixtureDef);
+			LeftSideFixture->SetUserData((void*)5);
+
+			//Sets up the identifier
+			unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit() | EntityIdentifier::AnimationBit();
+			ECS::SetUpIdentifier(entity, bitHolder, "Klock");
+		
+
 	}
+	ECS::GetComponent<PlayerData>(1).canUseTimeSlow = 1;
 
 	//Shadow Klock Entity 2
 	{
@@ -204,15 +253,33 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<PhysicsBody>(entity);
 		ECS::AttachComponent<BossObject>(entity);
 		ECS::AttachComponent<PlayerData>(entity);
+		ECS::AttachComponent<AnimationController>(entity);
 
 		ECS::GetComponent<PlayerData>(entity).Health = 15;
+		
+		auto& animController = ECS::GetComponent<AnimationController>(entity);
 
 		//Sets up components
-		std::string fileName = "shadowklock.png";
+		std::string fileName = "shadowklockspritesheet.png";
+
+		//Walking left animation
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(0);
+		auto& idle = animController.GetAnimation(0);
+		//Idle Animation
+		for (int i = 0; i <= 14; i++)
+		{
+
+			idle.AddFrame(vec2(1040 * i, 1200), vec2((1040 * i) + 1040, 0));
+
+		}
+		idle.SetRepeating(true);
+		idle.SetSecPerFrame(0.02f);
 
 		//Sets up components
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 50, 60);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 0.f, 97.f));
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 0.f, 49.f));
 
 		//Grabs reference to various components
 		//Sets up components
@@ -816,9 +883,9 @@ void BossFightScene::Update()
 		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetTransform(b2Vec2(-999, 999), 0);
 		ECS::GetComponent<PhysicsBody>(10).moveonnextstep = 0;
 	}
-
 	if (ECS::GetComponent<PlayerData>(1).isAttacking)
 	{
+
 		std::cout << "BRUH";
 
 		createdint = 1;
@@ -843,9 +910,9 @@ void BossFightScene::Update()
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
 		if (ECS::GetComponent<PlayerData>(1).facingLeft)
-			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x - 25), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
+			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x - 15), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
 		else
-			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x + 25), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
+			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x + 15), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
 
 		tempDef.fixedRotation = true;
 		tempDef.gravityScale = 0;
@@ -859,9 +926,15 @@ void BossFightScene::Update()
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
 		if (ECS::GetComponent<PlayerData>(1).facingLeft)
-			polygonShape.SetAsBox(45.f, 20.f, b2Vec2(-45.f, 0.f), 0);
+		{
+			ECS::GetComponent<AnimationController>(1).SetActiveAnim(7);
+			polygonShape.SetAsBox(35.f, 20.f, b2Vec2(0.f, 0.f), 0);
+		}
 		else
-			polygonShape.SetAsBox(45.f, 20.f, b2Vec2(45.f, 0.f), 0);
+		{
+			ECS::GetComponent<AnimationController>(1).SetActiveAnim(3);
+			polygonShape.SetAsBox(35.f, 20.f, b2Vec2(0.f, 0.f), 0);
+		}
 
 		myFixtureDef.shape = &polygonShape;
 		myFixtureDef.density = 0;
@@ -881,8 +954,10 @@ void BossFightScene::Update()
 	{
 		ECS::DestroyEntity(tempent);
 		std::cout << "Destroyed ent";
-		ECS::GetComponent<PlayerData>(1).TimeSinceAtt = 0.7f;
+
+		ECS::GetComponent<PlayerData>(1).TimeSinceAtt = 0.4f;
 		createdint = 0;
+
 	}
 
 

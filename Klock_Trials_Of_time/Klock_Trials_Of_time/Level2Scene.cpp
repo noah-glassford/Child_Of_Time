@@ -46,14 +46,11 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 	}
 
 	//Setup klock, entity 1
-		//Setup klock, entity 1
+		//Klock entity, used by the player, core entity #1
 	{
 		//Create new Entity
 		auto entity = ECS::CreateEntity();
 		ECS::SetIsMainPlayer(entity, true);
-
-		Sound2D _jump("Level2Music.mp3", "group1");
-		_jump.play();
 
 		//Add components
 		ECS::AttachComponent<Sprite>(entity);
@@ -63,40 +60,116 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<PlayerData>(entity);
 
 		//Sets up components
-		std::string fileName = "spritesheet.png";
+		std::string fileName = "KlockSpriteSheet.png";
 		auto& animController = ECS::GetComponent<AnimationController>(entity);
 
-		animController.InitUVs(fileName);
-		animController.AddAnimation(Animation());
-		animController.SetActiveAnim(0);
-		auto& anim = animController.GetAnimation(0);
-		//Walking right animation
 
-		anim.AddFrame(vec2(0.f, 544.f), vec2(376.f, 0.f));
-		anim.AddFrame(vec2(376.f, 544.f), vec2(752, 0.f));
-		anim.AddFrame(vec2(752.f, 544.f), vec2(1128.f, 0.f));
-		anim.AddFrame(vec2(376.f, 544.f), vec2(752, 0.f));
-		anim.SetRepeating(true);
-		anim.SetSecPerFrame(0.1f);
 
 		//Walking left animation
 		animController.InitUVs(fileName);
 		animController.AddAnimation(Animation());
-		//animController.SetActiveAnim(1);
-		auto& animation = animController.GetAnimation(1);
+		animController.SetActiveAnim(0);
+		auto& idle = animController.GetAnimation(0);
+		//Idle Animation
+		for (int i = 0; i <= 15; i++)
+		{
 
-		animation.AddFrame(vec2(376.f, 544.f), vec2(0.f, 0.f));
-		animation.AddFrame(vec2(752.f, 544.f), vec2(367.f, 0.f));
-		animation.AddFrame(vec2(1128.f, 544.f), vec2(752.f, 0.f));
-		animation.AddFrame(vec2(752.f, 544.f), vec2(376, 0.f));
-		animation.SetRepeating(true);
-		animation.SetSecPerFrame(0.1f);
+			idle.AddFrame(vec2(806 * i, 914), vec2(806 * i + 806, 0));
 
-		//Sets up components
+		}
+		idle.SetRepeating(true);
+		idle.SetSecPerFrame(0.05f);
+
+		//jump right animation
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(1);
+		auto& jump = animController.GetAnimation(1);
+		for (int i = 16; i <= 20; i++)
+		{
+			jump.AddFrame(vec2(806 * i, 914), vec2(806 * i + 806, 0));
+		}
+		jump.SetRepeating(false);
+		jump.SetSecPerFrame(0.05f);
+
+		//walk right animation
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(2);
+		auto& walkRight = animController.GetAnimation(2);
+
+		for (int i = 21; i <= 30; i++)
+		{
+			walkRight.AddFrame(vec2(806 * i, 914), vec2(806 * i + 806, 0));
+		}
+		walkRight.SetRepeating(true);
+		walkRight.SetSecPerFrame(0.05f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(3);
+		auto& attackRight = animController.GetAnimation(3);
+		for (int i = 31; i <= 38; i++)
+		{
+			attackRight.AddFrame(vec2(806 * i, 914), vec2(806 * i + 806, 0));
+		}
+		attackRight.SetRepeating(false);
+		attackRight.SetSecPerFrame(0.05f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(4);
+
+		auto& IdleLeft = animController.GetAnimation(4);
+		for (int i = 0; i <= 15; i++)
+		{
+			IdleLeft.AddFrame(vec2(806 * i + 806, 914), vec2(806 * i, 0));
+		}
+		IdleLeft.SetRepeating(true);
+		IdleLeft.SetSecPerFrame(0.05f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(5);
+
+		auto& jumpLeft = animController.GetAnimation(5);
+		for (int i = 16; i <= 20; i++)
+		{
+			jumpLeft.AddFrame(vec2(806 * i + 806, 914), vec2(806 * i, 0));
+		}
+		jumpLeft.SetRepeating(false);
+		jumpLeft.SetSecPerFrame(0.05f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(6);
+
+		auto& runLeft = animController.GetAnimation(6);
+		for (int i = 21; i <= 30; i++)
+		{
+			runLeft.AddFrame(vec2(806 * i + 806, 914), vec2(806 * i, 0));
+		}
+		runLeft.SetRepeating(true);
+		runLeft.SetSecPerFrame(0.05f);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(7);
+
+		auto& punchLeft = animController.GetAnimation(7);
+		for (int i = 31; i <= 38; i++)
+		{
+			punchLeft.AddFrame(vec2(806 * i + 806, 914), vec2(806 * i, 0));
+		}
+		punchLeft.SetRepeating(false);
+		punchLeft.SetSecPerFrame(0.05f);
+
+
+
 
 		//Sets up components
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 0.f, 97.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 0.f, 49.f));
 
 		//Grabs reference to various components
 		//Sets up components
@@ -1476,8 +1549,11 @@ void Level2Scene::Update()
 	ECS::GetComponent<Transform>(32).SetPosition(ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x - 280, ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y + 150, 99);
 	ECS::GetComponent<Transform>(33).SetPosition(ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x - 220, ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y + 200, 99);
 
+	
 	if (ECS::GetComponent<PlayerData>(1).isAttacking)
 	{
+
+		
 		std::cout << "BRUH";
 
 		createdint = 1;
@@ -1502,9 +1578,9 @@ void Level2Scene::Update()
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
 		if (ECS::GetComponent<PlayerData>(1).facingLeft)
-			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x - 25), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
+			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x - 15), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
 		else
-			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x + 25), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
+			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x + 15), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
 
 		tempDef.fixedRotation = true;
 		tempDef.gravityScale = 0;
@@ -1518,9 +1594,15 @@ void Level2Scene::Update()
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
 		if (ECS::GetComponent<PlayerData>(1).facingLeft)
-			polygonShape.SetAsBox(45.f, 20.f, b2Vec2(-45.f, 0.f), 0);
+		{
+			ECS::GetComponent<AnimationController>(1).SetActiveAnim(7);
+			polygonShape.SetAsBox(35.f, 20.f, b2Vec2(0.f, 0.f), 0);
+		}
 		else
-			polygonShape.SetAsBox(45.f, 20.f, b2Vec2(45.f, 0.f), 0);
+		{
+			ECS::GetComponent<AnimationController>(1).SetActiveAnim(3);
+			polygonShape.SetAsBox(35.f, 20.f, b2Vec2(0.f, 0.f), 0);
+		}
 
 		myFixtureDef.shape = &polygonShape;
 		myFixtureDef.density = 0;
@@ -1540,8 +1622,10 @@ void Level2Scene::Update()
 	{
 		ECS::DestroyEntity(tempent);
 		std::cout << "Destroyed ent";
-		ECS::GetComponent<PlayerData>(1).TimeSinceAtt = 0.7f;
+
+		ECS::GetComponent<PlayerData>(1).TimeSinceAtt = 0.4f;
 		createdint = 0;
+
 	}
 
 	
