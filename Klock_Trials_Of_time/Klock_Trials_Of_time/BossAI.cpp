@@ -9,17 +9,19 @@ void BossObject::PickAttack()
 {
 	lockAttack = 1;
 	AttackNumber = 1;
-	SetAttackPosition(b2Vec2(-50, 0));
+	
 	
 	if (ECS::GetComponent<PhysicsBody>(2).GetPosition().x < ECS::GetComponent<PhysicsBody>(1).GetPosition().x)
 	{
 		lockAttack == 0;
 		velocity = (b2Vec2(120, 0));
+		SetAttackPosition(b2Vec2(50, 0));
 	}
 	if (ECS::GetComponent<PhysicsBody>(2).GetPosition().x > ECS::GetComponent<PhysicsBody>(1).GetPosition().x)
 	{
 		lockAttack = 0;
 		velocity = (b2Vec2(-120, 0));
+		SetAttackPosition(b2Vec2(-50, 0));
 	}
 
 	if (ECS::GetComponent<PhysicsBody>(2).GetPosition().y > ECS::GetComponent<PhysicsBody>(1).GetPosition().y + 75&&
@@ -27,12 +29,14 @@ void BossObject::PickAttack()
 	{
 		lockAttack = 0;
 		velocity = (b2Vec2(120, -120));
+		SetAttackPosition(b2Vec2(50, -50));
 	}
 	if (ECS::GetComponent<PhysicsBody>(2).GetPosition().y > ECS::GetComponent<PhysicsBody>(1).GetPosition().y+75&&
 		ECS::GetComponent<PhysicsBody>(2).GetPosition().x > ECS::GetComponent<PhysicsBody>(1).GetPosition().x)
 	{
 		lockAttack = 0;
 		velocity = (b2Vec2(-120, -120));
+		SetAttackPosition(b2Vec2(-50, -50));
 	}
 	
 	//std::cout << AttackNumber;
@@ -134,7 +138,7 @@ void BossObject::RunAttack()
 	switch (AttackNumber)
 	{
 	case 1:
-		//ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(tempvelo);
+		ECS::GetComponent<PhysicsBody>(10).GetBody()->SetLinearVelocity(tempvelo);
 		break;
 	}
 }
@@ -144,16 +148,16 @@ void BossObject::RunMovement()
 	switch (movementNumber)
 	{
 	case 0:
-		//MoveHorizontal(50.f);
+		MoveHorizontal(30.f);
 		break;
 	case 1:
-		MoveVertical(-50.f);
+		MoveVertical(-30.f);
 		break;
 	case 2:
-		MoveVertical(-50.f);
+		MoveVertical(30.f);
 		break;
 	case 3:
-		//MoveHorizontal(-50.f);
+		MoveHorizontal(-30.f);
 		break;
 	}
 }

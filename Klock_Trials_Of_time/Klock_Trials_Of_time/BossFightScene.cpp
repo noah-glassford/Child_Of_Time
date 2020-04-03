@@ -1,5 +1,6 @@
 #include "BossFightScene.h"
 
+
 BossFightScene::BossFightScene(std::string name)
 	: Scene(name)
 {
@@ -11,7 +12,8 @@ BossFightScene::BossFightScene(std::string name)
 
 void BossFightScene::InitScene(float windowWidth, float windowHeight)
 {
-
+	windowHeighttemp = windowHeight;
+	windowWidthtemp = windowWidth;
 	//Allocates Register
 	m_sceneReg = new entt::registry;
 
@@ -647,11 +649,140 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 	}
 
 #pragma endregion
-	
+
+#pragma region moreplatforms
+	//ent 5
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "BossPlatform.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 20);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 50.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(0.f), float32(20.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)10);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
+	}
+
+	//ent 5
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "BossPlatform.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 20);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 50.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(-170.f), float32(-60.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)10);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
+	}
+
+	//ent 5
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "BossPlatform.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 20);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 50.f, 50.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(140.f), float32(-60.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth()), float(tempSpr.GetHeight()),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)10);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
+	}
+#pragma endregion
 
 	Sound2D _jump("BossMusic.mp3", "group1");
+	if(!_jump.isPlaying())
 	_jump.play();
 
+	
 
 	//Makes the camera focus on the main player
 	//ECS::GetComponent<HorizontalScroll>(EntityIdentifier::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(EntityIdentifier::MainPlayer()));
@@ -660,11 +791,16 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 
 void BossFightScene::Update()
 {
+//	
+	
+	
 	//UI stuff
 	//ECS::GetComponent<Transform>(3).SetPosition(ECS::GetComponent<HorizontalScroll>(0).GetCam()->GetPosition().x - 260, ECS::GetComponent<VerticalScroll>(0).GetCam()->GetPosition().y + 150, 99);
 	//ECS::GetComponent<Transform>(4).SetPosition(ECS::GetComponent<HorizontalScroll>(0).GetCam()->GetPosition().x - 220, ECS::GetComponent<VerticalScroll>(0).GetCam()->GetPosition().y + 200, 99);
 	ECS::GetComponent<PlayerData>(1).CurrentScene = 3;
 
+
+	
 	if (ECS::GetComponent<PlayerData>(2).Health == 0)
 	{
 		ECS::GetComponent<PhysicsBody>(2).GetBody()->SetTransform(b2Vec2(-999, 999), 0);
@@ -707,9 +843,9 @@ void BossFightScene::Update()
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
 		if (ECS::GetComponent<PlayerData>(1).facingLeft)
-			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x - 45), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
+			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x - 25), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
 		else
-			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x + 45), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
+			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x + 25), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
 
 		tempDef.fixedRotation = true;
 		tempDef.gravityScale = 0;
@@ -723,9 +859,9 @@ void BossFightScene::Update()
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
 		if (ECS::GetComponent<PlayerData>(1).facingLeft)
-			polygonShape.SetAsBox(20.f, 20.f, b2Vec2(-45.f, 0.f), 0);
+			polygonShape.SetAsBox(45.f, 20.f, b2Vec2(-45.f, 0.f), 0);
 		else
-			polygonShape.SetAsBox(20.f, 20.f, b2Vec2(45.f, 0.f), 0);
+			polygonShape.SetAsBox(45.f, 20.f, b2Vec2(45.f, 0.f), 0);
 
 		myFixtureDef.shape = &polygonShape;
 		myFixtureDef.density = 0;
@@ -748,6 +884,7 @@ void BossFightScene::Update()
 		ECS::GetComponent<PlayerData>(1).TimeSinceAtt = 0.7f;
 		createdint = 0;
 	}
+
 
 	ECS::GetComponent<BossObject>(2).RunAI();
 	

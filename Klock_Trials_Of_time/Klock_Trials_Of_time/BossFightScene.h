@@ -17,4 +17,6 @@ public:
 	void Update() override;
 	bool createdint{ 0 };
 	unsigned int tempent;
+	float windowWidthtemp;
+	float windowHeighttemp;
 };

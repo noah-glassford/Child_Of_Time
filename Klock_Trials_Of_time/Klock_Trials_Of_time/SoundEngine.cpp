@@ -27,6 +27,8 @@ void SoundManager::init(const std::string& defaultFilePath, unsigned numChannels
 	}
 	else
 		printf("Already initialized Sound Manager!\n");
+
+
 }
 
 void SoundManager::update()
@@ -110,6 +112,13 @@ Sound2D::Sound2D(const std::string& path, const std::string& groupName)
 void Sound2D::play()
 {
 	_chanel = SoundManager::play2DSound(_sound, _group);
+}
+
+void Sound2D::stop()
+{
+//	FMOD_RESULT Studio::Bus::setPaused(
+	
+	
 }
 
 bool Sound2D::isPlaying()

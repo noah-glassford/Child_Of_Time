@@ -81,6 +81,8 @@ public:
 	unsigned getSoundHandle() const { return _sound; }
 	unsigned getGroupHandle() const { return _group; }
 
+	void stop();
+
 	bool isPlaying();
 	void setLoopCount(int loopcount);
 

@@ -10,5 +10,9 @@ public:
 	//init, as each scene's content will be different
 	void InitScene(float windowWidth, float windowHeight) override;
 
+	bool createdint{ 0 }; //Counts frames since created a combat hitbox
+	unsigned int tempent;
+	bool tempbool{ 1 };
+
 	void Update();
 };

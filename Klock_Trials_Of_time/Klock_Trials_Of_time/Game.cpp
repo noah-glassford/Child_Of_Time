@@ -56,7 +56,7 @@ void Game::InitGame()
 
 	//Sets active scene reference to our scene
 	m_activeScene = m_scenes[1];
-	//cuck
+
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -115,13 +115,47 @@ void Game::Update()
 	//Update Physics System
 	PhysicsSystem::Update(m_register, m_activeScene->GetPhysicsWorld());
 
+
+	
+	//Animation stuff
+	//if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().x == 0)
+		//ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
+	if (ECS::GetComponent<AnimationController>(1).GetActiveAnim() == 2 && ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().x == 0)
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
+	if (!ECS::GetComponent<PlayerData>(1).Grounded && !ECS::GetComponent<PlayerData>(1).facingLeft)
+	{
+		
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
+	}
+	else if (!ECS::GetComponent<PlayerData>(1).Grounded && ECS::GetComponent<PlayerData>(1).facingLeft)
+	{
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(5);
+	}
+	
+	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking == true && !ECS::GetComponent<PlayerData>(1).facingLeft)
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(3);
+	else if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking == true && ECS::GetComponent<PlayerData>(1).facingLeft)
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(7);
+	
+	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 3600 && ECS::GetComponent<PlayerData>(1).CurrentScene == 1 &&
+		 ECS::GetComponent<PlayerData>(1).canUseTimeSlow == 1)
+		Switchscene(2);
+	
+	if (ECS::GetComponent<PlayerData>(1).Health == 0)
+	{
+		
+		Switchscene(0);
+	}
+	
+
 	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
 	unsigned int mainp = EntityIdentifier::MainPlayer();
 
 	if (ECS::GetComponent<PlayerData>(mainp).UsedUpTime > 0 && !ECS::GetComponent<PlayerData>(1).isSlowed)
 		ECS::GetComponent<PlayerData>(mainp).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime - deltaTime * 2;
 
-	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed) {
+	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed) 
+	{
 		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime <= 8.f)
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime + deltaTime;
 
@@ -150,8 +184,10 @@ void Game::Update()
 		ECS::GetComponent<PlayerData>(mainp).CanAttack = 0;
 	}
 	else
+	{
 		ECS::GetComponent<PlayerData>(mainp).CanAttack = 1;
-
+//		ECS::GetComponent<AnimationController>(1).GetAnimation(3).SetRepeating(false);
+	}
 	//The unironic worst way to do this (scene switching code)
 	/*
 	Commented out until we know what coords level 1 ends at
@@ -190,7 +226,6 @@ void Game::GUI()
 
 void Game::Switchscene(int scene)
 {
-	
 
 	m_activeScene = m_scenes[scene];
 
@@ -309,14 +344,14 @@ void Game::GamepadDown(XInputController* con)
 		if (!ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).OnWallRight)
 			Klock.MoveRight(30.f);
 
-		ECS::GetComponent<AnimationController>(EntityIdentifier::MainPlayer()).SetActiveAnim(0);
+		//ECS::GetComponent<AnimationController>(EntityIdentifier::MainPlayer()).SetActiveAnim(0);
 	}
 	if (con->IsButtonPressed(Buttons::DPAD_LEFT))
 	{
 		if (!ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).OnWallLeft)
 			Klock.MoveLeft(30.f);
 
-		ECS::GetComponent<AnimationController>(EntityIdentifier::MainPlayer()).SetActiveAnim(1);
+		//ECS::GetComponent<AnimationController>(EntityIdentifier::MainPlayer()).SetActiveAnim(1);
 	}
 
 	if (con->IsButtonPressed(Buttons::A))
@@ -379,17 +414,27 @@ void Game::KeyboardHold()
 		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft&& ECS::GetComponent<PlayerData>(1).Hit)
 			Klock.MoveLeft(38.f);
 		ECS::GetComponent<PlayerData>(1).facingLeft = 1;
+		//if (!ECS::GetComponent<AnimationController>(1).GetActiveAnim() == 3)
+		if (ECS::GetComponent<PlayerData>(1).Grounded)
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(6);
 
-		ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
+		
+
+
 	}
 	if (Input::GetKey(Key::D))
 	{
 		if (!ECS::GetComponent<PlayerData>(1).OnWallRight&& ECS::GetComponent<PlayerData>(1).Hit)
 			Klock.MoveRight(38.f);
-
+		
 		ECS::GetComponent<PlayerData>(1).facingLeft = 0;
-
-		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
+		//if (!ECS::GetComponent<AnimationController>(1).GetActiveAnim() == 3)
+		if (ECS::GetComponent<PlayerData>(1).Grounded)
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(2);
+	}
+	else
+	{
+		
 	}
 	if (Input::GetKey(Key::O))
 		ECS::GetComponent<Camera>(EntityIdentifier::MainCamera()).Zoom(-5);
@@ -407,17 +452,37 @@ void Game::KeyboardDown()
 
 	if (Input::GetKeyDown(Key::W))
 	{
+		
 		if (ECS::GetComponent<PlayerData>(1).Grounded)
 		{
 			Klock.Jump(4200000.f);
 			Sound2D _jump("jump.wav", "group1");
 			_jump.play();
+			//ECS::GetComponent<AnimationController>(1).GetAnimation(1).Reset();
+			//ECS::GetComponent<AnimationController>(1).GetAnimation(5).Reset();
+			if (!ECS::GetComponent<PlayerData>(1).facingLeft)
+				ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
+			else
+				ECS::GetComponent<AnimationController>(1).SetActiveAnim(5);
+			
 		}
 	}
 	if (Input::GetKeyDown(Key::K) && ECS::GetComponent<PlayerData>(1).CanAttack)
+	{
+		ECS::GetComponent<AnimationController>(1).GetAnimation(3).Reset();
+		ECS::GetComponent<AnimationController>(1).GetAnimation(7).Reset();
+		if (!ECS::GetComponent<PlayerData>(1).facingLeft)
+			ECS::GetComponent<AnimationController>(1).SetActiveAnim(3);
+		else
+			ECS::GetComponent<AnimationController>(1).SetActiveAnim(7);
+		
+
 		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = true;
+	}
 	else
+	{
 		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = false;
+	}
 
 	if (Input::GetKeyDown(Key::L) && slowSpamBlock && ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).canUseTimeSlow)
 	{

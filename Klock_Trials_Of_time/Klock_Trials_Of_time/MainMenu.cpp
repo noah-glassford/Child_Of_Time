@@ -210,7 +210,8 @@ void MainMenu::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
 	}
-
+	Sound2D _Music("MenuSong.mp3", "group1");
+		_Music.play();
 
 }
 
