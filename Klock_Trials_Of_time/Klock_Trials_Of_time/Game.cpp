@@ -115,13 +115,21 @@ void Game::Update()
 	//Update Physics System
 	PhysicsSystem::Update(m_register, m_activeScene->GetPhysicsWorld());
 
+	if (ECS::GetComponent<PlayerData>(1).Health == 0)
+	{
+		
+		Switchscene(0);
+	}
+	
+
 	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
 	unsigned int mainp = EntityIdentifier::MainPlayer();
 
 	if (ECS::GetComponent<PlayerData>(mainp).UsedUpTime > 0 && !ECS::GetComponent<PlayerData>(1).isSlowed)
 		ECS::GetComponent<PlayerData>(mainp).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime - deltaTime * 2;
 
-	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed) {
+	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed) 
+	{
 		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime <= 8.f)
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime + deltaTime;
 
@@ -190,7 +198,6 @@ void Game::GUI()
 
 void Game::Switchscene(int scene)
 {
-	
 
 	m_activeScene = m_scenes[scene];
 
