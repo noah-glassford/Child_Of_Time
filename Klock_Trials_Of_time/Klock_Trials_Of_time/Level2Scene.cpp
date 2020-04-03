@@ -1502,9 +1502,9 @@ void Level2Scene::Update()
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
 		if (ECS::GetComponent<PlayerData>(1).facingLeft)
-			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x - 45), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
+			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x - 25), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
 		else
-			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x + 45), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
+			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x + 25), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
 
 		tempDef.fixedRotation = true;
 		tempDef.gravityScale = 0;
@@ -1518,9 +1518,9 @@ void Level2Scene::Update()
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
 		if (ECS::GetComponent<PlayerData>(1).facingLeft)
-			polygonShape.SetAsBox(20.f, 20.f, b2Vec2(-45.f, 0.f), 0);
+			polygonShape.SetAsBox(45.f, 20.f, b2Vec2(-45.f, 0.f), 0);
 		else
-			polygonShape.SetAsBox(20.f, 20.f, b2Vec2(45.f, 0.f), 0);
+			polygonShape.SetAsBox(45.f, 20.f, b2Vec2(45.f, 0.f), 0);
 
 		myFixtureDef.shape = &polygonShape;
 		myFixtureDef.density = 0;
@@ -1543,6 +1543,7 @@ void Level2Scene::Update()
 		ECS::GetComponent<PlayerData>(1).TimeSinceAtt = 0.7f;
 		createdint = 0;
 	}
+
 	
 	
 	

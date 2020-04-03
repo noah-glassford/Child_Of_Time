@@ -55,8 +55,8 @@ void Game::InitGame()
 	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[0];
-	//cuck
+	m_activeScene = m_scenes[1];
+
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -115,6 +115,13 @@ void Game::Update()
 	//Update Physics System
 	PhysicsSystem::Update(m_register, m_activeScene->GetPhysicsWorld());
 
+	
+	//Animation stuff
+	//if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().x == 0)
+		//ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
+	
+
+	
 	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 3600 && ECS::GetComponent<PlayerData>(1).CurrentScene == 1 &&
 		 ECS::GetComponent<PlayerData>(1).canUseTimeSlow == 1)
 		Switchscene(2);
@@ -162,8 +169,10 @@ void Game::Update()
 		ECS::GetComponent<PlayerData>(mainp).CanAttack = 0;
 	}
 	else
+	{
 		ECS::GetComponent<PlayerData>(mainp).CanAttack = 1;
-
+//		ECS::GetComponent<AnimationController>(1).GetAnimation(3).SetRepeating(false);
+	}
 	//The unironic worst way to do this (scene switching code)
 	/*
 	Commented out until we know what coords level 1 ends at
@@ -320,14 +329,14 @@ void Game::GamepadDown(XInputController* con)
 		if (!ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).OnWallRight)
 			Klock.MoveRight(30.f);
 
-		ECS::GetComponent<AnimationController>(EntityIdentifier::MainPlayer()).SetActiveAnim(0);
+		//ECS::GetComponent<AnimationController>(EntityIdentifier::MainPlayer()).SetActiveAnim(0);
 	}
 	if (con->IsButtonPressed(Buttons::DPAD_LEFT))
 	{
 		if (!ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).OnWallLeft)
 			Klock.MoveLeft(30.f);
 
-		ECS::GetComponent<AnimationController>(EntityIdentifier::MainPlayer()).SetActiveAnim(1);
+		//ECS::GetComponent<AnimationController>(EntityIdentifier::MainPlayer()).SetActiveAnim(1);
 	}
 
 	if (con->IsButtonPressed(Buttons::A))
@@ -390,8 +399,8 @@ void Game::KeyboardHold()
 		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft&& ECS::GetComponent<PlayerData>(1).Hit)
 			Klock.MoveLeft(38.f);
 		ECS::GetComponent<PlayerData>(1).facingLeft = 1;
-
-		ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
+		if (!ECS::GetComponent<AnimationController>(1).GetActiveAnim() == 3)
+			ECS::GetComponent<AnimationController>(1).SetActiveAnim(2);
 	}
 	if (Input::GetKey(Key::D))
 	{
@@ -399,8 +408,8 @@ void Game::KeyboardHold()
 			Klock.MoveRight(38.f);
 
 		ECS::GetComponent<PlayerData>(1).facingLeft = 0;
-
-		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
+		if (!ECS::GetComponent<AnimationController>(1).GetActiveAnim() == 3)
+			ECS::GetComponent<AnimationController>(1).SetActiveAnim(2);
 	}
 	if (Input::GetKey(Key::O))
 		ECS::GetComponent<Camera>(EntityIdentifier::MainCamera()).Zoom(-5);
@@ -426,9 +435,18 @@ void Game::KeyboardDown()
 		}
 	}
 	if (Input::GetKeyDown(Key::K) && ECS::GetComponent<PlayerData>(1).CanAttack)
+	{
+		ECS::GetComponent<AnimationController>(1).GetAnimation(3).Reset();
+		ECS::GetComponent<AnimationController>(1).SetActiveAnim(3);
+		
+		
+
 		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = true;
+	}
 	else
+	{
 		ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isAttacking = false;
+	}
 
 	if (Input::GetKeyDown(Key::L) && slowSpamBlock && ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).canUseTimeSlow)
 	{
