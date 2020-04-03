@@ -116,7 +116,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(0.f), float32(60.f));
+		tempDef.position.Set(float32(2275.f), float32(100.f));
 		tempDef.fixedRotation = true;
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
@@ -932,6 +932,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
 	}
+	//23
 	{
 		//Create new entity
 		auto entity = ECS::CreateEntity();
@@ -941,8 +942,9 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 		ECS::AttachComponent<AnimationController>(entity);
+		ECS::AttachComponent<PlayerData>(entity);
 
-
+		ECS::GetComponent<PlayerData>(entity).Health = 4;
 
 		//Grabs reference to various components
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -995,6 +997,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 16), float(tempSpr.GetHeight() - 12),
 			vec2(0.f, 0.f), false, 1.5f);
 
+		ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)11);
 		//Sets up the Identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
@@ -1009,6 +1012,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 		ECS::AttachComponent<AnimationController>(entity);
+		ECS::AttachComponent<PlayerData>(entity);
 
 		//Grabs reference to various components
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -1037,6 +1041,8 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		anim.SetRepeating(true);
 		anim.SetSecPerFrame(0.1f);
 
+		ECS::GetComponent<PlayerData>(entity).Health = 4;
+		
 		//Sets up components
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 0.f, 49.f));
@@ -1061,6 +1067,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 16), float(tempSpr.GetHeight() - 12),
 			vec2(0.f, 0.f), false, 1.5f);
 
+		ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)12);
 		//Sets up the Identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
@@ -1540,12 +1547,17 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 
 void Level1Scene::Update()
 {
-	std::cout << "X: " << ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x << "\t\tY: " << ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().y << '\n';
+	//std::cout << "X: " << ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x << "\t\tY: " << ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().y << '\n';
 	GeneralUpdates();
 	PlatformMovement();
 	EnemyUpdates();
 
-	
+	if (ECS::GetComponent<PlayerData>(23).Health == 0)
+		ECS::GetComponent<PhysicsBody>(23).GetBody()->SetTransform(b2Vec2(99999,999999),0);
+
+	if (ECS::GetComponent<PlayerData>(24).Health == 0)
+		ECS::GetComponent<PhysicsBody>(24).GetBody()->SetTransform(b2Vec2(99999, 999999), 0);
+
 	ECS::GetComponent<PlayerData>(1).CurrentScene = 1;
 	
 	if (ECS::GetComponent<PlayerData>(1).isAttacking)
@@ -1574,9 +1586,9 @@ void Level1Scene::Update()
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
 		if (ECS::GetComponent<PlayerData>(1).facingLeft)
-			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x - 45), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
+			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x - 25), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
 		else
-			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x + 45), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
+			tempDef.position.Set(float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().x + 25), float32(ECS::GetComponent<PhysicsBody>(1).GetPosition().y));
 
 		tempDef.fixedRotation = true;
 		tempDef.gravityScale = 0;
@@ -1590,9 +1602,9 @@ void Level1Scene::Update()
 		b2PolygonShape polygonShape;
 		b2FixtureDef myFixtureDef;
 		if (ECS::GetComponent<PlayerData>(1).facingLeft)
-			polygonShape.SetAsBox(20.f, 20.f, b2Vec2(-45.f, 0.f), 0);
+			polygonShape.SetAsBox(45.f, 20.f, b2Vec2(-45.f, 0.f), 0);
 		else
-			polygonShape.SetAsBox(20.f, 20.f, b2Vec2(45.f, 0.f), 0);
+			polygonShape.SetAsBox(45.f, 20.f, b2Vec2(45.f, 0.f), 0);
 
 		myFixtureDef.shape = &polygonShape;
 		myFixtureDef.density = 0;

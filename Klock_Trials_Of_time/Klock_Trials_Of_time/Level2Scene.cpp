@@ -1471,6 +1471,8 @@ void Level2Scene::Update()
 {
 	std::cout << ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x << '\n';
 
+	ECS::GetComponent<PlayerData>(1).CurrentScene = 1;
+
 	ECS::GetComponent<Transform>(32).SetPosition(ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x - 280, ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y + 150, 99);
 	ECS::GetComponent<Transform>(33).SetPosition(ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x - 220, ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y + 200, 99);
 
