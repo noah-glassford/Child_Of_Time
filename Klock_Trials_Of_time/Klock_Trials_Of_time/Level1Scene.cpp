@@ -11,7 +11,7 @@ float plat15MovementSpeedX = 20.f;
 float plat15MovementSpeedY;
 bool plat15Up = false;
 float plat25MovementSpeedY;
-float plat32MovementSpeedX = 25.f;
+float plat34MovementSpeedX = 25.f;
 
 Level1Scene::Level1Scene(std::string name)
 	: Scene(name)
@@ -983,8 +983,6 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<PhysicsBody>(entity);
 		ECS::AttachComponent<AnimationController>(entity);
 
-		
-
 		//Grabs reference to various components
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
@@ -1018,14 +1016,14 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 
 		anim.SetRepeating(true);
 		anim.SetSecPerFrame(0.1f);
-		
+
 		//Sets up components
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 0.f, 49.f));
 
 		//Grabs reference to various components
 		//Sets up components
-		
+
 		//ECS::GetComponent<PlayerData>(entity).Health = 6;
 		//Physics body covers half the sprite
 			//Id type is environment
@@ -1396,15 +1394,12 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		minus8.SetRepeating(true);
 		minus8.SetSecPerFrame(0.1f);
 
-
-
 		ECS::GetComponent<Transform>(entity).SetPosition(ECS::GetComponent<PhysicsBody>(1).GetPosition().x, ECS::GetComponent<PhysicsBody>(1).GetPosition().y, 99);
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
 
 		//Sets up identifier
 		unsigned int bitHolder = EntityIdentifier::TransformBit() | EntityIdentifier::AnimationBit() | EntityIdentifier::SpriteBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Time Left UI");
-
 	}
 
 	//Hp HUD entity 33
@@ -1468,16 +1463,53 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		minus6.SetRepeating(true);
 		minus6.SetSecPerFrame(0.1f);
 
-
 		ECS::GetComponent<Transform>(entity).SetPosition(ECS::GetComponent<PhysicsBody>(1).GetPosition().x, ECS::GetComponent<PhysicsBody>(1).GetPosition().y, 99);
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 200, 40, true, &animController);
 
 		//Sets up identifier
 		unsigned int bitHolder = EntityIdentifier::TransformBit() | EntityIdentifier::AnimationBit() | EntityIdentifier::SpriteBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "HP UI");
-
 	}
 
+	//setup moving platform, entity 34
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "1_plat1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 70, 35);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(20.f, 0.f, 51.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_kinematicBody;
+		tempDef.position.Set(float32(2750.f), float32(240.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 8), float(tempSpr.GetHeight() - 4),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
+	}
 	Sound2D _Music("Level1Music.mp3", "group1");
 	_Music.play();
 
@@ -1535,10 +1567,6 @@ void Level1Scene::Update()
 	case 6: ECS::GetComponent<AnimationController>(33).SetActiveAnim(0);
 		break;
 	}
-	
-
-
-	
 }
 
 void Level1Scene::GeneralUpdates()
@@ -1619,10 +1647,11 @@ void Level1Scene::PlatformMovement()
 		plat25MovementSpeedY = 0.f;
 	ECS::GetComponent<PhysicsBody>(25).GetBody()->SetLinearVelocity(b2Vec2(0.f, plat25MovementSpeedY * platformSpeedMulti));
 
-	//platform 32 movements
-	if (ECS::GetComponent<PhysicsBody>(32).GetBody()->GetPosition().x < 2700 || ECS::GetComponent<PhysicsBody>(32).GetBody()->GetPosition().x > 3000)
-		plat32MovementSpeedX = -plat32MovementSpeedX;
-	ECS::GetComponent<PhysicsBody>(32).GetBody()->SetLinearVelocity(b2Vec2(plat32MovementSpeedX * platformSpeedMulti, 0.f));
+	//platform 34 movements
+
+	if (ECS::GetComponent<PhysicsBody>(34).GetBody()->GetPosition().x < 2700 || ECS::GetComponent<PhysicsBody>(34).GetBody()->GetPosition().x > 3000)
+		plat34MovementSpeedX = -plat34MovementSpeedX;
+	ECS::GetComponent<PhysicsBody>(34).GetBody()->SetLinearVelocity(b2Vec2(plat34MovementSpeedX * platformSpeedMulti, 0.f));
 }
 
 void Level1Scene::EnemyUpdates()
