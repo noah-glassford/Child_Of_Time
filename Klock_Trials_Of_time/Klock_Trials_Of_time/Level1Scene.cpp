@@ -23,7 +23,6 @@ Level1Scene::Level1Scene(std::string name)
 
 void Level1Scene::InitScene(float windowWidth, float windowHeight)
 {
-	
 	//Allocates Register
 	m_sceneReg = new entt::registry;
 
@@ -36,7 +35,6 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		m_physicsWorld->SetGravity(m_gravity);
 		m_physicsWorld->SetContactListener(&listener);
 	}
-
 
 	//Sets up aspect ratio for the camera
 	float aspectRatio = windowWidth / windowHeight;
@@ -1604,7 +1602,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_kinematicBody;
-		tempDef.position.Set(float32(2750.f), float32(240.f));
+		tempDef.position.Set(float32(2860.f), float32(240.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -1644,7 +1642,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_kinematicBody;
-		tempDef.position.Set(float32(3600.f), float32(220.f));
+		tempDef.position.Set(float32(3600.f), float32(550.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -1654,26 +1652,6 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		//Sets up the Identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
-	}
-
-	//loading screen
-		//Background entity, core entity #36
-	{
-		//Create new entity
-		auto entity = ECS::CreateEntity();
-
-		//Add components
-		ECS::AttachComponent<Sprite>(entity);
-		ECS::AttachComponent<Transform>(entity);
-
-		//Sets up components
-		std::string fileName = "LoadingScreen1.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
-		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 1.f));
-
-		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
-		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
 	}
 
 	Sound2D _Music("Level1Music.mp3", "group1");
@@ -1774,12 +1752,6 @@ void Level1Scene::Update()
 		createdint = 0;
 	}
 
-	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x > ECS::GetComponent<PhysicsBody>(35).GetBody()->GetPosition().x - 3)
-	{
-		ECS::GetComponent<Transform>(36).SetPosition(ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x, ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y, 99);
-	}
-	
-	
 	ECS::GetComponent<Transform>(32).SetPosition(ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x - 280, ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y + 150, 99);
 	ECS::GetComponent<Transform>(33).SetPosition(ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x - 220, ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y + 200, 99);
 

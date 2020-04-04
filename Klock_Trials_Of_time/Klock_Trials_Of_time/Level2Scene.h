@@ -15,4 +15,5 @@ public:
 	bool tempbool{ 1 };
 
 	void Update();
+	void EnemyUpdates();
 };
