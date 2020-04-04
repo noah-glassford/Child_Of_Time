@@ -57,7 +57,7 @@ void Game::InitGame()
 	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[3];
+	m_activeScene = m_scenes[0];
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -116,6 +116,7 @@ void Game::Update()
 	//Update Physics System
 	PhysicsSystem::Update(m_register, m_activeScene->GetPhysicsWorld());
 
+#pragma region animationswitchstuff
 	//Animation stuff
 	//if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().x == 0)
 		//ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
@@ -148,7 +149,6 @@ void Game::Update()
 
 
 
-
 	
 	if (!ECS::GetComponent<PlayerData>(1).Grounded && !ECS::GetComponent<PlayerData>(1).facingLeft && ECS::GetComponent<AnimationController>(1).GetAnimation(ECS::GetComponent<AnimationController>(1).GetActiveAnim()).GetAnimationDone()
 		)
@@ -161,9 +161,15 @@ void Game::Update()
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(5);
 	}
 
-	if (ECS::GetComponent<PhysicsBody>(1).GetPosition().x > 3600 && ECS::GetComponent<PlayerData>(1).CurrentScene == 1 &&
-		ECS::GetComponent<PlayerData>(1).canUseTimeSlow == 1)
-		Switchscene(2);
+#pragma endregion
+	
+	//This switches scene at the end of level 1
+	if(ECS::GetComponent<PlayerData>(1).CurrentScene == 1)
+		if (ECS::GetComponent<PhysicsBody>(35).GetBody()->GetContactList() != 0 &&ECS::GetComponent<PlayerData>(1).canUseTimeSlow == 1)
+			Switchscene(2);
+
+
+
 
 	if (ECS::GetComponent<PlayerData>(1).Health == 0)
 	{

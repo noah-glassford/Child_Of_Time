@@ -55,7 +55,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "Level1_BG.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 6400, 1500);
 		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1000.f, 250.f, 1.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1000.f, 250.f, 2.f));
 
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
@@ -1615,6 +1615,67 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
 	}
+
+	//setup goal ent 35
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "klockclock.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 35);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(20.f, 0.f, 51.f));
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_kinematicBody;
+		tempDef.position.Set(float32(3600.f), float32(220.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 8), float(tempSpr.GetHeight() - 4),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
+	}
+
+	//loading screen
+		//Background entity, core entity #36
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Sets up components
+		std::string fileName = "LoadingScreen1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1920, 1080);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.1);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 1.f));
+
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
+	}
+
 	Sound2D _Music("Level1Music.mp3", "group1");
 	_Music.play();
 
@@ -1625,7 +1686,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 
 void Level1Scene::Update()
 {
-	//std::cout << "X: " << ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x << "\t\tY: " << ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().y << '\n';
+	std::cout << "X: " << ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x << "\t\tY: " << ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().y << '\n';
 	GeneralUpdates();
 	PlatformMovement();
 	EnemyUpdates();
@@ -1713,6 +1774,12 @@ void Level1Scene::Update()
 		createdint = 0;
 	}
 
+	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x > ECS::GetComponent<PhysicsBody>(35).GetBody()->GetPosition().x - 3)
+	{
+		ECS::GetComponent<Transform>(36).SetPosition(ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x, ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y, 99);
+	}
+	
+	
 	ECS::GetComponent<Transform>(32).SetPosition(ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x - 280, ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y + 150, 99);
 	ECS::GetComponent<Transform>(33).SetPosition(ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x - 220, ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y + 200, 99);
 
