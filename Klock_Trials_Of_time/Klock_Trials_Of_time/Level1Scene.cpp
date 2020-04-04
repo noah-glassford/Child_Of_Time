@@ -6,12 +6,21 @@ std::string newSign = "signtime.png";
 
 //moving platforms shtuff i guess
 float plat10MovementSpeedY;
-float plat12MovementSpeedX = 15.f;
+float plat12MovementSpeedX = 8.f;
 float plat15MovementSpeedX = 20.f;
 float plat15MovementSpeedY;
 bool plat15Up = false;
 float plat25MovementSpeedY;
-float plat34MovementSpeedX = 25.f;
+float plat34MovementSpeedX = 20.f;
+
+//enemy stuff i guess
+float enem1Distance;
+float enem2Distance;
+float enem3Distance;
+float enem4Distance;
+float enem5Distance;
+float enem6Distance;
+float enem7Distance;
 
 Level1Scene::Level1Scene(std::string name)
 	: Scene(name)
@@ -29,13 +38,14 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 	//Attach the Register
 	ECS::AttachRegister(m_sceneReg);
 
+	/*
 	if (m_physicsWorld == nullptr)
 	{
 		m_physicsWorld = new b2World(m_gravity);
 		m_physicsWorld->SetGravity(m_gravity);
 		m_physicsWorld->SetContactListener(&listener);
 	}
-
+	*/
 	//Sets up aspect ratio for the camera
 	float aspectRatio = windowWidth / windowHeight;
 
@@ -624,7 +634,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_kinematicBody;
-		tempDef.position.Set(float32(1210.f), float32(-330.f));
+		tempDef.position.Set(float32(1250.f), float32(-330.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -1653,6 +1663,356 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
 	}
+	//36
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+		ECS::AttachComponent<AnimationController>(entity);
+		ECS::AttachComponent<PlayerData>(entity);
+
+		ECS::GetComponent<PlayerData>(entity).Health = 4;
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "L1Enemy.png";
+		auto& animController = ECS::GetComponent<AnimationController>(entity);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(0);
+		auto& anim = animController.GetAnimation(0);
+		//Walking right animation
+
+		//robson fuck you, you fucking cuck. I bet if you ever get a significant other they will have an onlyfans. I hope you spill dorito dust on your fur suit sonicfox looks ass sounding ass being ass mother fucker. Platkop kaffir gaan eet jo ma se poss.
+		anim.AddFrame(vec2(0.f, 642.f), vec2(716.f, 0.f));
+		anim.AddFrame(vec2(716.f, 642.f), vec2(1432.f, 0.f));
+		anim.AddFrame(vec2(1432.f, 642.f), vec2(2148.f, 0.f));
+		anim.AddFrame(vec2(2148.f, 642.f), vec2(2864.f, 0.f));
+		anim.AddFrame(vec2(0.f, 1284.f), vec2(716.f, 642.f));
+		anim.AddFrame(vec2(716.f, 1284.f), vec2(1432.f, 642.f));
+		anim.AddFrame(vec2(1432.f, 1284.f), vec2(2148.f, 642.f));
+		anim.AddFrame(vec2(2148.f, 1284.f), vec2(2864.f, 642.f));
+
+		anim.SetRepeating(true);
+		anim.SetSecPerFrame(0.1f);
+
+		//Sets up components
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 0.f, 49.f));
+
+		//Grabs reference to various components
+		//Sets up components
+
+		//ECS::GetComponent<PlayerData>(entity).Health = 6;
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_dynamicBody;
+		tempDef.position.Set(float32(3150.f), float32(29.f));
+		tempDef.fixedRotation = true;
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 16), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)11);
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
+	}
+	//37
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+		ECS::AttachComponent<AnimationController>(entity);
+		ECS::AttachComponent<PlayerData>(entity);
+
+		ECS::GetComponent<PlayerData>(entity).Health = 4;
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "L1Enemy.png";
+		auto& animController = ECS::GetComponent<AnimationController>(entity);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(0);
+		auto& anim = animController.GetAnimation(0);
+		//Walking right animation
+
+		//robson fuck you, you fucking cuck. I bet if you ever get a significant other they will have an onlyfans. I hope you spill dorito dust on your fur suit sonicfox looks ass sounding ass being ass mother fucker. Platkop kaffir gaan eet jo ma se poss.
+		anim.AddFrame(vec2(0.f, 642.f), vec2(716.f, 0.f));
+		anim.AddFrame(vec2(716.f, 642.f), vec2(1432.f, 0.f));
+		anim.AddFrame(vec2(1432.f, 642.f), vec2(2148.f, 0.f));
+		anim.AddFrame(vec2(2148.f, 642.f), vec2(2864.f, 0.f));
+		anim.AddFrame(vec2(0.f, 1284.f), vec2(716.f, 642.f));
+		anim.AddFrame(vec2(716.f, 1284.f), vec2(1432.f, 642.f));
+		anim.AddFrame(vec2(1432.f, 1284.f), vec2(2148.f, 642.f));
+		anim.AddFrame(vec2(2148.f, 1284.f), vec2(2864.f, 642.f));
+
+		anim.SetRepeating(true);
+		anim.SetSecPerFrame(0.1f);
+
+		//Sets up components
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 0.f, 49.f));
+
+		//Grabs reference to various components
+		//Sets up components
+
+		//ECS::GetComponent<PlayerData>(entity).Health = 6;
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_dynamicBody;
+		tempDef.position.Set(float32(4000.f), float32(0.f));
+		tempDef.fixedRotation = true;
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 16), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)11);
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
+	}
+	//38
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+		ECS::AttachComponent<AnimationController>(entity);
+		ECS::AttachComponent<PlayerData>(entity);
+
+		ECS::GetComponent<PlayerData>(entity).Health = 4;
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "L1Enemy.png";
+		auto& animController = ECS::GetComponent<AnimationController>(entity);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(0);
+		auto& anim = animController.GetAnimation(0);
+		//Walking right animation
+
+		//robson fuck you, you fucking cuck. I bet if you ever get a significant other they will have an onlyfans. I hope you spill dorito dust on your fur suit sonicfox looks ass sounding ass being ass mother fucker. Platkop kaffir gaan eet jo ma se poss.
+		anim.AddFrame(vec2(0.f, 642.f), vec2(716.f, 0.f));
+		anim.AddFrame(vec2(716.f, 642.f), vec2(1432.f, 0.f));
+		anim.AddFrame(vec2(1432.f, 642.f), vec2(2148.f, 0.f));
+		anim.AddFrame(vec2(2148.f, 642.f), vec2(2864.f, 0.f));
+		anim.AddFrame(vec2(0.f, 1284.f), vec2(716.f, 642.f));
+		anim.AddFrame(vec2(716.f, 1284.f), vec2(1432.f, 642.f));
+		anim.AddFrame(vec2(1432.f, 1284.f), vec2(2148.f, 642.f));
+		anim.AddFrame(vec2(2148.f, 1284.f), vec2(2864.f, 642.f));
+
+		anim.SetRepeating(true);
+		anim.SetSecPerFrame(0.1f);
+
+		//Sets up components
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 0.f, 49.f));
+
+		//Grabs reference to various components
+		//Sets up components
+
+		//ECS::GetComponent<PlayerData>(entity).Health = 6;
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_dynamicBody;
+		tempDef.position.Set(float32(4000.f), float32(0.f));
+		tempDef.fixedRotation = true;
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 16), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)11);
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
+	}
+	//39
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+		ECS::AttachComponent<AnimationController>(entity);
+		ECS::AttachComponent<PlayerData>(entity);
+
+		ECS::GetComponent<PlayerData>(entity).Health = 4;
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "L1Enemy.png";
+		auto& animController = ECS::GetComponent<AnimationController>(entity);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(0);
+		auto& anim = animController.GetAnimation(0);
+		//Walking right animation
+
+		//robson fuck you, you fucking cuck. I bet if you ever get a significant other they will have an onlyfans. I hope you spill dorito dust on your fur suit sonicfox looks ass sounding ass being ass mother fucker. Platkop kaffir gaan eet jo ma se poss.
+		anim.AddFrame(vec2(0.f, 642.f), vec2(716.f, 0.f));
+		anim.AddFrame(vec2(716.f, 642.f), vec2(1432.f, 0.f));
+		anim.AddFrame(vec2(1432.f, 642.f), vec2(2148.f, 0.f));
+		anim.AddFrame(vec2(2148.f, 642.f), vec2(2864.f, 0.f));
+		anim.AddFrame(vec2(0.f, 1284.f), vec2(716.f, 642.f));
+		anim.AddFrame(vec2(716.f, 1284.f), vec2(1432.f, 642.f));
+		anim.AddFrame(vec2(1432.f, 1284.f), vec2(2148.f, 642.f));
+		anim.AddFrame(vec2(2148.f, 1284.f), vec2(2864.f, 642.f));
+
+		anim.SetRepeating(true);
+		anim.SetSecPerFrame(0.1f);
+
+		//Sets up components
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 0.f, 49.f));
+
+		//Grabs reference to various components
+		//Sets up components
+
+		//ECS::GetComponent<PlayerData>(entity).Health = 6;
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_dynamicBody;
+		tempDef.position.Set(float32(4000.f), float32(0.f));
+		tempDef.fixedRotation = true;
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 16), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)11);
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
+	}
+	//40
+	{
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+		ECS::AttachComponent<AnimationController>(entity);
+		ECS::AttachComponent<PlayerData>(entity);
+
+		ECS::GetComponent<PlayerData>(entity).Health = 4;
+
+		//Grabs reference to various components
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhysBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "L1Enemy.png";
+		auto& animController = ECS::GetComponent<AnimationController>(entity);
+
+		animController.InitUVs(fileName);
+		animController.AddAnimation(Animation());
+		animController.SetActiveAnim(0);
+		auto& anim = animController.GetAnimation(0);
+		//Walking right animation
+
+		//robson fuck you, you fucking cuck. I bet if you ever get a significant other they will have an onlyfans. I hope you spill dorito dust on your fur suit sonicfox looks ass sounding ass being ass mother fucker. Platkop kaffir gaan eet jo ma se poss.
+		anim.AddFrame(vec2(0.f, 642.f), vec2(716.f, 0.f));
+		anim.AddFrame(vec2(716.f, 642.f), vec2(1432.f, 0.f));
+		anim.AddFrame(vec2(1432.f, 642.f), vec2(2148.f, 0.f));
+		anim.AddFrame(vec2(2148.f, 642.f), vec2(2864.f, 0.f));
+		anim.AddFrame(vec2(0.f, 1284.f), vec2(716.f, 642.f));
+		anim.AddFrame(vec2(716.f, 1284.f), vec2(1432.f, 642.f));
+		anim.AddFrame(vec2(1432.f, 1284.f), vec2(2148.f, 642.f));
+		anim.AddFrame(vec2(2148.f, 1284.f), vec2(2864.f, 642.f));
+
+		anim.SetRepeating(true);
+		anim.SetSecPerFrame(0.1f);
+
+		//Sets up components
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(550.f, 0.f, 49.f));
+
+		//Grabs reference to various components
+		//Sets up components
+
+		//ECS::GetComponent<PlayerData>(entity).Health = 6;
+		//Physics body covers half the sprite
+			//Id type is environment
+		float shrinkX = 0.f;
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_dynamicBody;
+		tempDef.position.Set(float32(4000.f), float32(0.f));
+		tempDef.fixedRotation = true;
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 16), float(tempSpr.GetHeight() - 12),
+			vec2(0.f, 0.f), false, 1.5f);
+
+		ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)11);
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
+	}
 
 	Sound2D _Music("Level1Music.mp3", "group1");
 	_Music.play();
@@ -1808,6 +2168,23 @@ void Level1Scene::GeneralUpdates()
 	else
 		platformSpeedMulti = 1.0f;
 
+	//respawn mechanic
+	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().y < -500) {
+		if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x < 950) { //checkpint 1
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetTransform(b2Vec2(0, 0), 0);
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
+		}
+		else if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x < 1350) { //checkpoint 2
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetTransform(b2Vec2(850, 150), 0);
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(0.f, -50.f));
+		}
+		else if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x < 4000) { //checkpoint 2
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetTransform(b2Vec2(1740, 160), 0);
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
+		}
+	}
+
+	//reuns when the player reaches the swap point in the level, just ignore this it should all be fine
 	if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x > 3550 && ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).canUseTimeSlow == false) {
 		ECS::GetComponent<Sprite>(6).LoadSprite(newSign, 120, 150);
 		ECS::GetComponent<Transform>(6).SetPositionX(865);
@@ -1830,6 +2207,11 @@ void Level1Scene::GeneralUpdates()
 		ECS::GetComponent<PhysicsBody>(28).GetBody()->SetTransform(b2Vec2(3300, -0), 0);
 		ECS::GetComponent<PhysicsBody>(29).GetBody()->SetTransform(b2Vec2(3450, 60), 0);
 		ECS::GetComponent<PhysicsBody>(30).GetBody()->SetTransform(b2Vec2(3600, 120), 0);
+
+		ECS::GetComponent<PhysicsBody>(37).GetBody()->SetTransform(b2Vec2(335, -13), 0);
+		ECS::GetComponent<PhysicsBody>(38).GetBody()->SetTransform(b2Vec2(1880, 159), 0);
+		ECS::GetComponent<PhysicsBody>(39).GetBody()->SetTransform(b2Vec2(1790, 159), 0);
+		ECS::GetComponent<PhysicsBody>(40).GetBody()->SetTransform(b2Vec2(3320, 360), 0);
 	}
 }
 
@@ -1884,7 +2266,66 @@ void Level1Scene::PlatformMovement()
 
 void Level1Scene::EnemyUpdates()
 {
-	//enemy #1, entity #23 | range and movement checks
+	//enemy #1 | range and movement checks
+	enem1Distance = ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x - ECS::GetComponent<PhysicsBody>(23).GetBody()->GetPosition().x;
+	if (enem1Distance > 0 && enem1Distance < 250 && ECS::GetComponent<PhysicsBody>(23).GetBody()->GetPosition().x < 2650) //player on the right side of enemy
+		ECS::GetComponent<PhysicsBody>(23).GetBody()->SetLinearVelocity(b2Vec2(13 * platformSpeedMulti, 0.f));
+	else if (enem1Distance < 0 && enem1Distance > -250 && ECS::GetComponent<PhysicsBody>(23).GetBody()->GetPosition().x > 2370) //player on the left side of enemy
+		ECS::GetComponent<PhysicsBody>(23).GetBody()->SetLinearVelocity(b2Vec2(-13 * platformSpeedMulti, 0.f));
+	else
+		ECS::GetComponent<PhysicsBody>(23).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
 
-	//enemy #2, entity #24 | range and movement checks
+	//enemy #2 | range and movement checks
+	enem2Distance = ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x - ECS::GetComponent<PhysicsBody>(24).GetBody()->GetPosition().x;
+	if (enem2Distance > 0 && enem2Distance < 250 && ECS::GetComponent<PhysicsBody>(24).GetBody()->GetPosition().x < 2650) //player on the right side of enemy
+		ECS::GetComponent<PhysicsBody>(24).GetBody()->SetLinearVelocity(b2Vec2(18 * platformSpeedMulti, 0.f));
+	else if (enem2Distance < 0 && enem2Distance > -250 && ECS::GetComponent<PhysicsBody>(24).GetBody()->GetPosition().x > 2370) //player on the left side of enemy
+		ECS::GetComponent<PhysicsBody>(24).GetBody()->SetLinearVelocity(b2Vec2(-18 * platformSpeedMulti, 0.f));
+	else
+		ECS::GetComponent<PhysicsBody>(24).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
+
+	//enemy #3 | range and movement checks
+	enem3Distance = ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x - ECS::GetComponent<PhysicsBody>(36).GetBody()->GetPosition().x;
+	if (enem3Distance > 0 && enem3Distance < 250 && ECS::GetComponent<PhysicsBody>(36).GetBody()->GetPosition().x < 3220) //player on the right side of enemy
+		ECS::GetComponent<PhysicsBody>(36).GetBody()->SetLinearVelocity(b2Vec2(10 * platformSpeedMulti, 0.f));
+	else if (enem3Distance < 0 && enem3Distance > -250 && ECS::GetComponent<PhysicsBody>(36).GetBody()->GetPosition().x > 3060) //player on the left side of enemy
+		ECS::GetComponent<PhysicsBody>(36).GetBody()->SetLinearVelocity(b2Vec2(-10 * platformSpeedMulti, 0.f));
+	else
+		ECS::GetComponent<PhysicsBody>(36).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
+
+	//enemy #4| range and movement checks
+	enem4Distance = ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x - ECS::GetComponent<PhysicsBody>(37).GetBody()->GetPosition().x;
+	if (enem4Distance > 0 && enem4Distance < 250 && ECS::GetComponent<PhysicsBody>(37).GetBody()->GetPosition().x < 410) //player on the right side of enemy
+		ECS::GetComponent<PhysicsBody>(37).GetBody()->SetLinearVelocity(b2Vec2(19 * platformSpeedMulti, 0.f));
+	else if (enem4Distance < 0 && enem4Distance > -250 && ECS::GetComponent<PhysicsBody>(37).GetBody()->GetPosition().x > 280) //player on the left side of enemy
+		ECS::GetComponent<PhysicsBody>(37).GetBody()->SetLinearVelocity(b2Vec2(-19 * platformSpeedMulti, 0.f));
+	else
+		ECS::GetComponent<PhysicsBody>(37).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
+
+	//enemy #5| range and movement checks
+	enem5Distance = ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x - ECS::GetComponent<PhysicsBody>(38).GetBody()->GetPosition().x;
+	if (enem5Distance > 0 && enem5Distance < 250 && ECS::GetComponent<PhysicsBody>(38).GetBody()->GetPosition().x < 1910) //player on the right side of enemy
+		ECS::GetComponent<PhysicsBody>(38).GetBody()->SetLinearVelocity(b2Vec2(10 * platformSpeedMulti, 0.f));
+	else if (enem5Distance < 0 && enem5Distance > -250 && ECS::GetComponent<PhysicsBody>(38).GetBody()->GetPosition().x > 1680) //player on the left side of enemy
+		ECS::GetComponent<PhysicsBody>(38).GetBody()->SetLinearVelocity(b2Vec2(-10 * platformSpeedMulti, 0.f));
+	else
+		ECS::GetComponent<PhysicsBody>(38).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
+
+	//enemy #6| range and movement checks
+	enem6Distance = ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x - ECS::GetComponent<PhysicsBody>(39).GetBody()->GetPosition().x;
+	if (enem6Distance > 0 && enem6Distance < 250 && ECS::GetComponent<PhysicsBody>(39).GetBody()->GetPosition().x < 1910) //player on the right side of enemy
+		ECS::GetComponent<PhysicsBody>(39).GetBody()->SetLinearVelocity(b2Vec2(11 * platformSpeedMulti, 0.f));
+	else if (enem6Distance < 0 && enem6Distance > -250 && ECS::GetComponent<PhysicsBody>(39).GetBody()->GetPosition().x > 1680) //player on the left side of enemy
+		ECS::GetComponent<PhysicsBody>(39).GetBody()->SetLinearVelocity(b2Vec2(-11 * platformSpeedMulti, 0.f));
+	else
+		ECS::GetComponent<PhysicsBody>(39).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
+
+	//enemy #7| range and movement checks
+	enem7Distance = ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x - ECS::GetComponent<PhysicsBody>(40).GetBody()->GetPosition().x;
+	if (enem7Distance > 0 && enem7Distance < 250 && ECS::GetComponent<PhysicsBody>(40).GetBody()->GetPosition().x < 3325) //player on the right side of enemy
+		ECS::GetComponent<PhysicsBody>(40).GetBody()->SetLinearVelocity(b2Vec2(19 * platformSpeedMulti, 0.f));
+	else if (enem7Distance < 0 && enem7Distance > -250 && ECS::GetComponent<PhysicsBody>(40).GetBody()->GetPosition().x > 3230) //player on the left side of enemy
+		ECS::GetComponent<PhysicsBody>(40).GetBody()->SetLinearVelocity(b2Vec2(-19 * platformSpeedMulti, 0.f));
+	else
+		ECS::GetComponent<PhysicsBody>(40).GetBody()->SetLinearVelocity(b2Vec2(0.f, 0.f));
 }

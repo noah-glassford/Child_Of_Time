@@ -25,13 +25,14 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 
 	//Attach the Register
 	ECS::AttachRegister(m_sceneReg);
-
+	/*
 	if (m_physicsWorld == nullptr)
 	{
 		m_physicsWorld = new b2World(m_gravity);
 		m_physicsWorld->SetGravity(m_gravity);
 		m_physicsWorld->SetContactListener(&listener);
 	}
+	*/
 
 	//Sets up aspect ratio for the camera
 	float aspectRatio = windowWidth / windowHeight;
@@ -2317,6 +2318,7 @@ void Level2Scene::Update()
 	//platform 4 movements
 	if (ECS::GetComponent<PhysicsBody>(4).GetBody()->GetPosition().y < 0 || ECS::GetComponent<PhysicsBody>(4).GetBody()->GetPosition().y > 150)
 		plat4MoveSpeed = -plat4MoveSpeed;
+
 	ECS::GetComponent<PhysicsBody>(4).GetBody()->SetLinearVelocity(b2Vec2(0.f, plat4MoveSpeed * platAcc));
 
 	//entity 6 door close
