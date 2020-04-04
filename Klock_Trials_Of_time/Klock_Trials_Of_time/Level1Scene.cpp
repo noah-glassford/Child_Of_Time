@@ -23,7 +23,6 @@ Level1Scene::Level1Scene(std::string name)
 
 void Level1Scene::InitScene(float windowWidth, float windowHeight)
 {
-	
 	//Allocates Register
 	m_sceneReg = new entt::registry;
 
@@ -36,7 +35,6 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		m_physicsWorld->SetGravity(m_gravity);
 		m_physicsWorld->SetContactListener(&listener);
 	}
-
 
 	//Sets up aspect ratio for the camera
 	float aspectRatio = windowWidth / windowHeight;
@@ -1604,7 +1602,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 
 		tempDef.type = b2_kinematicBody;
-		tempDef.position.Set(float32(2750.f), float32(240.f));
+		tempDef.position.Set(float32(2860.f), float32(240.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
