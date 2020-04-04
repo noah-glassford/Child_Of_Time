@@ -125,7 +125,6 @@ void Game::Update()
 	if (ECS::GetComponent<AnimationController>(1).GetActiveAnim() == 6 && ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().x == 0)
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(4);
 
-
 	if (ECS::GetComponent<AnimationController>(1).GetAnimation(ECS::GetComponent<AnimationController>(1).GetActiveAnim()).GetAnimationDone() && !ECS::GetComponent<PlayerData>(1).facingLeft)
 	{
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(0);
@@ -140,16 +139,13 @@ void Game::Update()
 	{
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
 	}
-	else if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().y > 0 
-		 && ECS::GetComponent<PlayerData>(1).facingLeft && !ECS::GetComponent<PlayerData>(1).Grounded && ECS::GetComponent<AnimationController>(1).GetActiveAnim() != 7)
+	else if (ECS::GetComponent<PhysicsBody>(1).GetBody()->GetLinearVelocity().y > 0
+		&& ECS::GetComponent<PlayerData>(1).facingLeft && !ECS::GetComponent<PlayerData>(1).Grounded && ECS::GetComponent<AnimationController>(1).GetActiveAnim() != 7)
 	{
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(5);
 	}
 
-
-
-	
-	if (!ECS::GetComponent<PlayerData>(1).Grounded && !ECS::GetComponent<PlayerData>(1).facingLeft && ECS::GetComponent<AnimationController>(1).GetAnimation(ECS::GetComponent<AnimationController>(1).GetActiveAnim()).GetAnimationDone()
+	if (!ECS::GetComponent<PlayerData>(1).Grounded && !ECS::GetComponent<PlayerData>(1).facingLeft&& ECS::GetComponent<AnimationController>(1).GetAnimation(ECS::GetComponent<AnimationController>(1).GetActiveAnim()).GetAnimationDone()
 		)
 	{
 		ECS::GetComponent<AnimationController>(1).SetActiveAnim(1);
@@ -161,14 +157,14 @@ void Game::Update()
 	}
 
 #pragma endregion
-	
+
 	//This switches scene at the end of level 1
-	if(ECS::GetComponent<PlayerData>(1).CurrentScene == 1)
-		if (ECS::GetComponent<PhysicsBody>(35).GetBody()->GetContactList() != 0 &&ECS::GetComponent<PlayerData>(1).canUseTimeSlow == 1)
+	if (ECS::GetComponent<PlayerData>(1).CurrentScene == 1)
+		if (ECS::GetComponent<PhysicsBody>(35).GetBody()->GetContactList() != 0 && ECS::GetComponent<PlayerData>(1).canUseTimeSlow == 1)
 			Switchscene(2);
-
-
-
+	if (ECS::GetComponent<PlayerData>(1).CurrentScene == 2)
+		if (ECS::GetComponent<PhysicsBody>(49).GetBody()->GetContactList() != 0 && ECS::GetComponent<PlayerData>(1).canUseTimeSlow == 1)
+			Switchscene(3);
 
 	if (ECS::GetComponent<PlayerData>(1).Health == 0)
 	{
@@ -253,9 +249,8 @@ void Game::GUI()
 
 void Game::Switchscene(int scene)
 {
-
 	SoundManager::stop();
-	
+
 	m_activeScene->Unload();
 
 	m_activeScene = m_scenes[scene];
