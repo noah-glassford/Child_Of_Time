@@ -854,6 +854,284 @@ inline void CollisionListener::BeginContact(b2Contact* contact)
 		else
 			ECS::GetComponent<PhysicsBody>(40).GetBody()->SetLinearVelocity(b2Vec2(-20, 20));
 	}
+
+	if ((int)fixtureBUserData == 18 && (int)fixtureAUserData == 7)
+	{
+		_EnemyHurt.play();
+
+		ECS::GetComponent<PlayerData>(50).Health--;
+		if (!ECS::GetComponent<PlayerData>(1).facingLeft)
+			ECS::GetComponent<PhysicsBody>(50).GetBody()->SetLinearVelocity(b2Vec2(20, 20));
+		else
+			ECS::GetComponent<PhysicsBody>(50).GetBody()->SetLinearVelocity(b2Vec2(-20, 20));
+	}
+
+	if ((int)fixtureAUserData == 18 && (int)fixtureBUserData == 7)
+	{
+		_EnemyHurt.play();
+
+		ECS::GetComponent<PlayerData>(50).Health--;
+		if (!ECS::GetComponent<PlayerData>(1).facingLeft)
+			ECS::GetComponent<PhysicsBody>(50).GetBody()->SetLinearVelocity(b2Vec2(20, 20));
+		else
+			ECS::GetComponent<PhysicsBody>(50).GetBody()->SetLinearVelocity(b2Vec2(-20, 20));
+	}
+
+
+	if ((int)fixtureBUserData == 19 && (int)fixtureAUserData == 7)
+	{
+		_EnemyHurt.play();
+
+		ECS::GetComponent<PlayerData>(51).Health--;
+		if (!ECS::GetComponent<PlayerData>(1).facingLeft)
+			ECS::GetComponent<PhysicsBody>(51).GetBody()->SetLinearVelocity(b2Vec2(20, 20));
+		else
+			ECS::GetComponent<PhysicsBody>(51).GetBody()->SetLinearVelocity(b2Vec2(-20, 20));
+	}
+
+	if ((int)fixtureAUserData == 19 && (int)fixtureBUserData == 7)
+	{
+		_EnemyHurt.play();
+
+		ECS::GetComponent<PlayerData>(51).Health--;
+		if (!ECS::GetComponent<PlayerData>(1).facingLeft)
+			ECS::GetComponent<PhysicsBody>(51).GetBody()->SetLinearVelocity(b2Vec2(20, 20));
+		else
+			ECS::GetComponent<PhysicsBody>(51).GetBody()->SetLinearVelocity(b2Vec2(-20, 20));
+	}
+
+
+	if ((int)fixtureBUserData == 20 && (int)fixtureAUserData == 7)
+	{
+		_EnemyHurt.play();
+
+		ECS::GetComponent<PlayerData>(52).Health--;
+		if (!ECS::GetComponent<PlayerData>(1).facingLeft)
+			ECS::GetComponent<PhysicsBody>(52).GetBody()->SetLinearVelocity(b2Vec2(20, 20));
+		else
+			ECS::GetComponent<PhysicsBody>(52).GetBody()->SetLinearVelocity(b2Vec2(-20, 20));
+	}
+
+	if ((int)fixtureAUserData == 20 && (int)fixtureBUserData == 7)
+	{
+		_EnemyHurt.play();
+
+		ECS::GetComponent<PlayerData>(52).Health--;
+		if (!ECS::GetComponent<PlayerData>(1).facingLeft)
+			ECS::GetComponent<PhysicsBody>(52).GetBody()->SetLinearVelocity(b2Vec2(20, 20));
+		else
+			ECS::GetComponent<PhysicsBody>(52).GetBody()->SetLinearVelocity(b2Vec2(-20, 20));
+	}
+
+
+	if ((int)fixtureAUserData == 18 && (int)fixtureBUserData == 4)
+	{
+		//std::cout << "Klock got hit by an enemy on his left";
+		if (ECS::GetComponent<PlayerData>(1).Hit)
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Health--;
+			ECS::GetComponent<PlayerData>(1).Hit = 0;
+			ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.7f;
+			//ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(20000000, 100000000, 0));
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(30, 30));
+			//ECS::GetComponent<PhysicsBody>(9).SetPosition(b2Vec2(-999, 999));
+			ECS::GetComponent<PhysicsBody>(10).moveonnextstep = true;
+		}
+		//ECS::GetComponent<PhysicsBody>(9).GetBody()->SetTransform(b2Vec2(-9999, -9999), 0);
+
+
+	}
+	if ((int)fixtureBUserData == 18 && (int)fixtureAUserData == 4)
+	{
+		//	std::cout << "Klock got hit by an enemy on his left";
+		if (ECS::GetComponent<PlayerData>(1).Hit)
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Health--;
+			ECS::GetComponent<PlayerData>(1).Hit = 0;
+			ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.7f;
+			//ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(200000000,100000000, 0));
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(30, 30));
+			//ECS::GetComponent<PhysicsBody>(10).GetBody()->SetTransform(b2Vec2(-9999, -9999), 0);
+			ECS::GetComponent<PhysicsBody>(10).moveonnextstep = true;
+		}
+		//	ECS::GetComponent<PhysicsBody>(9).GetBody()->SetTransform(b2Vec2(-9999, -9999), 0);
+
+	}
+
+	if ((int)fixtureAUserData == 18 && (int)fixtureBUserData == 5)
+	{
+		//std::cout << "Klock got hit by an enemy on his left";
+		if (ECS::GetComponent<PlayerData>(1).Hit)
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Health--;
+			ECS::GetComponent<PlayerData>(1).Hit = 0;
+			ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.7f;
+			//ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(20000000, 100000000, 0));
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(30, 30));
+			//ECS::GetComponent<PhysicsBody>(9).SetPosition(b2Vec2(-999, 999));
+			ECS::GetComponent<PhysicsBody>(10).moveonnextstep = true;
+		}
+		//ECS::GetComponent<PhysicsBody>(9).GetBody()->SetTransform(b2Vec2(-9999, -9999), 0);
+
+
+	}
+	if ((int)fixtureBUserData == 18 && (int)fixtureAUserData == 5)
+	{
+		//	std::cout << "Klock got hit by an enemy on his left";
+		if (ECS::GetComponent<PlayerData>(1).Hit)
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Health--;
+			ECS::GetComponent<PlayerData>(1).Hit = 0;
+			ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.7f;
+			//ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(200000000,100000000, 0));
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(30, 30));
+			//ECS::GetComponent<PhysicsBody>(10).GetBody()->SetTransform(b2Vec2(-9999, -9999), 0);
+			ECS::GetComponent<PhysicsBody>(10).moveonnextstep = true;
+		}
+		//	ECS::GetComponent<PhysicsBody>(9).GetBody()->SetTransform(b2Vec2(-9999, -9999), 0);
+
+	}
+
+
+	if ((int)fixtureAUserData == 19 && (int)fixtureBUserData == 4)
+	{
+		//std::cout << "Klock got hit by an enemy on his left";
+		if (ECS::GetComponent<PlayerData>(1).Hit)
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Health--;
+			ECS::GetComponent<PlayerData>(1).Hit = 0;
+			ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.7f;
+			//ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(20000000, 100000000, 0));
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(30, 30));
+			//ECS::GetComponent<PhysicsBody>(9).SetPosition(b2Vec2(-999, 999));
+			ECS::GetComponent<PhysicsBody>(10).moveonnextstep = true;
+		}
+		//ECS::GetComponent<PhysicsBody>(9).GetBody()->SetTransform(b2Vec2(-9999, -9999), 0);
+
+
+	}
+	if ((int)fixtureBUserData == 19 && (int)fixtureAUserData == 4)
+	{
+		//	std::cout << "Klock got hit by an enemy on his left";
+		if (ECS::GetComponent<PlayerData>(1).Hit)
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Health--;
+			ECS::GetComponent<PlayerData>(1).Hit = 0;
+			ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.7f;
+			//ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(200000000,100000000, 0));
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(30, 30));
+			//ECS::GetComponent<PhysicsBody>(10).GetBody()->SetTransform(b2Vec2(-9999, -9999), 0);
+			ECS::GetComponent<PhysicsBody>(10).moveonnextstep = true;
+		}
+		//	ECS::GetComponent<PhysicsBody>(9).GetBody()->SetTransform(b2Vec2(-9999, -9999), 0);
+
+	}
+
+	if ((int)fixtureAUserData == 19 && (int)fixtureBUserData == 5)
+	{
+		//std::cout << "Klock got hit by an enemy on his left";
+		if (ECS::GetComponent<PlayerData>(1).Hit)
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Health--;
+			ECS::GetComponent<PlayerData>(1).Hit = 0;
+			ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.7f;
+			//ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(20000000, 100000000, 0));
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(30, 30));
+			//ECS::GetComponent<PhysicsBody>(9).SetPosition(b2Vec2(-999, 999));
+			ECS::GetComponent<PhysicsBody>(10).moveonnextstep = true;
+		}
+		//ECS::GetComponent<PhysicsBody>(9).GetBody()->SetTransform(b2Vec2(-9999, -9999), 0);
+
+
+	}
+	if ((int)fixtureBUserData == 19 && (int)fixtureAUserData == 5)
+	{
+		//	std::cout << "Klock got hit by an enemy on his left";
+		if (ECS::GetComponent<PlayerData>(1).Hit)
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Health--;
+			ECS::GetComponent<PlayerData>(1).Hit = 0;
+			ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.7f;
+			//ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(200000000,100000000, 0));
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(30, 30));
+			//ECS::GetComponent<PhysicsBody>(10).GetBody()->SetTransform(b2Vec2(-9999, -9999), 0);
+			ECS::GetComponent<PhysicsBody>(10).moveonnextstep = true;
+		}
+		//	ECS::GetComponent<PhysicsBody>(9).GetBody()->SetTransform(b2Vec2(-9999, -9999), 0);
+
+	}
+
+
+	if ((int)fixtureAUserData == 20 && (int)fixtureBUserData == 4)
+	{
+		//std::cout << "Klock got hit by an enemy on his left";
+		if (ECS::GetComponent<PlayerData>(1).Hit)
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Health--;
+			ECS::GetComponent<PlayerData>(1).Hit = 0;
+			ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.7f;
+			//ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(20000000, 100000000, 0));
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(30, 30));
+			//ECS::GetComponent<PhysicsBody>(9).SetPosition(b2Vec2(-999, 999));
+			ECS::GetComponent<PhysicsBody>(10).moveonnextstep = true;
+		}
+		//ECS::GetComponent<PhysicsBody>(9).GetBody()->SetTransform(b2Vec2(-9999, -9999), 0);
+
+
+	}
+	if ((int)fixtureBUserData == 20 && (int)fixtureAUserData == 4)
+	{
+		//	std::cout << "Klock got hit by an enemy on his left";
+		if (ECS::GetComponent<PlayerData>(1).Hit)
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Health--;
+			ECS::GetComponent<PlayerData>(1).Hit = 0;
+			ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.7f;
+			//ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(200000000,100000000, 0));
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(30, 30));
+			//ECS::GetComponent<PhysicsBody>(10).GetBody()->SetTransform(b2Vec2(-9999, -9999), 0);
+			ECS::GetComponent<PhysicsBody>(10).moveonnextstep = true;
+		}
+		//	ECS::GetComponent<PhysicsBody>(9).GetBody()->SetTransform(b2Vec2(-9999, -9999), 0);
+
+	}
+
+	if ((int)fixtureAUserData == 20 && (int)fixtureBUserData == 5)
+	{
+		//std::cout << "Klock got hit by an enemy on his left";
+		if (ECS::GetComponent<PlayerData>(1).Hit)
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Health--;
+			ECS::GetComponent<PlayerData>(1).Hit = 0;
+			ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.7f;
+			//ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(20000000, 100000000, 0));
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(30, 30));
+			//ECS::GetComponent<PhysicsBody>(9).SetPosition(b2Vec2(-999, 999));
+			ECS::GetComponent<PhysicsBody>(10).moveonnextstep = true;
+		}
+		//ECS::GetComponent<PhysicsBody>(9).GetBody()->SetTransform(b2Vec2(-9999, -9999), 0);
+
+
+	}
+	if ((int)fixtureBUserData == 20 && (int)fixtureAUserData == 5)
+	{
+		//	std::cout << "Klock got hit by an enemy on his left";
+		if (ECS::GetComponent<PlayerData>(1).Hit)
+		{
+			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).Health--;
+			ECS::GetComponent<PlayerData>(1).Hit = 0;
+			ECS::GetComponent<PlayerData>(1).TimeSinceHit = 0.7f;
+			//ECS::GetComponent<PhysicsBody>(1).ApplyForce(vec3(200000000,100000000, 0));
+			ECS::GetComponent<PhysicsBody>(1).GetBody()->SetLinearVelocity(b2Vec2(30, 30));
+			//ECS::GetComponent<PhysicsBody>(10).GetBody()->SetTransform(b2Vec2(-9999, -9999), 0);
+			ECS::GetComponent<PhysicsBody>(10).moveonnextstep = true;
+		}
+		//	ECS::GetComponent<PhysicsBody>(9).GetBody()->SetTransform(b2Vec2(-9999, -9999), 0);
+
+	}
+
+
+
 }
 inline void CollisionListener::EndContact(b2Contact* contact)
 {
