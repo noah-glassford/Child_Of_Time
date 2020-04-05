@@ -2028,6 +2028,25 @@ void Level1Scene::Update()
 	PlatformMovement();
 	EnemyUpdates();
 
+	if (ECS::GetComponent<PlayerData>(1).Health == 0)
+	{
+		ECS::GetComponent<PhysicsBody>(1).GetBody()->SetTransform(b2Vec2(0, 0), 0);
+		ECS::GetComponent<PhysicsBody>(23).GetBody()->SetTransform(b2Vec2(2370, 19), 0);
+		ECS::GetComponent<PhysicsBody>(24).GetBody()->SetTransform(b2Vec2(2570, 19), 0);
+		
+		
+		
+		ECS::GetComponent<PlayerData>(1).Health = 6;
+		ECS::GetComponent<PlayerData>(23).Health = 6;
+		ECS::GetComponent<PlayerData>(24).Health = 4;
+		ECS::GetComponent<PlayerData>(36).Health = 4;
+		ECS::GetComponent<PlayerData>(37).Health = 4;
+		ECS::GetComponent<PlayerData>(38).Health = 4;
+		ECS::GetComponent<PlayerData>(39).Health = 4;
+		ECS::GetComponent<PlayerData>(40).Health = 4;
+	}
+
+
 	if (ECS::GetComponent<PlayerData>(23).Health == 0)
 		ECS::GetComponent<PhysicsBody>(23).GetBody()->SetTransform(b2Vec2(99999, 999999), 0);
 

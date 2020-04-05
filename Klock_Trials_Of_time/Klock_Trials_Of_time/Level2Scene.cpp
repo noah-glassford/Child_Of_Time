@@ -30,14 +30,9 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 
 	//Attach the Register
 	ECS::AttachRegister(m_sceneReg);
-	/*
-	if (m_physicsWorld == nullptr)
-	{
-		m_physicsWorld = new b2World(m_gravity);
-		m_physicsWorld->SetGravity(m_gravity);
-		m_physicsWorld->SetContactListener(&listener);
-	}
-	*/
+	
+	
+	
 
 	//Sets up aspect ratio for the camera
 	float aspectRatio = windowWidth / windowHeight;
@@ -2389,6 +2384,22 @@ void Level2Scene::Update()
 	ECS::GetComponent<Transform>(32).SetPosition(ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x - 280, ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y + 150, 99);
 	ECS::GetComponent<Transform>(33).SetPosition(ECS::GetComponent<HorizontalScroll>(2).GetCam()->GetPosition().x - 220, ECS::GetComponent<VerticalScroll>(2).GetCam()->GetPosition().y + 200, 99);
 
+	if (ECS::GetComponent<PlayerData>(1).Health == 0)
+	{
+		ECS::GetComponent<PhysicsBody>(1).GetBody()->SetTransform(b2Vec2(0, 50), 0);
+		ECS::GetComponent<PhysicsBody>(50).GetBody()->SetTransform(b2Vec2(639, 267), 0);
+		ECS::GetComponent<PhysicsBody>(51).GetBody()->SetTransform(b2Vec2(10, 452), 0);
+		ECS::GetComponent<PhysicsBody>(52).GetBody()->SetTransform(b2Vec2(1569, 367), 0);
+	
+
+		ECS::GetComponent<PlayerData>(1).Health = 6;
+		ECS::GetComponent<PlayerData>(50).Health = 4;
+		ECS::GetComponent<PlayerData>(51).Health = 4;
+		ECS::GetComponent<PlayerData>(52).Health = 4;
+	
+	}
+	
+	
 	//the enemy kill stuff
 	for (int i = 50; i <= 52; i++)
 	{

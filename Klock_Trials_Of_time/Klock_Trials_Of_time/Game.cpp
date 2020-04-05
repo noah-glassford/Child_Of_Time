@@ -53,7 +53,7 @@ void Game::InitGame()
 	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[2];
+	m_activeScene = m_scenes[3];
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -163,10 +163,7 @@ void Game::Update()
 		if (ECS::GetComponent<PhysicsBody>(49).GetBody()->GetContactList() != 0 && ECS::GetComponent<PlayerData>(1).canUseTimeSlow == 1)
 			Switchscene(3);
 
-	if (ECS::GetComponent<PlayerData>(1).Health == 0)
-	{
-		Switchscene(ECS::GetComponent<PlayerData>(1).CurrentScene);
-	}
+	
 
 	//std::cout << UsedUpTime << " " << isSlowed << std::endl;
 	unsigned int mainp = EntityIdentifier::MainPlayer();
@@ -533,6 +530,13 @@ void Game::KeyboardDown()
 			//Switchscene(1);
 	}
 
+	if (Input::GetKeyDown(Key::Enter) && ECS::GetComponent<PlayerData>(1).CurrentScene != 0)
+	{
+		//	ECS::GetComponent<Transform>(3).SetPositionX(0.f);
+		Switchscene(ECS::GetComponent<PlayerData>(1).CurrentScene);
+		//if (ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
+			//Switchscene(1);
+	}
 	m_activeScene->KeyboardDown();
 }
 

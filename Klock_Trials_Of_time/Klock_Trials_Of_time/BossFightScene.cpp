@@ -455,14 +455,14 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		animController.InitUVs(fileName);
 		animController.AddAnimation(Animation());
 		auto& minus4 = animController.GetAnimation(4);
-		minus4.AddFrame(vec2(970, 270), vec2(1788, 0));
+		minus4.AddFrame(vec2(970, 240), vec2(1788, 0));
 		minus4.SetRepeating(true);
 		minus4.SetSecPerFrame(0.1f);
 
 		animController.InitUVs(fileName);
 		animController.AddAnimation(Animation());
 		auto& minus5 = animController.GetAnimation(5);
-		minus5.AddFrame(vec2(970, 484), vec2(1788, 227));
+		minus5.AddFrame(vec2(970, 464), vec2(1788, 227));
 		minus5.SetRepeating(true);
 		minus5.SetSecPerFrame(0.1f);
 
@@ -961,8 +961,15 @@ void BossFightScene::Update()
 	//ECS::GetComponent<Transform>(4).SetPosition(ECS::GetComponent<HorizontalScroll>(0).GetCam()->GetPosition().x - 220, ECS::GetComponent<VerticalScroll>(0).GetCam()->GetPosition().y + 200, 99);
 	ECS::GetComponent<PlayerData>(1).CurrentScene = 3;
 
-
+	if (ECS::GetComponent<PlayerData>(1).Health == 0)
+	{
+		ECS::GetComponent<PhysicsBody>(1).GetBody()->SetTransform(b2Vec2(0,0), 0);
+		ECS::GetComponent<PhysicsBody>(2).GetBody()->SetTransform(b2Vec2(0, 70), 0);
+		ECS::GetComponent<PlayerData>(2).Health = 10;
+		ECS::GetComponent<PlayerData>(1).Health = 6;
+	}
 	
+
 	if (ECS::GetComponent<PlayerData>(2).Health == 0)
 	{
 		ECS::GetComponent<PhysicsBody>(2).GetBody()->SetTransform(b2Vec2(-999, 999), 0);
