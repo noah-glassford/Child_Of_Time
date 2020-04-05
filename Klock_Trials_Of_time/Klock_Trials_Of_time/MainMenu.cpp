@@ -38,8 +38,8 @@ void MainMenu::InitScene(float windowWidth, float windowHeight)
 		ECS::SetUpIdentifier(entity, bitHolder, "Main Scrolling Camera");
 		ECS::SetIsMainCamera(entity, true);
 	}
-	//hacky bullshit, will crash unless this is here, ent 1
-	//By hacky bullshit I mean if this isn't a full player entity it crashes just don't open this shit aight ok cool
+	// will crash unless this is here, ent 1
+	
 	{
 
 		//Create new Entity

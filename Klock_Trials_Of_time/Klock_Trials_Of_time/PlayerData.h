@@ -1,6 +1,6 @@
 #pragma once
 /*
-This class handles all the random bool spaghetti code shit and puts it all into once place
+This class handles all the random bool spaghetti code and puts it all into once place
 This is an ECS component that will be attached to stuff
 This is unorganized and not done properly but that doesn't really matter its just a bunch of bools
 */
@@ -25,8 +25,7 @@ public:
 
 	bool CanAttack = 1;
 
-	int CurrentScene;//Honestly have no fucking idea where else to put this
-
+	int CurrentScene;
 	bool facingLeft{ 0 };
 
 	bool isSlowed;

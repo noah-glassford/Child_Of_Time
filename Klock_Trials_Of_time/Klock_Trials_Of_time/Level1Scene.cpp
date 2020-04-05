@@ -1046,7 +1046,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		auto& anim = animController.GetAnimation(0);
 		//Walking right animation
 
-		//robson fuck you, you fucking cuck. I bet if you ever get a significant other they will have an onlyfans. I hope you spill dorito dust on your fur suit sonicfox looks ass sounding ass being ass mother fucker. Platkop kaffir gaan eet jo ma se poss.
+	
 		anim.AddFrame(vec2(0.f, 642.f), vec2(716.f, 0.f));
 		anim.AddFrame(vec2(716.f, 642.f), vec2(1432.f, 0.f));
 		anim.AddFrame(vec2(1432.f, 642.f), vec2(2148.f, 0.f));
@@ -1114,7 +1114,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		auto& anim = animController.GetAnimation(0);
 		//Walking right animation
 
-		//robson fuck you, you fucking cuck. I bet if you ever get a significant other they will have an onlyfans. I hope you spill dorito dust on your fur suit sonicfox looks ass sounding ass being ass mother fucker. Platkop kaffir gaan eet jo ma se poss.
+	
 		anim.AddFrame(vec2(0.f, 642.f), vec2(716.f, 0.f));
 		anim.AddFrame(vec2(716.f, 642.f), vec2(1432.f, 0.f));
 		anim.AddFrame(vec2(1432.f, 642.f), vec2(2148.f, 0.f));
@@ -1558,14 +1558,14 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		animController.InitUVs(fileName);
 		animController.AddAnimation(Animation());
 		auto& minus4 = animController.GetAnimation(4);
-		minus4.AddFrame(vec2(970, 270), vec2(1788, 0));
+		minus4.AddFrame(vec2(970, 220), vec2(1788, 0));
 		minus4.SetRepeating(true);
 		minus4.SetSecPerFrame(0.1f);
 
 		animController.InitUVs(fileName);
 		animController.AddAnimation(Animation());
 		auto& minus5 = animController.GetAnimation(5);
-		minus5.AddFrame(vec2(970, 484), vec2(1788, 227));
+		minus5.AddFrame(vec2(970, 464), vec2(1788, 227));
 		minus5.SetRepeating(true);
 		minus5.SetSecPerFrame(0.1f);
 
@@ -1691,7 +1691,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		auto& anim = animController.GetAnimation(0);
 		//Walking right animation
 
-		//robson fuck you, you fucking cuck. I bet if you ever get a significant other they will have an onlyfans. I hope you spill dorito dust on your fur suit sonicfox looks ass sounding ass being ass mother fucker. Platkop kaffir gaan eet jo ma se poss.
+		
 		anim.AddFrame(vec2(0.f, 642.f), vec2(716.f, 0.f));
 		anim.AddFrame(vec2(716.f, 642.f), vec2(1432.f, 0.f));
 		anim.AddFrame(vec2(1432.f, 642.f), vec2(2148.f, 0.f));
@@ -1761,7 +1761,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		auto& anim = animController.GetAnimation(0);
 		//Walking right animation
 
-		//robson fuck you, you fucking cuck. I bet if you ever get a significant other they will have an onlyfans. I hope you spill dorito dust on your fur suit sonicfox looks ass sounding ass being ass mother fucker. Platkop kaffir gaan eet jo ma se poss.
+		
 		anim.AddFrame(vec2(0.f, 642.f), vec2(716.f, 0.f));
 		anim.AddFrame(vec2(716.f, 642.f), vec2(1432.f, 0.f));
 		anim.AddFrame(vec2(1432.f, 642.f), vec2(2148.f, 0.f));
@@ -1831,8 +1831,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		auto& anim = animController.GetAnimation(0);
 		//Walking right animation
 
-		//robson fuck you, you fucking cuck. I bet if you ever get a significant other they will have an onlyfans. I hope you spill dorito dust on your fur suit sonicfox looks ass sounding ass being ass mother fucker. Platkop kaffir gaan eet jo ma se poss.
-		anim.AddFrame(vec2(0.f, 642.f), vec2(716.f, 0.f));
+		
 		anim.AddFrame(vec2(716.f, 642.f), vec2(1432.f, 0.f));
 		anim.AddFrame(vec2(1432.f, 642.f), vec2(2148.f, 0.f));
 		anim.AddFrame(vec2(2148.f, 642.f), vec2(2864.f, 0.f));
@@ -1901,7 +1900,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		auto& anim = animController.GetAnimation(0);
 		//Walking right animation
 
-		//robson fuck you, you fucking cuck. I bet if you ever get a significant other they will have an onlyfans. I hope you spill dorito dust on your fur suit sonicfox looks ass sounding ass being ass mother fucker. Platkop kaffir gaan eet jo ma se poss.
+		
 		anim.AddFrame(vec2(0.f, 642.f), vec2(716.f, 0.f));
 		anim.AddFrame(vec2(716.f, 642.f), vec2(1432.f, 0.f));
 		anim.AddFrame(vec2(1432.f, 642.f), vec2(2148.f, 0.f));
@@ -1971,7 +1970,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		auto& anim = animController.GetAnimation(0);
 		//Walking right animation
 
-		//robson fuck you, you fucking cuck. I bet if you ever get a significant other they will have an onlyfans. I hope you spill dorito dust on your fur suit sonicfox looks ass sounding ass being ass mother fucker. Platkop kaffir gaan eet jo ma se poss.
+		
 		anim.AddFrame(vec2(0.f, 642.f), vec2(716.f, 0.f));
 		anim.AddFrame(vec2(716.f, 642.f), vec2(1432.f, 0.f));
 		anim.AddFrame(vec2(1432.f, 642.f), vec2(2148.f, 0.f));
@@ -2205,7 +2204,7 @@ void Level1Scene::GeneralUpdates()
 		ECS::GetComponent<PhysicsBody>(19).GetBody()->SetTransform(b2Vec2(2150, 80), 0);
 		ECS::GetComponent<PhysicsBody>(11).GetBody()->SetTransform(b2Vec2(1070, -350), 0);
 		ECS::GetComponent<PhysicsBody>(20).GetBody()->SetTransform(b2Vec2(2300, -80), 0);
-		//this line is broken and i don't know why the fuck it be like that, workin on fixing it
+		
 		//ECS::GetComponent<PhysicsBody>(21).GetBody()->SetTransform(b2Vec2(4000, -350), 0);
 		ECS::GetComponent<PhysicsBody>(22).GetBody()->SetTransform(b2Vec2(1325, -150), 0);
 		ECS::GetComponent<PhysicsBody>(26).GetBody()->SetTransform(b2Vec2(2550, -100), 0);

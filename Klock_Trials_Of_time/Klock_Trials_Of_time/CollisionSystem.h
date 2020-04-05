@@ -6,7 +6,7 @@
 #include "MovementSystem.h"
 #include "SoundEngine.h"
 /*
-This system is to make collision less shit
+This system is to make collision better
 Also contains the collision listener
 */
 
@@ -45,7 +45,7 @@ inline void CollisionListener::BeginContact(b2Contact* contact)
 		{
 			ECS::GetComponent<PlayerData>(2).Health--;
 			_EnemyHurt.play();
-			//std::cout << "fuck";
+			
 		}
 		std::cout << ECS::GetComponent<PlayerData>(2).Health;
 	}
@@ -65,7 +65,7 @@ inline void CollisionListener::BeginContact(b2Contact* contact)
 		{
 			ECS::GetComponent<PlayerData>(2).Health--;
 			_EnemyHurt.play();
-			//std::cout << "fuck";
+			
 		}
 		std::cout << ECS::GetComponent<PlayerData>(2).Health;
 	}
