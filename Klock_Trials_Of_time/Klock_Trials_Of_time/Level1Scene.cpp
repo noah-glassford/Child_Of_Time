@@ -1728,7 +1728,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 16), float(tempSpr.GetHeight() - 12),
 			vec2(0.f, 0.f), false, 1.5f);
 
-		ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)11);
+		ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)13);
 		//Sets up the Identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
@@ -1798,7 +1798,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 16), float(tempSpr.GetHeight() - 12),
 			vec2(0.f, 0.f), false, 1.5f);
 
-		ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)11);
+		ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)14);
 		//Sets up the Identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
@@ -1868,7 +1868,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 16), float(tempSpr.GetHeight() - 12),
 			vec2(0.f, 0.f), false, 1.5f);
 
-		ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)11);
+		ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)15);
 		//Sets up the Identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
@@ -1938,7 +1938,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 16), float(tempSpr.GetHeight() - 12),
 			vec2(0.f, 0.f), false, 1.5f);
 
-		ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)11);
+		ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)16);
 		//Sets up the Identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
@@ -2008,7 +2008,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 		tempPhysBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - 16), float(tempSpr.GetHeight() - 12),
 			vec2(0.f, 0.f), false, 1.5f);
 
-		ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)11);
+		ECS::GetComponent<PhysicsBody>(entity).GetBody()->GetFixtureList()->SetUserData((void*)17);
 		//Sets up the Identifier
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
@@ -2034,6 +2034,12 @@ void Level1Scene::Update()
 
 	if (ECS::GetComponent<PlayerData>(24).Health == 0)
 		ECS::GetComponent<PhysicsBody>(24).GetBody()->SetTransform(b2Vec2(99999, 999999), 0);
+
+	for (int i = 36; i <= 40; i++)
+	{
+		if (ECS::GetComponent<PlayerData>(i).Health == 0)
+			ECS::GetComponent<PhysicsBody>(i).GetBody()->SetTransform(b2Vec2(99999, 999999), 0);
+	}
 
 	ECS::GetComponent<PlayerData>(1).CurrentScene = 1;
 
