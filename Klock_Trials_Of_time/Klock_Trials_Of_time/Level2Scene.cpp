@@ -2158,7 +2158,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 
 void Level2Scene::Update()
 {
-	std::cout << "X: " << ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x << '\t' << "Y: " << ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().y << '\n';
+	//std::cout << "X: " << ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().x << '\t' << "Y: " << ECS::GetComponent<PhysicsBody>(1).GetBody()->GetPosition().y << '\n';
 
 	ECS::GetComponent<PlayerData>(1).CurrentScene = 2;
 
