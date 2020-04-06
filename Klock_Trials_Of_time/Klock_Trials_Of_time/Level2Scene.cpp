@@ -31,7 +31,12 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 	//Attach the Register
 	ECS::AttachRegister(m_sceneReg);
 	
-	
+	if (m_physicsWorld == nullptr)
+	{
+		m_physicsWorld = new b2World(m_gravity);
+		m_physicsWorld->SetGravity(m_gravity);
+		m_physicsWorld->SetContactListener(&listener);
+	}
 	
 
 	//Sets up aspect ratio for the camera
