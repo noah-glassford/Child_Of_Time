@@ -173,13 +173,13 @@ void Game::Update()
 
 	if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed)
 	{
-		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime <= 8.f)
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime <= 10.f)
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime = ECS::GetComponent<PlayerData>(1).UsedUpTime + deltaTime;
 
-		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime < 8.f)
+		if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime < 10.f)
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = true;
 
-		else if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime > 8.f)
+		else if (ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).UsedUpTime > 10.f)
 		{
 			ECS::GetComponent<PlayerData>(EntityIdentifier::MainPlayer()).isSlowed = false;
 			EffectManager::RemoveEffect(0);
@@ -432,7 +432,7 @@ void Game::KeyboardHold()
 	if (Input::GetKey(Key::A))
 	{
 		if (!ECS::GetComponent<PlayerData>(1).OnWallLeft&& ECS::GetComponent<PlayerData>(1).Hit)
-			Klock.MoveLeft(38.f);
+			Klock.MoveLeft(40.f);
 		ECS::GetComponent<PlayerData>(1).facingLeft = 1;
 		//if (!ECS::GetComponent<AnimationController>(1).GetActiveAnim() == 3)
 		if (ECS::GetComponent<PlayerData>(1).Grounded&& ECS::GetComponent<AnimationController>(1).GetActiveAnim() != 7)
@@ -441,7 +441,7 @@ void Game::KeyboardHold()
 	if (Input::GetKey(Key::D))
 	{
 		if (!ECS::GetComponent<PlayerData>(1).OnWallRight&& ECS::GetComponent<PlayerData>(1).Hit)
-			Klock.MoveRight(38.f);
+			Klock.MoveRight(40.f);
 
 		ECS::GetComponent<PlayerData>(1).facingLeft = 0;
 		//if (!ECS::GetComponent<AnimationController>(1).GetActiveAnim() == 3)
