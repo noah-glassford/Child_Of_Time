@@ -4,6 +4,7 @@
 
 #include "Scene.h"
 #include "SoundEngine.h"
+#include "BossAI.h"
 
 class BossFightScene : public Scene
 {
@@ -16,4 +17,6 @@ public:
 	void Update() override;
 	bool createdint{ 0 };
 	unsigned int tempent;
+	float windowWidthtemp;
+	float windowHeighttemp;
 };

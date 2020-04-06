@@ -180,6 +180,12 @@
     <ClInclude Include="BossFightScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BossAI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationController.cpp">
@@ -342,6 +348,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BossFightScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BossAI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

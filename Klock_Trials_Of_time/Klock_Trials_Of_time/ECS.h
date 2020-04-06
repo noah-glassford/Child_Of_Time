@@ -12,6 +12,7 @@
 #include "VerticalScroll.h"
 #include "HorizontalScroll.h"
 #include "PlayerData.h"
+#include "BossAI.h"
 
 
 class ECS abstract

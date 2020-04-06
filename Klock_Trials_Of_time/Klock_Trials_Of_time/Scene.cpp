@@ -13,6 +13,13 @@ void Scene::Unload()
 		delete m_sceneReg;
 		m_sceneReg = nullptr;
 	}
+	/*
+	if (m_physicsWorld != nullptr)
+	{
+		delete m_physicsWorld;
+		m_physicsWorld = nullptr;
+	}
+	*/
 }
 
 void Scene::SaveScene()
@@ -103,7 +110,7 @@ void Scene::SetGravity(b2Vec2 grav)
 	m_gravity = grav;
 }
 
-b2World & Scene::GetPhysicsWorld()
+b2World& Scene::GetPhysicsWorld()
 {
 	return *m_physicsWorld;
 }
@@ -111,9 +118,9 @@ b2World & Scene::GetPhysicsWorld()
 void Scene::SetWindowSize(float windowWidth, float windowHeight)
 {
 	auto& tempCam = m_sceneReg->get<Camera>(EntityIdentifier::MainCamera());
-	
+
 	tempCam.SetWindowSize(vec2(windowWidth, windowHeight));
 	tempCam.Orthographic(float(windowWidth / windowHeight), tempCam.GetOrthoSize().x, tempCam.GetOrthoSize().y,
-															tempCam.GetOrthoSize().z, tempCam.GetOrthoSize().w,
-															tempCam.GetNear(), tempCam.GetFar());
+		tempCam.GetOrthoSize().z, tempCam.GetOrthoSize().w,
+		tempCam.GetNear(), tempCam.GetFar());
 }

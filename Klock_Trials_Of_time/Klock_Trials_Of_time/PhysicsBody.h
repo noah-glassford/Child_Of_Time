@@ -176,6 +176,8 @@ public:
 	//Does the object not move?
 	void SetDynamic(bool isDynamic);
 
+	bool moveonnextstep;
+
 private:
 	//The actual box2D body
 	b2Body* m_body = nullptr;
