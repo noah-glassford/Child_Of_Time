@@ -2014,6 +2014,7 @@ void Level1Scene::InitScene(float windowWidth, float windowHeight)
 	}
 
 	Sound2D _Music("Level1Music.mp3", "group1");
+	_Music.setLoopCount(-1);
 	_Music.play();
 
 	//Makes the camera focus on the main player

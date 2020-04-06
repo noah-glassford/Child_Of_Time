@@ -53,7 +53,7 @@ void Game::InitGame()
 	m_scenes.push_back(new BossFightScene("Boss Fight Scene")); //3
 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[3];
+	m_activeScene = m_scenes[0];
 
 	//m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
@@ -521,22 +521,46 @@ void Game::KeyboardDown()
 			EffectManager::RemoveEffect(0);
 	}
 
+	if (Input::GetKeyDown(Key::Escape) && ECS::GetComponent<PlayerData>(1).CurrentScene == 3 && ECS::GetComponent<PlayerData>(2).Health == 0)
+		Switchscene(0);
+
 	if (Input::GetKeyDown(Key::Enter) && ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
 	{
 		//	ECS::GetComponent<Transform>(3).SetPositionX(0.f);
-		std::cout << "m8";
+		
 		ECS::GetComponent<Transform>(3).SetPosition(vec3(0, 0, 5));
 		//if (ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
 			//Switchscene(1);
 	}
 
-	if (Input::GetKeyDown(Key::Enter) && ECS::GetComponent<PlayerData>(1).CurrentScene != 0)
+	if (Input::GetKeyDown(Key::Alt) && ECS::GetComponent<PlayerData>(1).CurrentScene == 1)
 	{
 		//	ECS::GetComponent<Transform>(3).SetPositionX(0.f);
-		Switchscene(ECS::GetComponent<PlayerData>(1).CurrentScene);
+		Switchscene(1);
 		//if (ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
 			//Switchscene(1);
 	}
+
+	
+	if (Input::GetKeyDown(Key::Alt) && ECS::GetComponent<PlayerData>(1).CurrentScene == 2)
+	{
+		//	ECS::GetComponent<Transform>(3).SetPositionX(0.f);
+		Switchscene(2);
+		//if (ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
+			//Switchscene(1);
+	}
+
+	if (Input::GetKeyDown(Key::Alt) && ECS::GetComponent<PlayerData>(1).CurrentScene == 3)
+	{
+		//	ECS::GetComponent<Transform>(3).SetPositionX(0.f);
+		Switchscene(3);
+		//if (ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
+			//Switchscene(1);
+	}
+
+	
+
+
 	m_activeScene->KeyboardDown();
 }
 
@@ -547,6 +571,7 @@ void Game::KeyboardUp()
 	}
 	if (Input::GetKeyUp(Key::Enter) && ECS::GetComponent<PlayerData>(1).CurrentScene == 0)
 		Switchscene(1);
+
 
 	m_activeScene->KeyboardUp();
 }

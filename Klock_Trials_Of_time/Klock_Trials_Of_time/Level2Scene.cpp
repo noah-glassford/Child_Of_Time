@@ -179,6 +179,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 		//Sets up components
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 49.f));
 		ECS::GetComponent<PlayerData>(entity).Health = 6;
+		ECS::GetComponent<PlayerData>(entity).CurrentScene = 2;
 		//Grabs reference to various components
 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -2368,6 +2369,7 @@ void Level2Scene::InitScene(float windowWidth, float windowHeight)
 	}
 
 	Sound2D _Music("Level2Music.mp3", "group1");
+	_Music.setLoopCount(-1);
 	_Music.play();
 
 	//Makes the camera focus on the main player

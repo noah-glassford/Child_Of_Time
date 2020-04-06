@@ -200,6 +200,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 			//Sets up components
 			ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 49.f));
 			ECS::GetComponent<PlayerData>(entity).Health = 6;
+			ECS::GetComponent<PlayerData>(entity).CurrentScene = 3;
 			//Grabs reference to various components
 
 			auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -403,7 +404,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 
 
 
-		ECS::GetComponent<Transform>(entity).SetPosition(-300,250,99);
+		ECS::GetComponent<Transform>(entity).SetPosition(-300,250,97);
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 35, 45, true, &animController);
 
 		//Sets up identifier
@@ -475,7 +476,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 
 
 		//ECS::GetComponent<Transform>(entity).SetPosition(ECS::GetComponent<PhysicsBody>(1).GetPosition().x, ECS::GetComponent<PhysicsBody>(1).GetPosition().y, 99);
-		ECS::GetComponent<Transform>(entity).SetPosition(-300, 300, 99);
+		ECS::GetComponent<Transform>(entity).SetPosition(-300, 300, 97);
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 200, 40, true, &animController);
 
 		//Sets up identifier
@@ -497,7 +498,7 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "BossBackground.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1000, 580);
 		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.000001);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 100.f, 1.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 100.f, 2.f));
 
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
@@ -938,10 +939,31 @@ void BossFightScene::InitScene(float windowWidth, float windowHeight)
 		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit() | EntityIdentifier::PhysicsBit();
 		ECS::SetUpIdentifier(entity, bitHolder, "Platform 1");
 	}
+	{
+
+		//Create new entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Sets up components
+		std::string fileName = "end_screen.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1000, 580);
+		ECS::GetComponent<Sprite>(entity).SetSizeScale(0.000001);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 100.f, 1.f));
+
+		unsigned int bitHolder = EntityIdentifier::SpriteBit() | EntityIdentifier::TransformBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "BackGround");
+
+	}
+
+
 #pragma endregion
 
 	Sound2D _jump("BossMusic.mp3", "group1");
-	if(!_jump.isPlaying())
+	_jump.setLoopCount(-1);
 	_jump.play();
 
 	
@@ -973,6 +995,7 @@ void BossFightScene::Update()
 	if (ECS::GetComponent<PlayerData>(2).Health == 0)
 	{
 		ECS::GetComponent<PhysicsBody>(2).GetBody()->SetTransform(b2Vec2(-999, 999), 0);
+		ECS::GetComponent<Transform>(16).SetPosition(0,100,99);
 	}
 	
 	//Gets rid of the rock attack if it hits something
